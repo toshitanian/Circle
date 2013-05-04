@@ -1,0 +1,16 @@
+# コメントは行頭に"#"をつけます。
+ 
+# glob パターンが使えます。
+#拡張子が".txt"のファイルを無視します。（サブディレクトリ含む）
+*.txt
+ 
+# "tmp"ディレクトリ配下のファイルを全て無視します。
+tmp/
+ 
+# 拡張子が".m"のファイルは無視しません。
+!*.m
+#Mac用
+.DS_Store
+#xcodeproj内の無視スべきもの
+MazeMonster.xcodeproj/project.xcworkspace
+MazeMonster.xcodeproj/xcuserdata
