@@ -7,9 +7,7 @@
 //
 
 #import "CMViewController.h"
-#import "CMArtistViewController.h"
-#import "CMSongViewController.h"
-#import "CMAlbumViewController.h"
+
 @interface CMViewController ()
 
 @end
@@ -27,8 +25,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-      [self.navigationController setNavigationBarHidden:YES animated:NO];
-
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
     
     //level selector
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -40,22 +38,52 @@
     float cv_height=
     //self.view.frame.size.height
     [[UIScreen mainScreen] bounds].size.height;
-
     
-   // _cv=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320 , cv_height) collectionViewLayout:flowLayout];
-     _cv=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320 , cv_height) collectionViewLayout:[[CMCircleLayout alloc] init]];
+    
+    // _cv=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320 , cv_height) collectionViewLayout:flowLayout];
+    _cv=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320 , cv_height) collectionViewLayout:[[CMCircleLayout alloc] init]];
     
     _cv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     _cv.showsHorizontalScrollIndicator = NO;
     _cv.showsVerticalScrollIndicator = NO;
     _cv.bounces=NO;
-   // UINib *nib = [UINib nibWithNibName:@"CMContentCell" bundle:nil];
+    // UINib *nib = [UINib nibWithNibName:@"CMContentCell" bundle:nil];
     //[_cv registerNib:nib forCellWithReuseIdentifier:@"CMContentCell"];
-   //  [_cv registerClass:[Cell class] forCellWithReuseIdentifier:@"CMContentCell"];
+    //  [_cv registerClass:[Cell class] forCellWithReuseIdentifier:@"CMContentCell"];
     [_cv registerClass:[CMContentCell class] forCellWithReuseIdentifier:@"CMContentCell"];
     _cv.delegate=self;
     _cv.dataSource=self;
     [self.view addSubview:_cv];
+    
+    
+ 
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    //各種Viewの読み込み
+    if(_artistViewController==NULL){
+        _artistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:0];
+    }
+    
+    if(_songViewController==NULL){
+        _songViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
+        
+    }
+    
+    if(_albumViewController==NULL){
+        _albumViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
+    }
+    
+    if(_playlistViewController==NULL){
+        _playlistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:3];
+        
+    }
+    
+    if(_infoViewController==NULL){
+        _infoViewController=[[CMInfoViewController alloc] initWithNibName:@"CMInfoViewController" bundle:nil];
+        
+    }
 }
 
 
@@ -99,26 +127,28 @@
         
     } completion:^(BOOL finished){
         if(indexPath.row==0){
-            CMArtistViewController *vc=[[CMArtistViewController alloc] initWithNibName:@"CMArtistViewController" bundle:nil];
-            [self.navigationController pushViewController:vc animated:NO];
+    
+            [self.navigationController pushViewController:_artistViewController animated:NO];
+            
+            
         }else if(indexPath.row==1){
-            CMSongViewController *vc=[[CMSongViewController alloc] initWithNibName:@"CMSongViewController" bundle:nil];
-            [self.navigationController pushViewController:vc animated:NO];
-        
+            [self.navigationController pushViewController:_songViewController animated:NO];
+            
         }else if(indexPath.row==2){
-            CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil];
-            [self.navigationController pushViewController:vc animated:NO];
+    
+            [self.navigationController pushViewController:_albumViewController animated:NO];
             
         }else if(indexPath.row==3){
             
+            [self.navigationController pushViewController:_playlistViewController animated:NO];
             
         }else if(indexPath.row==4){
             
-            
+              [self.navigationController pushViewController:_infoViewController animated:NO];
         }
         
     }];
-
+    
     return YES;
 }
 
@@ -128,6 +158,7 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    NSLog(@"MEMORYYYYYYYYYYY");
 }
 
 @end

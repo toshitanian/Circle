@@ -214,7 +214,8 @@
 
     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
     ad.playerViewController.query=_query;
-    [self presentModalViewController:ad.playerViewController animated:YES];
+    ad.playerViewController.needReload=YES;
+    [self presentViewController:ad.playerViewController animated:YES completion:nil];
     
     // NSLog(@"%d:%s",indexPath.row,[[_albums objectAtIndex:indexPath.row] objectForKey:@"song_name"]);
     /*

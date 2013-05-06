@@ -9,11 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "CMContentCell.h"
 #import "CMCircleLayout.h"
+#import "CMAlbumViewController.h"
+#import "CMInfoViewController.h"
 
 
 @interface CMViewController : UIViewController<UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
 {
   UICollectionView *_cv;
+    CMAlbumViewController *_artistViewController;
+    CMAlbumViewController *_albumViewController;
+    CMAlbumViewController *_songViewController;
+    CMAlbumViewController *_playlistViewController;
+    CMInfoViewController *_infoViewController;
 }
 
 @property (nonatomic, assign) NSInteger cellCount;

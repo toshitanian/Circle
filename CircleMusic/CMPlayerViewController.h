@@ -11,9 +11,10 @@
 
 
 //http://secondflush2.blog.fc2.com/blog-entry-906.html#currentPlaybackTime
-//http://secondflush2.blog.fc2.com/blog-entry-911.html
-//http://secondflush2.blog.fc2.com/blog-entry-907.html
+//http://secondflush2.blog.fc2.com/blog-entry-911.html MPMediaItem
+//http://secondflush2.blog.fc2.com/blog-entry-907.html  MPMediaQuery
 //http://netdiever.com/archives/11640
+//http://secondflush2.blog.fc2.com/blog-entry-909.html Playlist
 
 @interface CMPlayerViewController : UIViewController
 {
@@ -38,10 +39,13 @@
     IBOutlet UILabel *_queue_label;
     
     NSTimer *_tm;
+    bool _out_of_queue;
+    
 }
 
 -(IBAction)dismiss:(id)sender;
 @property MPMusicPlayerController *player;
 @property (atomic,assign) bool isPlaying;
+@property (atomic,assign) bool needReload;
 @property (nonatomic,retain) MPMediaQuery *query;
 @end

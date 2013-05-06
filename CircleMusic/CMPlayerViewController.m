@@ -26,12 +26,21 @@
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-   
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     //[self updatePlayingMusicInfo:nil];
+    if(self.needReload){
+        [self.player setQueueWithQuery:self.query];
+        self.needReload=NO;
+        [self.player play];
+        _out_of_queue=NO;
+        self.isPlaying=YES;
+        _player.volume=0;
+    }
+    
 }
 
 - (void)viewDidLoad
@@ -41,7 +50,7 @@
     //self.player = [MPMusicPlayerController iPodMusicPlayer];
     
     self.player = [MPMusicPlayerController applicationMusicPlayer];
-    [self.player setQueueWithQuery:self.query];
+    
     
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self
@@ -50,8 +59,7 @@
                              object:self.player];
     [self.player beginGeneratingPlaybackNotifications];
     
-    [self.player play];
-    self.isPlaying=YES;
+    
     _btn_play = [self getControllButton];
     _btn_play.center=CGPointMake(_controller.center.x,_controller.frame.size.height/2);
     [_btn_play addTarget:self
@@ -69,9 +77,9 @@
     
     _btn_previous = [self getControllButton];
     _btn_previous.center=CGPointMake(_controller.center.x-_btn_previous.frame.size.width*3/2,_controller.frame.size.height/2);
-        //何故かうまくいかない
+    //何故かうまくいかない
     [_btn_previous setImage:[UIImage imageNamed:@"previous.png"] forState:UIControlStateNormal];
-     [_btn_previous setImage:[UIImage imageNamed:@"previous.png"] forState:UIControlStateHighlighted];
+    [_btn_previous setImage:[UIImage imageNamed:@"previous.png"] forState:UIControlStateHighlighted];
     [_btn_previous addTarget:self
                       action:@selector(previous_pushed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -83,7 +91,7 @@
     
     [_slider addTarget:self action:@selector(slide:) forControlEvents:UIControlEventValueChanged];
     
-
+    
     
     _artwork.layer.cornerRadius = _artwork.frame.size.width/2;
     _artwork.layer.borderWidth = 5.0f;
@@ -115,16 +123,16 @@
     [_toast_next addSubview:niv];
     
     _toast_previous.frame=CGRectMake(0,_artwork.frame.origin.y-_toast_previous.frame.size.height,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
-        _toast_previous.layer.cornerRadius = _toast_previous.frame.size.width/2;
-      _toast_previous.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f];
+    _toast_previous.layer.cornerRadius = _toast_previous.frame.size.width/2;
+    _toast_previous.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f];
     UIImageView *piv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"previous.png"]];
     piv.frame=CGRectMake(0,0,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
     piv.layer.cornerRadius=_toast_previous.layer.cornerRadius;
     piv.clipsToBounds=YES;
     piv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     [_toast_previous addSubview:piv];
- 
-
+    
+    
     _tm =
     [NSTimer scheduledTimerWithTimeInterval:0.3f target:self selector:@selector(clock:) userInfo:nil repeats:YES];
     [_tm fire];
@@ -137,25 +145,25 @@
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     [self.view addGestureRecognizer:tapRecognizer];
     /*
-    UISwipeGestureRecognizer* swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
-    [self.view addGestureRecognizer:swipeRecognizer];
-    */
+     UISwipeGestureRecognizer* swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
+     [self.view addGestureRecognizer:swipeRecognizer];
+     */
     
 }
 
--(void)clock:(id*)something
+-(void)clock:(id)something
 {
     if(_player.playbackState!=MPMusicPlaybackStateSeekingForward
-    && _player.playbackState!=MPMusicPlaybackStateSeekingBackward
-    && _player.playbackState!=MPMusicPlaybackStatePaused
-    && _player.playbackState!=MPMusicPlaybackStateStopped)
+       && _player.playbackState!=MPMusicPlaybackStateSeekingBackward
+       && _player.playbackState!=MPMusicPlaybackStatePaused
+       && _player.playbackState!=MPMusicPlaybackStateStopped)
     {
-       // NSLog(@"%f",_player.currentPlaybackTime);
+        // NSLog(@"%f",_player.currentPlaybackTime);
         _song_progress.value=_player.currentPlaybackTime;
         _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
         
     }
-
+    
 }
 
 -(UIButton *) getControllButton{
@@ -171,6 +179,7 @@
 
 #pragma mark - controller
 -(void)play_pushed:(UIButton *)btn{
+    _out_of_queue=NO;
     if(_isPlaying){
         _isPlaying=NO;
         [_player pause];
@@ -185,14 +194,30 @@
 }
 
 -(void)next_pushed:(UIButton *)btn{
-    [_player skipToNextItem];
-    [self showToast:_toast_next];
+    if(_out_of_queue){
+        
+        [_player play];
+        [self showToast:_toast_next];
+        _out_of_queue=NO;
+        return;
+    }
     
+    if(self.player.indexOfNowPlayingItem+1<[[self.query items] count]){
+        [_player skipToNextItem];
+        [self showToast:_toast_next];
+        _out_of_queue=NO;
+    }
 }
 
 -(void)previous_pushed:(UIButton *)btn{
-    [_player skipToPreviousItem];
-    [self showToast:_toast_previous];
+    if(self.player.indexOfNowPlayingItem>0  && self.player.indexOfNowPlayingItem<10000 ){
+        [_player skipToPreviousItem];
+        [self showToast:_toast_previous];
+    }else{
+        [_player stop];
+        _out_of_queue=YES;
+    }
+    
     
 }
 
@@ -202,7 +227,11 @@
 #pragma mark - player
 -(void)updatePlayingMusicInfo:(id *)something
 {
-    _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",0,[[self.query items] count]];
+    int index= !_out_of_queue ? self.player.indexOfNowPlayingItem+1:0;
+    if(!_out_of_queue){
+        index=self.player.indexOfNowPlayingItem+1>[[self.query items] count] ? [[self.query items] count]:self.player.indexOfNowPlayingItem+1;
+    }
+    _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",index,[[self.query items] count]];
     //!!TODO index
     _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
     float full_time=[(NSNumber *)[[_player nowPlayingItem] valueForProperty:MPMediaItemPropertyPlaybackDuration] floatValue];
@@ -212,8 +241,8 @@
     _info_title.text=  [[_player nowPlayingItem] valueForProperty:MPMediaItemPropertyTitle];
     _info_album.text=  [[_player nowPlayingItem] valueForProperty:MPMediaItemPropertyAlbumTitle];
     MPMediaItemArtwork *artwork= [[_player nowPlayingItem]valueForProperty:  MPMediaItemPropertyArtwork];
-
-        UIImage *artworkImage =[artwork imageWithSize: _artwork.bounds.size];
+    
+    UIImage *artworkImage =[artwork imageWithSize: _artwork.bounds.size];
     if(artworkImage!=nil){
         _artwork.image=artworkImage;
     }else{
@@ -229,7 +258,7 @@
 -(void)seek:(UISlider*)slider{
     _player.currentPlaybackTime=_song_progress.value;
     _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
-
+    
 }
 
 #pragma  mark - toast
@@ -251,25 +280,32 @@
         view.alpha = 0.0;
     };
     
-  [UIView animateWithDuration:1.5 animations:animations completion:nil];
-
+    [UIView animateWithDuration:1.5 animations:animations completion:nil];
+    
 }
 
 #pragma mark - gesture
 //http://labs.techfirm.co.jp/ipad/cho/466
 - (void)handlePanGesture:(UIGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded)
-    {
-        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer*)sender;
-        CGPoint point = [pan translationInView:self.view];
-        CGPoint velocity = [pan velocityInView:self.view];
-      //  NSLog(@"pan. translation: %@, velocity: %@", NSStringFromCGPoint(point), NSStringFromCGPoint(velocity));
-        float angle=atan(point.y/point.x)/2/M_PI*360;
-        //NSLog(@"%lf",atan(point.y/point.x)/2/M_PI*360);
+    
+    UIPanGestureRecognizer *pan = (UIPanGestureRecognizer*)sender;
+    CGPoint point = [pan translationInView:self.view];
+    CGPoint velocity = [pan velocityInView:self.view];
+    //  NSLog(@"pan. translation: %@, velocity: %@", NSStringFromCGPoint(point), NSStringFromCGPoint(velocity));
+    float angle=atan(point.y/point.x)/2/M_PI*360;
+    //NSLog(@"%lf",atan(point.y/point.x)/2/M_PI*360);
+    if (sender.state == UIGestureRecognizerStateEnded){
         if(abs(angle)<40){
             if(velocity.x>200) [self previous_pushed:nil];
             if(velocity.x<-200) [self next_pushed:nil];
         }
+    }
+    
+    if(abs(angle)>50){
+        //!!TODO positionで決めたほうがいいかも
+        NSLog(@"%lf",velocity.y/100000.0);
+        float v_up=MAX(-0.2, velocity.y/100000.0);
+        _player.volume-=v_up;
     }
 }
 
@@ -278,28 +314,28 @@
     {
         UITapGestureRecognizer *tap = (UITapGestureRecognizer*)sender;
         CGPoint point=[tap locationInView:_artwork];
-       // NSLog(@"Tap:%lf/%lf",[tap locationInView:_artwork].x,[tap locationInView:_artwork].y);
+        // NSLog(@"Tap:%lf/%lf",[tap locationInView:_artwork].x,[tap locationInView:_artwork].y);
         NSLog(@"%lf|%lf",sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2)),_artwork.frame.size.width/2);
         if(sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2))
-                <_artwork.frame.size.width/2){
+           <_artwork.frame.size.width/2){
             [self play_pushed:nil];
         }
     }
 }
 /*
-- (void)handleSwipeGesture:(UIGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded)
-    {
-        UISwipeGestureRecognizer *swipe = (UISwipeGestureRecognizer*)sender;
-        NSLog(@"%u",swipe.direction);
-    }
-}
-
-*/
+ - (void)handleSwipeGesture:(UIGestureRecognizer *)sender {
+ if (sender.state == UIGestureRecognizerStateEnded)
+ {
+ UISwipeGestureRecognizer *swipe = (UISwipeGestureRecognizer*)sender;
+ NSLog(@"%u",swipe.direction);
+ }
+ }
+ 
+ */
 #pragma  mark - something
 
 -(IBAction)dismiss:(id)sender{
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning

@@ -7,7 +7,8 @@
 //
 
 #import "CMArtistViewController.h"
-#import <MediaPlayer/MediaPlayer.h>
+#import "CMAppDelegate.h"
+
 #import "CMSpiralLayout.h"
 #import "CMSpiralCell.h"
 
@@ -47,15 +48,14 @@
     _albums = [NSMutableArray array];
     
     
-    MPMediaQuery *query = [MPMediaQuery  artistsQuery];
+    _query = [MPMediaQuery  artistsQuery];
     
-    [query addFilterPredicate: [MPMediaPropertyPredicate
+    [_query addFilterPredicate: [MPMediaPropertyPredicate
                                 predicateWithValue: @"Linkin Park"
                                 forProperty: MPMediaItemPropertyArtist]];
    
-    
-    [query setGroupingType: MPMediaGroupingAlbum];
-    NSArray *albums = [query collections];
+    [_query setGroupingType: MPMediaGroupingAlbum];
+    NSArray *albums = [_query collections];
     for (MPMediaItemCollection *album in albums) {
 
         MPMediaItem *representativeItem = [album representativeItem];
@@ -118,6 +118,9 @@
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     self.cellCount=self.cellCount-1;
+    CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    ad.playerViewController.query=_query;
+    [self presentViewController:ad.playerViewController animated:YES completion:nil];
 /*
     NSLog(@"%d",indexPath.row);
     [_cv performBatchUpdates:^{

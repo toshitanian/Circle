@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <MediaPlayer/MediaPlayer.h>
 
 //ref:https://developer.apple.com/jp/devcenter/ios/library/documentation/iPodLibraryAccess_Guide.pdf
 //ref:http://iphone-dev.g.hatena.ne.jp/sawat/20090718/1247936645
@@ -16,6 +16,7 @@
 {
     UICollectionView *_cv;
     NSMutableArray *_albums;
+    MPMediaQuery *_query;
 }
 
 -(IBAction)pop:(id)sender;
