@@ -62,7 +62,7 @@
     NSTimer *_tm;
     bool _out_of_queue;
     
-    AVQueuePlayer *_player2;
+ 
  
     NSMutableArray *_items;
     NSMutableArray *_urls;
@@ -73,9 +73,14 @@
 }
 
 -(IBAction)dismiss:(id)sender;
+-(void)play_pushed:(UIButton *)btn;
+-(void)next_pushed:(UIButton *)btn;
+-(void)previous_pushed:(UIButton *)btn;
+
 @property MPMusicPlayerController *player;
 @property (atomic,assign) bool isPlaying;
 @property (atomic,assign) int currentIndex;
 @property (atomic,assign) bool needReload;
 @property (nonatomic,retain) MPMediaQuery *query;
+@property (nonatomic,retain) AVQueuePlayer *player2;
 @end

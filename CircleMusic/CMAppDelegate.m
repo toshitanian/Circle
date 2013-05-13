@@ -53,6 +53,31 @@ void exceptionHandler(NSException *exception) {
     [[NSUserDefaults standardUserDefaults] setValue:log forKey:@"failLog"];
 }
 
+// Respond to remote control events
+- (void) remoteControlReceivedWithEvent: (UIEvent *) receivedEvent {
+
+    if (receivedEvent.type == UIEventTypeRemoteControl) {
+        
+        switch (receivedEvent.subtype) {
+                
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                [self.playerViewController play_pushed:nil];
+                break;
+                
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                [self.playerViewController previous_pushed:nil];
+                break;
+                
+            case UIEventSubtypeRemoteControlNextTrack:
+                [self.playerViewController next_pushed:nil];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -153,7 +153,7 @@ static const NSString *PlayerRateContext;
     
     _toast_next.frame=CGRectMake(self.view.frame.size.width-_toast_previous.frame.size.width,_artwork.frame.origin.y-_toast_next.frame.size.height,_toast_next.frame.size.width,_toast_next.frame.size.height);
     _toast_next.layer.cornerRadius = _toast_next.frame.size.width/2;
-    _toast_next.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f];
+    _toast_next.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.65f];
     UIImageView *niv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"next.png"]];
     niv.frame=CGRectMake(0,0,_toast_next.frame.size.width,_toast_next.frame.size.height);
     niv.layer.cornerRadius=_toast_next.layer.cornerRadius;
@@ -163,7 +163,7 @@ static const NSString *PlayerRateContext;
     
     _toast_previous.frame=CGRectMake(0,_artwork.frame.origin.y-_toast_previous.frame.size.height,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
     _toast_previous.layer.cornerRadius = _toast_previous.frame.size.width/2;
-    _toast_previous.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.8f];
+    _toast_previous.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.65f];
     UIImageView *piv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"previous.png"]];
     piv.frame=CGRectMake(0,0,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
     piv.layer.cornerRadius=_toast_previous.layer.cornerRadius;
@@ -339,7 +339,8 @@ static const NSString *PlayerRateContext;
             [_player2 advanceToNextItem];
             NSLog(@"nextPlayWithPlaying:%d",self.currentIndex);
         }else{
-            [self updatePlayingMusicInfo:nil];
+            [_player2 advanceToNextItem];
+            //[self updatePlayingMusicInfo:nil];
             NSLog(@"nextPlayNotPlaying:%d",self.currentIndex);
         }
         
