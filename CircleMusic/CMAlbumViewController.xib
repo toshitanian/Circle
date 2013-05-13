@@ -187,7 +187,7 @@
 								<string key="NSFrame">{{0, 331}, {320, 130}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="1072012917"/>
+								<reference key="NSNextKeyView" ref="650020020"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">2</int>
@@ -202,7 +202,7 @@
 								<string key="NSFrame">{{220, 68}, {100, 270}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="453287358"/>
+								<reference key="NSNextKeyView" ref="1072012917"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
@@ -217,7 +217,7 @@
 								<string key="NSFrame">{{0, 68}, {221, 100}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
+								<reference key="NSNextKeyView" ref="571955704"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
@@ -232,7 +232,7 @@
 								<string key="NSFrame">{{0, 166}, {100, 150}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="1032892795"/>
+								<reference key="NSNextKeyView" ref="453287358"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
@@ -281,6 +281,7 @@
 						<string key="NSFrame">{{101, 490}, {70, 44}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="832894374"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -297,11 +298,33 @@
 						<reference key="IBUIFontDescription" ref="61118515"/>
 						<reference key="IBUIFont" ref="303099856"/>
 					</object>
+					<object class="IBUIButton" id="832894374">
+						<reference key="NSNextResponder" ref="191373211"/>
+						<int key="NSvFlags">292</int>
+						<string key="NSFrame">{{241, 490}, {64, 44}}</string>
+						<reference key="NSSuperview" ref="191373211"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:9</string>
+						<bool key="IBUIOpaque">NO</bool>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<int key="IBUIContentHorizontalAlignment">0</int>
+						<int key="IBUIContentVerticalAlignment">0</int>
+						<int key="IBUIButtonType">1</int>
+						<string key="IBUINormalTitle">Index</string>
+						<reference key="IBUIHighlightedTitleColor" ref="339892573"/>
+						<object class="NSColor" key="IBUINormalTitleColor">
+							<int key="NSColorSpace">1</int>
+							<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
+						</object>
+						<reference key="IBUINormalTitleShadowColor" ref="306330589"/>
+						<reference key="IBUIFontDescription" ref="61118515"/>
+						<reference key="IBUIFont" ref="303099856"/>
+					</object>
 				</array>
 				<string key="NSFrame">{{0, 20}, {320, 548}}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView" ref="571955704"/>
+				<reference key="NSNextKeyView" ref="1032892795"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MQA</bytes>
@@ -431,6 +454,15 @@
 					</object>
 					<int key="connectionID">83</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">showIndex:</string>
+						<reference key="source" ref="832894374"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">94</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -447,6 +479,7 @@
 							<reference ref="1032892795"/>
 							<reference ref="1072012917"/>
 							<reference ref="411029064"/>
+							<reference ref="832894374"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -533,6 +566,11 @@
 						<reference key="parent" ref="1032892795"/>
 						<string key="objectName">Slider4</string>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">93</int>
+						<reference key="object" ref="832894374"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -552,12 +590,13 @@
 				<string key="85.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="86.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="87.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="93.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">92</int>
+			<int key="maxID">94</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -567,6 +606,7 @@
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="label_touched:">id</string>
 						<string key="pop:">id</string>
+						<string key="showIndex:">id</string>
 						<string key="showPlayer:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
@@ -576,6 +616,10 @@
 						</object>
 						<object class="IBActionInfo" key="pop:">
 							<string key="name">pop:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showIndex:">
+							<string key="name">showIndex:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showPlayer:">

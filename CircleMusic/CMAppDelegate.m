@@ -25,7 +25,32 @@
     
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
+    
+    if( [[NSUserDefaults standardUserDefaults] stringForKey:@"failLog"]){
+        NSLog(@"failLog:%@",[[NSUserDefaults standardUserDefaults] stringForKey:@"failLog"]);
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"failLog"];
+    }else{
+        NSLog(@"No Error");
+    }
+    
+    NSSetUncaughtExceptionHandler(&exceptionHandler);
     return YES;
+}
+
+//http://www.yoheim.net/blog.php?q=20130113
+void exceptionHandler(NSException *exception) {
+    // ここで、例外発生時の情報を出力します。
+    // NSLog関数でcallStackSymbolsを出力することで、
+    // XCODE上で開発している際にも、役立つスタックトレースを取得できるようになります。
+    //NSLog(@"%@", exception.name);
+    //NSLog(@"%@", exception.reason);
+    //NSLog(@"%@", exception.callStackSymbols);
+    
+    // ログをUserDefaultsに保存しておく。
+    // 次の起動の際に存在チェックすれば、前の起動時に異常終了したことを検知できます。
+    NSString *log = [NSString stringWithFormat:@"%@, %@, %@", exception.name, exception.reason, exception.callStackSymbols];
+    [[NSUserDefaults standardUserDefaults] setValue:log forKey:@"failLog"];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

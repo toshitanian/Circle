@@ -198,7 +198,7 @@
     cell.iv.image=nil;
     if(indexPath.section==0){
         cell.label.text=[[NSString alloc] initWithFormat:@"%d",indexPath.row];
-        cell.label.textAlignment= UITextAlignmentCenter;
+        cell.label.textAlignment=  NSTextAlignmentCenter;;
         cell.label.font = [UIFont fontWithName:@"AppleGothic" size:100];
         //   UIImage *artworkImage =[[[_albums objectAtIndex:indexPath.row] objectForKey:@"artwork"] imageWithSize: cell.iv.bounds.size];
           // cell.iv.image=artworkImage;

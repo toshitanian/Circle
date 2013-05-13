@@ -9,6 +9,14 @@
 #import "CMPlayerViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
+static const NSString *PlayerStatusContext;
+static const NSString *CurrentItemChangedContext;
+static const NSString *PlayerRateContext;
+
+@implementation CMMusicItem
+@end
+
+
 @interface CMPlayerViewController ()
 
 @end
@@ -24,6 +32,8 @@
     return self;
 }
 
+
+#pragma mark - views
 -(void)viewWillDisappear:(BOOL)animated
 {
     
@@ -35,14 +45,50 @@
     if(self.needReload){
         [self.player setQueueWithQuery:self.query];
         self.needReload=NO;
-        [self.player play];
+        // [self.player play];
         _out_of_queue=NO;
         self.isPlaying=YES;
-        _player.volume=0;
+        //   _player.volume=0;
+        _shadow.hidden=YES;
+        _items = [NSMutableArray array];
+        _urls=[NSMutableArray array];
+        NSArray *collections=[self.query collections];
+        NSMutableArray *_playerItems = [NSMutableArray array];
+        self.currentIndex=0;
+        for (int i = 0 ; i < [collections count];  i++){
+            CMMusicItem *item=[[CMMusicItem alloc] init];
+            MPMediaItem *representativeItem = [[collections objectAtIndex:i] representativeItem];
+            NSURL *url = [representativeItem valueForProperty:MPMediaItemPropertyAssetURL];
+            item.artist=  [representativeItem valueForProperty:MPMediaItemPropertyArtist];
+            item.title=  [representativeItem valueForProperty:MPMediaItemPropertyTitle];
+            item.album=  [representativeItem valueForProperty:MPMediaItemPropertyAlbumTitle];
+            item.fulltime=[(NSNumber *)[representativeItem valueForProperty:MPMediaItemPropertyPlaybackDuration] floatValue];
+            
+            MPMediaItemArtwork *artwork= [representativeItem valueForProperty: MPMediaItemPropertyArtwork];
+            item.artwork=[artwork imageWithSize: _artwork.bounds.size];
+            [_items addObject:item];
+            if(url!=nil){
+                [_urls addObject:url];
+            }
+            //NSLog(@"%@",url);
+            if (url != nil){
+                AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
+                [_playerItems addObject:playerItem];
+                
+            }
+        }
+        _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
+        [_player2 play];
+        [_player2 addObserver:self forKeyPath:@"status" options:0 context:&PlayerStatusContext];
+        [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
+        [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
+
+        [self updatePlayingMusicInfo:nil];
+        
+        
     }
     
 }
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -51,13 +97,6 @@
     
     self.player = [MPMusicPlayerController applicationMusicPlayer];
     
-    
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self
-                           selector:@selector(updatePlayingMusicInfo:)
-                               name:MPMusicPlayerControllerNowPlayingItemDidChangeNotification
-                             object:self.player];
-    [self.player beginGeneratingPlaybackNotifications];
     
     
     _btn_play = [self getControllButton];
@@ -149,21 +188,91 @@
      [self.view addGestureRecognizer:swipeRecognizer];
      */
     
+    
+    _audioSession = [AVAudioSession sharedInstance];
+    _audioSession.delegate=self;
+    [_audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [_audioSession setActive:YES error:nil];
+    
+    [self becomeFirstResponder];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
+
+
+#pragma mark - observer
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    NSLog(@"observer start");
+    
+    if (context == &PlayerStatusContext) {
+        AVPlayer *thePlayer = (AVPlayer *)object;
+        if ([thePlayer status] == AVPlayerStatusFailed) {
+            NSError *error = [thePlayer error];
+            NSLog(@"Error:%@",error);
+            // Respond to error: for example, display an alert sheet.
+            //self.isPlaying = NO;
+            return;
+            
+        }else if ([thePlayer status] == AVPlayerStatusReadyToPlay){
+            // if status OK start play
+            
+            [_player2 play];
+            
+            
+        }else{
+            //NSLog(@"AVPlayerStatusNone:%@",object);
+        }
+        
+    }else if (context == &CurrentItemChangedContext){
+        
+        AVPlayerItem *currentItem = [_player2 currentItem];
+        AVURLAsset *asset = (AVURLAsset *)currentItem.asset;
+        //  NSLog(@"currentItem%@.asset:%@",currentItem,currentItem.asset);
+        
+        if (currentItem != nil){
+            self.currentIndex = [_urls indexOfObject:asset.URL];
+            [self updatePlayingMusicInfo:nil];
+        }else{
+            [self finish];
+        }
+        
+    }else if (context == &PlayerRateContext){
+        
+    }
+    NSLog(@"observer end");
+    return;
+    
+}
+
+
+
 
 -(void)clock:(id)something
 {
-    if(_player.playbackState!=MPMusicPlaybackStateSeekingForward
-       && _player.playbackState!=MPMusicPlaybackStateSeekingBackward
-       && _player.playbackState!=MPMusicPlaybackStatePaused
-       && _player.playbackState!=MPMusicPlaybackStateStopped)
-    {
-        // NSLog(@"%f",_player.currentPlaybackTime);
-        _song_progress.value=_player.currentPlaybackTime;
-        _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
+
+    @try {
         
-    }
+        if(_isSkipping) return;
+        if(self.isPlaying){
+            AVPlayerItem *item=[_player2 currentItem];
+            int current_time=CMTimeGetSeconds(item.currentTime);
+            _song_progress.value=current_time;
+            _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];
+            
+        }
     
+    
+}
+@catch (NSException *exception) {
+    NSLog(@"clock error");
+}
+@finally {
+    
+}
+
 }
 
 -(UIButton *) getControllButton{
@@ -182,82 +291,240 @@
     _out_of_queue=NO;
     if(_isPlaying){
         _isPlaying=NO;
-        [_player pause];
+        // [_player pause];
+        [_player2 pause];
         _artwork.alpha=0.5f;
         _shadow.hidden=NO;
     }else{
         _isPlaying=YES;
-        [_player play];
+        //  [_player play];
+        [_player2 play];
         _artwork.alpha=1.0f;
         _shadow.hidden=YES;
     }
 }
 
--(void)next_pushed:(UIButton *)btn{
-    if(_out_of_queue){
-        
-        [_player play];
-        [self showToast:_toast_next];
-        _out_of_queue=NO;
-        return;
+- (void)stop
+{
+    if (self.isPlaying){
+        [_player2 pause];
+        self.isPlaying = NO;
     }
-    
-    if(self.player.indexOfNowPlayingItem+1<[[self.query items] count]){
-        [_player skipToNextItem];
-        [self showToast:_toast_next];
-        _out_of_queue=NO;
-    }
+    _player2 = nil;
 }
 
--(void)previous_pushed:(UIButton *)btn{
-    if(self.player.indexOfNowPlayingItem>0  && self.player.indexOfNowPlayingItem<10000 ){
-        [_player skipToPreviousItem];
-        [self showToast:_toast_previous];
+-(int)get_next_index
+{
+    if (self.currentIndex+1>[_items count]-1) {
+        return -1;
+    }
+    return self.currentIndex+1;
+}
+
+-(void)finish
+{
+    [self stop];
+    [self dismiss:nil];
+
+}
+
+-(void)next_pushed:(UIButton *)btn{
+    
+    
+    if ([self get_next_index]!=-1) {
+        
+        self.currentIndex=[self get_next_index];
+        
+        if (self.isPlaying) {
+            [_player2 advanceToNextItem];
+            NSLog(@"nextPlayWithPlaying:%d",self.currentIndex);
+        }else{
+            [self updatePlayingMusicInfo:nil];
+            NSLog(@"nextPlayNotPlaying:%d",self.currentIndex);
+        }
+        
+        [self showToast:_toast_next];
     }else{
-        [_player stop];
-        _out_of_queue=YES;
+        [self finish];
+     
+        
     }
     
+    
+    
+    
+}
+
+-(int)get_previous_index
+{
+    if(self.currentIndex-1<0) return 0;
+    
+    return self.currentIndex-1;
+}
+
+
+- (void)playAtIndex:(NSInteger)index
+{
+    
+    self.currentIndex = index;
+
+    
+    dispatch_queue_t q_global;
+    q_global = dispatch_get_global_queue(0, 0);
+    dispatch_async(q_global, ^{
+        
+        //[self stop];
+        
+        
+        NSMutableArray *_playerItems = [NSMutableArray array];
+        int musicCount = [_items count];
+        // palyerItems に　AVPlayerItemを追加
+        for (int i = index ; i < musicCount ; i++){
+            NSURL *url = [_urls objectAtIndex:i];
+            if (url != nil){
+                AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
+                [_playerItems addObject:playerItem];
+            }
+        }
+        
+        // AVQueuePlayerのインスタンスつくる
+        _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
+        
+        [_player2 addObserver:self forKeyPath:@"status" options:0 context:&PlayerStatusContext];
+        [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
+        [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
+        
+        if(self.isPlaying){
+            [_player2 play];
+        }else{
+            [_player2 pause];
+        }
+        
+        
+    });
+}
+-(void)previous_pushed:(UIButton *)btn{
+    if(_isSkipping) return;
+    _isSkipping=YES;
+    self.currentIndex=[self get_previous_index];
+    
+    [self playAtIndex:self.currentIndex];
+    [self updatePlayingMusicInfo:nil];
+    [self showToast:_toast_previous];
+    
+    [self updatePlayingMusicInfo:nil];
+    
+    
+    _isSkipping=NO;
     
 }
 
 -(void)slide:(UISlider*)slider{
     _player.volume=slider.value;
 }
-#pragma mark - player
--(void)updatePlayingMusicInfo:(id *)something
-{
-    int index= !_out_of_queue ? self.player.indexOfNowPlayingItem+1:0;
-    if(!_out_of_queue){
-        index=self.player.indexOfNowPlayingItem+1>[[self.query items] count] ? [[self.query items] count]:self.player.indexOfNowPlayingItem+1;
-    }
-    _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",index,[[self.query items] count]];
-    //!!TODO index
-    _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
-    float full_time=[(NSNumber *)[[_player nowPlayingItem] valueForProperty:MPMediaItemPropertyPlaybackDuration] floatValue];
-    _full_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)full_time/60,(int)full_time%60];
-    _song_progress.maximumValue=full_time;
-    _info_artist.text=  [[_player nowPlayingItem] valueForProperty:MPMediaItemPropertyArtist];
-    _info_title.text=  [[_player nowPlayingItem] valueForProperty:MPMediaItemPropertyTitle];
-    _info_album.text=  [[_player nowPlayingItem] valueForProperty:MPMediaItemPropertyAlbumTitle];
-    MPMediaItemArtwork *artwork= [[_player nowPlayingItem]valueForProperty:  MPMediaItemPropertyArtwork];
-    
-    UIImage *artworkImage =[artwork imageWithSize: _artwork.bounds.size];
-    if(artworkImage!=nil){
-        _artwork.image=artworkImage;
-    }else{
-        _artwork.image=[UIImage imageNamed:@"no_artwork.png"];
+
+
+#pragma mark - Remote-control event handling
+// Respond to remote control events
+- (void) remoteControlReceivedWithEvent: (UIEvent *) receivedEvent {
+    if (receivedEvent.type == UIEventTypeRemoteControl) {
+        
+        switch (receivedEvent.subtype) {
+                
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                [self play_pushed:nil];
+                break;
+                
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                [self previous_pushed:nil];
+                break;
+                
+            case UIEventSubtypeRemoteControlNextTrack:
+                [self next_pushed:nil];
+                break;
+                
+            default:
+                break;
+        }
     }
 }
 
--(void)MPMusicPlayerControllerVolumeDidChangeNotification:(id *)something
+- (void)inputIsAvailableChanged:(BOOL)isInputAvailable
+{
+    NSLog(@"%d",isInputAvailable);
+    if (isInputAvailable) {
+        if(_player.volume>0.5) _player.volume=0.5;
+    }
+}
+#pragma mark - player
+-(void)updatePlayingMusicInfo:(id *)something
+{
+    
+    _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",self.currentIndex+1,[_items count]];
+    //!!TODO index
+    _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
+    
+    CMMusicItem *item=[_items objectAtIndex:self.currentIndex];
+    _full_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)item.fulltime/60,(int)item.fulltime%60];
+    _song_progress.maximumValue=item.fulltime;
+    _info_artist.text=  item.artist;
+    _info_title.text=  item.title;
+    _info_album.text=  item.album;
+    
+    if(item.artwork!=nil){
+        _artwork.image=item.artwork;
+    }else{
+        _artwork.image=[UIImage imageNamed:@"no_artwork.png"];
+    }
+    
+    Class playingInfoCenter = NSClassFromString(@"MPNowPlayingInfoCenter");
+    
+    if (playingInfoCenter) {
+        CMMusicItem *item = [_items objectAtIndex:self.currentIndex];
+        
+        NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
+        [songInfo setObject:item.title  forKey:MPMediaItemPropertyTitle];
+        [songInfo setObject:item.artist forKey:MPMediaItemPropertyArtist];
+        [songInfo setObject:item.album  forKey:MPMediaItemPropertyAlbumTitle];
+        
+        // UIImage *img=[self roundCornersOfImage:[UIImage imageWithCGImage:item.artwork.CGImage]];
+        
+        
+        
+        if (item.artwork){
+            MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:item.artwork];
+            
+            [songInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
+        }else{
+            [songInfo setObject:[[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:@"no_artwork.png"]] forKey:MPMediaItemPropertyArtwork];
+        }
+        
+        
+        [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:songInfo];
+        //NSLog(@"songInfo:%@",songInfo);
+        
+    }
+    
+    
+}
+
+-(void)MPMusicPlayerControllerVolumeDidChangeNotification:(id)something
 {
     // _slider.value=_player.volume;
 }
 
+-(void)handle_PlaybackStateChanged:(id)something
+{
+}
+
 -(void)seek:(UISlider*)slider{
-    _player.currentPlaybackTime=_song_progress.value;
-    _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
+    // _player.currentPlaybackTime=_song_progress.value;
+    // _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
+    
+    //TODO: index
+     AVPlayerItem *item=[_player2 currentItem];
+     [item seekToTime:CMTimeMake(slider.value, 1)];
+    
     
 }
 
@@ -296,6 +563,7 @@
     //NSLog(@"%lf",atan(point.y/point.x)/2/M_PI*360);
     if (sender.state == UIGestureRecognizerStateEnded){
         if(abs(angle)<40){
+            
             if(velocity.x>200) [self previous_pushed:nil];
             if(velocity.x<-200) [self next_pushed:nil];
         }
@@ -303,9 +571,11 @@
     
     if(abs(angle)>50){
         //!!TODO positionで決めたほうがいいかも
-        NSLog(@"%lf",velocity.y/100000.0);
+        //NSLog(@"%lf",velocity.y/100000.0);
         float v_up=MAX(-0.2, velocity.y/100000.0);
         _player.volume-=v_up;
+        //_player.volume-=v_up;
+        
     }
 }
 
@@ -315,7 +585,7 @@
         UITapGestureRecognizer *tap = (UITapGestureRecognizer*)sender;
         CGPoint point=[tap locationInView:_artwork];
         // NSLog(@"Tap:%lf/%lf",[tap locationInView:_artwork].x,[tap locationInView:_artwork].y);
-        NSLog(@"%lf|%lf",sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2)),_artwork.frame.size.width/2);
+        //NSLog(@"%lf|%lf",sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2)),_artwork.frame.size.width/2);
         if(sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2))
            <_artwork.frame.size.width/2){
             [self play_pushed:nil];
@@ -332,6 +602,64 @@
  }
  
  */
+
+- (UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage {
+    
+    CGImageRef maskRef = maskImage.CGImage;
+    
+    CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
+                                        CGImageGetHeight(maskRef),
+                                        CGImageGetBitsPerComponent(maskRef),
+                                        CGImageGetBitsPerPixel(maskRef),
+                                        CGImageGetBytesPerRow(maskRef),
+                                        CGImageGetDataProvider(maskRef), NULL, false);
+    
+    CGImageRef masked = CGImageCreateWithMask([image CGImage], mask);
+    return [UIImage imageWithCGImage:masked];
+    
+}
+void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, float ovalHeight)
+{
+	float fw, fh;
+	if (ovalWidth == 0 || ovalHeight == 0) {
+		CGContextAddRect(context, rect);
+		return;
+	}
+	CGContextSaveGState(context);
+	CGContextTranslateCTM (context, CGRectGetMinX(rect), CGRectGetMinY(rect));
+	CGContextScaleCTM (context, ovalWidth, ovalHeight);
+	fw = CGRectGetWidth (rect) / ovalWidth;
+	fh = CGRectGetHeight (rect) / ovalHeight;
+	CGContextMoveToPoint(context, fw, fh/2);
+	CGContextAddArcToPoint(context, fw, fh, fw/2, fh, 1);
+	CGContextAddArcToPoint(context, 0, fh, 0, fh/2, 1);
+	CGContextAddArcToPoint(context, 0, 0, fw/2, 0, 1);
+	CGContextAddArcToPoint(context, fw, 0, fw, fh/2, 1);
+	CGContextClosePath(context);
+	CGContextRestoreGState(context);
+}
+- (UIImage *)roundCornersOfImage:(UIImage *)source
+{
+	int w = source.size.width;
+	int h = source.size.height;
+	
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+	
+	CGContextBeginPath(context);
+	CGRect rect = CGRectMake(0, 0, w, h);
+	addRoundedRectToPath(context, rect, 5, 5);
+	CGContextClosePath(context);
+	CGContextClip(context);
+	
+	CGContextDrawImage(context, CGRectMake(0, 0, w, h), source.CGImage);
+	
+	CGImageRef imageMasked = CGBitmapContextCreateImage(context);
+	CGContextRelease(context);
+	CGColorSpaceRelease(colorSpace);
+	
+	return [UIImage imageWithCGImage:imageMasked];
+}
 #pragma  mark - something
 
 -(IBAction)dismiss:(id)sender{
@@ -344,4 +672,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+    [self resignFirstResponder];
+    
+}
 @end

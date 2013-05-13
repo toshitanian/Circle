@@ -9,6 +9,8 @@
 #import "CMInfoViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CMAppDelegate.h"
+
+
 @interface CMInfoViewController ()
 
 @end
@@ -28,6 +30,21 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setDelegate:self];
+    [audioSession setCategory:AVAudioSessionCategoryAmbient error:nil];
+    [audioSession setActive:YES error:nil];
+    
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"mp3"];
+    NSURL *file = [[NSURL alloc] initFileURLWithPath:soundPath];
+    AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:file error:nil];
+    player.delegate=self;
+    [player prepareToPlay];
+    
+    // サウンドの再生。
+    [player play];
+    
 }
 #pragma mark - something
 

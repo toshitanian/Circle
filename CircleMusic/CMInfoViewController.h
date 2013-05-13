@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface CMInfoViewController : UIViewController
+#include <AVFoundation/AVFoundation.h>
+@interface CMInfoViewController : UIViewController<AVAudioPlayerDelegate>
 
 
 -(IBAction)pop:(id)sender;

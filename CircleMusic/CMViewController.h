@@ -13,7 +13,7 @@
 #import "CMInfoViewController.h"
 
 
-@interface CMViewController : UIViewController<UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
+@interface CMViewController : UIViewController<UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,CMAlbumViewControllerDelegate>
 {
   UICollectionView *_cv;
     CMAlbumViewController *_artistViewController;

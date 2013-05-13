@@ -9,6 +9,24 @@
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "CMSpiralCircleView.h"
+#import "CMIndexView.h"
+
+@interface CMPanGestureRecognizer : UIPanGestureRecognizer
+@property (atomic,assign) int tag;
+@end
+
+@interface CMTapGestureRecognizer : UITapGestureRecognizer
+@property (atomic,assign) int tag;
+@end
+
+
+@class CMAlbumViewController;
+@protocol CMAlbumViewControllerDelegate <NSObject>
+
+-(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController *)vc;
+
+@end
+
 @interface CMAlbumViewController : UIViewController<CMSpiralCircleViewDelegate>
 {
     
@@ -43,11 +61,16 @@
     NSTimer *_tm;
     
     UIView *_touching_view;
+    
+    CMIndexView *_index_view;
+    
+    NSArray *index_dic;
 }
 //[type] 0: artist 1: song 2:album
 @property(atomic,assign) int type;
 @property(atomic,assign) CGPoint pointPanBegan;
 @property(nonatomic,retain) NSString *query_keyword;
+@property (nonatomic,retain) id<CMAlbumViewControllerDelegate> delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withType:(int)type;
 
@@ -55,5 +78,7 @@
 -(IBAction)pop:(id)sender;
 -(IBAction)showPlayer:(id)sender;
 -(IBAction)label_touched:(id)sender;
+-(IBAction)showIndex:(id)sender;
+-(IBAction)hideIndex:(id)sender;
 
 @end

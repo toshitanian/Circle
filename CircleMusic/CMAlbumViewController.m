@@ -11,16 +11,27 @@
 #import "CMAppDelegate.h"
 #import "CMSpiralCircleView.h"
 
+
 #define  ITEM_SIZE 130
 #define VIEW_NUM 20
 #define CIRCLES_IN_PI 6
 #define TIMER 0.05f
 
-@interface CMPanGestureRecognizer : UIPanGestureRecognizer
-@property (atomic,assign) int tag;
-@end
+
 
 @implementation CMPanGestureRecognizer
+- (id)initWithTarget:(id)target action:(SEL)action
+{
+    self=[super initWithTarget:target action:action];
+    if(self){
+        
+    }
+    return self;
+}
+
+@end
+
+@implementation CMTapGestureRecognizer
 - (id)initWithTarget:(id)target action:(SEL)action
 {
     self=[super initWithTarget:target action:action];
@@ -40,6 +51,7 @@
 
 @implementation CMAlbumViewController
 
+#pragma mark - view
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withType:(int)type
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -112,7 +124,7 @@
         if(self.query_keyword!=nil){
             [query addFilterPredicate: [MPMediaPropertyPredicate
                                         predicateWithValue: self.query_keyword
-                                        forProperty: MPMediaItemPropertyArtist]];
+                                        forProperty: MPMediaItemPropertyAlbumArtist]];
         }
         collections = [query collections];
     }else if(self.type==3){
@@ -122,6 +134,7 @@
     }
     
     //views
+   
     _item_num=[collections count];
     for (int i=0; i<_item_num; i++) {
         float ratio=(1-(float)i/VIEW_NUM)*1.0;
@@ -131,7 +144,7 @@
         //media
         MPMediaItem *representativeItem = [[collections objectAtIndex:i] representativeItem];
         NSString *artistName =
-        [representativeItem valueForProperty: MPMediaItemPropertyArtist];
+        [representativeItem valueForProperty: MPMediaItemPropertyAlbumArtist];
         NSString *albumName =
         [representativeItem valueForProperty: MPMediaItemPropertyAlbumTitle];
         NSString *title= [representativeItem valueForProperty: MPMediaItemPropertyTitle];
@@ -167,8 +180,7 @@
         
         [view setImage];
         
-        UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-        //[view addGestureRecognizer:tapRecognizer];
+        
         
         if(i<VIEW_NUM){
             [_spiral addSubview:view];
@@ -177,6 +189,17 @@
             view.frame=CGRectMake(0,0,0,0);
         }
         [_circles addObject:view];
+        
+        
+        @try {
+            [self.delegate CMAlbumViewControllerDidChangeProgressOfLoad:(float)i/(float)_item_num From:self];
+        }
+        @catch (NSException *exception) {
+            
+        }
+        @finally {
+            
+        }
         
         
     }
@@ -195,6 +218,16 @@
     
     
     _scroll_speed=0.0;
+    
+#pragma mark index_view init
+     index_dic=[CMIndexView getIndexes:collections WithType:self.type];
+    _index_view=[[CMIndexView alloc] initWithFrame:self.view.frame WithIndexes:index_dic];
+    [_index_view setFrame:CGRectMake(self.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height)];
+    
+    [self.view addSubview:_index_view];
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [_index_view addGestureRecognizer:tapRecognizer];
+    
     
     
 }
@@ -250,6 +283,7 @@
     
     if(_angle==0 && angle>0){
         // NSLog(@"invalid");
+        
         return;
     }
     _angle=MAX( MIN(0, _angle+angle),-1*M_PI/CIRCLES_IN_PI*((float)_item_num-0.5));
@@ -286,99 +320,99 @@
         _current_target=target;
         //NSLog(@"changed:%d",_current_target);
         
-            
-            if(target_changed<0){
-                
-                if(_current_target>1){
-                    //左に消えていく
-                    
-                    @try {
-                        CMSpiralCircleView *view=[_circles objectAtIndex:_current_target-2];
-                        CGPoint center=CGPointMake(-1*view.frame.size.width/2,view.center.y);
-                        [view removeFromSuperview];
-                        /*
-                         void (^animations)(void) = ^{
-                         
-                         
-                         [view setCenter:center];
-                         };
-                         void (^completionAnimation)(BOOL) = ^(BOOL finished) {
-                         
-                         [view removeFromSuperview];
-                         };
-                         
-                         if(_current_target!=_item_num-1){
-                         [UIView animateWithDuration:0.4
-                         animations:animations
-                         completion:completionAnimation];
-                         }
-                         */
-                    }
-                    @catch (NSException *exception) {
-                        NSLog(@"LeftDisApper:%@",exception);
-                    }
-                    @finally {
-                        
-                    }
-            
-                    
-                    
-                }
-                if(_current_target<_item_num-VIEW_NUM+1){
-                    //中心から現れる
-                    @try {
-                        CMSpiralCircleView * view=[_circles objectAtIndex:_current_target+VIEW_NUM-1];
-                        NSLog(@"%@",view.album_name);
-                        [_spiral addSubview:view];
-                        [_spiral sendSubviewToBack:view];
-                    }
-                    @catch (NSException *exception) {
-                        NSLog(@"CenterApper:%@",exception);
-                    }
-                    @finally {
-                        
-                    }
-              
-                }
-            }else if(target_changed>0){
-                
-                if(_current_target<_item_num-VIEW_NUM+1){
-                    //中心に消えていく
-                    @try {
-                                   [[_circles objectAtIndex:_current_target+VIEW_NUM] removeFromSuperview];
-                    }
-                    @catch (NSException *exception) {
-                        NSLog(@"CenterDisApper:%@",exception);
-                    }
-                    @finally {
-                        
-                    }
-         
-                }
-                
-                if(_current_target>-1){
-                    //左から現れる
-                    @try {
-                        CMSpiralCircleView *view=[_circles objectAtIndex:_current_target];
-                        [_spiral addSubview:view];
-                        [_spiral bringSubviewToFront:view];
-                    }
-                    @catch (NSException *exception) {
-                        NSLog(@"CenterApper:%@",exception);
-                    }
-                    @finally {
-                        
-                    }
         
+        if(target_changed<0){
+            
+            if(_current_target>1){
+                //左に消えていく
+                
+                @try {
+                    CMSpiralCircleView *view=[_circles objectAtIndex:_current_target-2];
+                    CGPoint center=CGPointMake(-1*view.frame.size.width/2,view.center.y);
+                    [view removeFromSuperview];
+                    /*
+                     void (^animations)(void) = ^{
+                     
+                     
+                     [view setCenter:center];
+                     };
+                     void (^completionAnimation)(BOOL) = ^(BOOL finished) {
+                     
+                     [view removeFromSuperview];
+                     };
+                     
+                     if(_current_target!=_item_num-1){
+                     [UIView animateWithDuration:0.4
+                     animations:animations
+                     completion:completionAnimation];
+                     }
+                     */
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"LeftDisApper:%@",exception);
+                }
+                @finally {
                     
                 }
-              
+                
+                
+                
+            }
+            if(_current_target<_item_num-VIEW_NUM+1){
+                //中心から現れる
+                @try {
+                    CMSpiralCircleView * view=[_circles objectAtIndex:_current_target+VIEW_NUM-1];
+                    NSLog(@"%@",view.album_name);
+                    [_spiral addSubview:view];
+                    [_spiral sendSubviewToBack:view];
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"CenterApper:%@",exception);
+                }
+                @finally {
+                    
+                }
+                
+            }
+        }else if(target_changed>0){
+            
+            if(_current_target<_item_num-VIEW_NUM+1){
+                //中心に消えていく
+                @try {
+                    [[_circles objectAtIndex:_current_target+VIEW_NUM] removeFromSuperview];
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"CenterDisApper:%@",exception);
+                }
+                @finally {
+                    
+                }
+                
+            }
+            
+            if(_current_target>-1){
+                //左から現れる
+                @try {
+                    CMSpiralCircleView *view=[_circles objectAtIndex:_current_target];
+                    [_spiral addSubview:view];
+                    [_spiral bringSubviewToFront:view];
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"CenterApper:%@",exception);
+                }
+                @finally {
+                    
+                }
+                
+                
             }
             
         }
-
         
-        
+    }
+    
+    
+    
     
     
     
@@ -439,7 +473,7 @@
 - (void)handleTapGesture:(UIGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
-        NSLog(@"NNNN");
+        [self hideIndex:nil];
     }
 }
 
@@ -456,17 +490,16 @@
         if(CGRectContainsPoint(_slider2.frame, current_point)) tag=2;
         if(CGRectContainsPoint(_slider3.frame, current_point)) tag=3;
         if(CGRectContainsPoint(_slider4.frame, current_point)) tag=4;
-         //NSLog(@"%d|%lf:%lf",tag,velocity.x,velocity.y);
+        //NSLog(@"%d|%lf:%lf",tag,velocity.x,velocity.y);
         //NSLog(@"BEGAN¥%lf:%lf",current_point.x,current_point.y);
         
     }
-    
     if(sender.state==UIGestureRecognizerStateEnded){
         self.pointPanBegan=CGPointMake(-1,-1);
     }
     
     if(sender.state==UIGestureRecognizerStateBegan){
-       // NSLog(@"BEGAN¥%lf:%lf",point.x,velocity.x);
+        // NSLog(@"BEGAN¥%lf:%lf",point.x,velocity.x);
         
     }else{
         
@@ -569,7 +602,7 @@
     
     
     if(_touching_view==view){
-       // NSLog(@"TouchUp Cancel");
+        // NSLog(@"TouchUp Cancel");
         _touching_view=nil;
         return;
     }
@@ -579,14 +612,14 @@
     if(_presenting_player) return;
     
     view.original_center=view.center;
-
-  
+    
+    
     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
     
     if(self.type==0){
         ///
         [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
-         CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
+        CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
         vc.query_keyword=view.artist_name;
         vc.view.alpha=0.0;
         [self.view addSubview:vc.view];
@@ -599,8 +632,8 @@
         return;
         
     }else if(self.type==1){
-            [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
-          _presenting_player=YES;
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
+        _presenting_player=YES;
         MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
         [songQuery addFilterPredicate: [MPMediaPropertyPredicate
                                         predicateWithValue: view.title
@@ -613,7 +646,7 @@
         
         [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
     }else if(self.type==2){
-            [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
         MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
         [songQuery addFilterPredicate: [MPMediaPropertyPredicate
                                         predicateWithValue: view.album_name
@@ -645,10 +678,41 @@
     }
     if(_pointPanBegan.x==-1.0){
         _pointPanBegan=[touch locationInView:_spiral];
-      
+        
         
     }
 }
+
+#pragma mark - index view
+-(IBAction)showIndex:(id)sender
+{
+    
+    void (^animations)(void) = ^{
+        _index_view.center=CGPointMake(self.view.frame.size.width*0.75,self.view.frame.size.height/2);
+        
+        // _index_view.center=CGPointMake(self.view.frame.size.width*0.5,self.view.frame.size.height/2);
+        
+    };
+    void (^completionAnimation)(BOOL) = ^(BOOL finished) {
+        
+    };
+    [UIView animateWithDuration:0.7 animations:animations completion:completionAnimation];
+    
+}
+
+-(IBAction)hideIndex:(id)sender
+{
+    void (^animations)(void) = ^{
+        _index_view.frame=CGRectMake(self.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height);
+    };
+    void (^completionAnimation)(BOOL) = ^(BOOL finished) {
+        
+    };
+    [UIView animateWithDuration:0.5 animations:animations completion:completionAnimation];
+}
+
+
+
 
 #pragma mark - something
 

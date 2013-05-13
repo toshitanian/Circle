@@ -55,37 +55,66 @@
     _cv.dataSource=self;
     [self.view addSubview:_cv];
     
-    
- 
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    //各種Viewの読み込み
-    if(_artistViewController==NULL){
-        _artistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:0];
-    }
-    
-    if(_songViewController==NULL){
-        _songViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
-        
-    }
-    
-    if(_albumViewController==NULL){
-        _albumViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
-    }
-    
-    if(_playlistViewController==NULL){
-        _playlistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:3];
-        
-    }
+    [NSThread detachNewThreadSelector:@selector(artistvcThread)
+                             toTarget:self
+                           withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(songvcThread)
+                             toTarget:self
+                           withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(albumvcThread)
+                             toTarget:self
+                           withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(playlistvcThread)
+                             toTarget:self
+                           withObject:nil];
     
     if(_infoViewController==NULL){
         _infoViewController=[[CMInfoViewController alloc] initWithNibName:@"CMInfoViewController" bundle:nil];
         
     }
+ 
 }
 
+#pragma mark - load vc
+- (void)artistvcThread {
+    //各種Viewの読み込み
+    if(_artistViewController==NULL){
+        _artistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:0];
+          _artistViewController.delegate=self;
+    }
+
+}
+
+- (void)songvcThread {
+
+    if(_songViewController==NULL){
+        _songViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
+        _songViewController.delegate=self;
+        
+    }
+    
+}
+- (void)albumvcThread {
+    if(_albumViewController==NULL){
+        _albumViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
+        _albumViewController.delegate=self;
+    }
+}
+- (void)playlistvcThread {
+    
+    if(_playlistViewController==NULL){
+        _playlistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:3];
+        _playlistViewController.delegate=self;
+        
+    }
+
+    
+}
+
+-(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController*)vc
+{
+   // NSLog(@"%lf",progress);
+}
 
 # pragma mark - collection view
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section;
