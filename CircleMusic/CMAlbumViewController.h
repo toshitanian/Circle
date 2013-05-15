@@ -10,6 +10,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "CMSpiralCircleView.h"
 #import "CMIndexView.h"
+#import "CMIndexCircleView.h"
 
 @interface CMPanGestureRecognizer : UIPanGestureRecognizer
 @property (atomic,assign) int tag;
@@ -65,6 +66,8 @@
     CMIndexView *_index_view;
     
     NSArray *index_dic;
+    
+    CMIndexCircleView *_index_circle_view;
 }
 //[type] 0: artist 1: song 2:album
 @property(atomic,assign) int type;

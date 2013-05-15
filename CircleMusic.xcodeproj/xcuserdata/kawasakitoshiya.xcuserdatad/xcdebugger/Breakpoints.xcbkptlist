@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "CircleMusic/CMPlayerViewController.m"
-         timestampString = "390157104.032973"
+         timestampString = "390320842.721572"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "578"
-         endingLineNumber = "578"
+         startingLineNumber = "647"
+         endingLineNumber = "647"
          landmarkName = "-handlePanGesture:"
          landmarkType = "5">
       </FileBreakpoint>

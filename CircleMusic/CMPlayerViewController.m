@@ -8,10 +8,17 @@
 
 #import "CMPlayerViewController.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "CMAlbumViewController.h"
+#import <Social/Social.h>
 static const NSString *PlayerStatusContext;
 static const NSString *CurrentItemChangedContext;
 static const NSString *PlayerRateContext;
+
+
+
+
+
+
 
 @implementation CMMusicItem
 @end
@@ -46,10 +53,11 @@ static const NSString *PlayerRateContext;
         [self.player setQueueWithQuery:self.query];
         self.needReload=NO;
         // [self.player play];
-        _out_of_queue=NO;
+        
         self.isPlaying=YES;
         //   _player.volume=0;
         _shadow.hidden=YES;
+        _artwork.alpha=1.0f;
         _items = [NSMutableArray array];
         _urls=[NSMutableArray array];
         NSArray *collections=[self.query collections];
@@ -82,7 +90,7 @@ static const NSString *PlayerRateContext;
         [_player2 addObserver:self forKeyPath:@"status" options:0 context:&PlayerStatusContext];
         [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
         [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
-
+        
         [self updatePlayingMusicInfo:nil];
         
         
@@ -128,7 +136,6 @@ static const NSString *PlayerRateContext;
     //[_controller addSubview:_btn_previous];
     ///ここまで
     
-    [_slider addTarget:self action:@selector(slide:) forControlEvents:UIControlEventValueChanged];
     
     
     
@@ -151,7 +158,7 @@ static const NSString *PlayerRateContext;
     playiv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     [_shadow addSubview:playiv];
     
-    _toast_next.frame=CGRectMake(self.view.frame.size.width-_toast_previous.frame.size.width,_artwork.frame.origin.y-_toast_next.frame.size.height,_toast_next.frame.size.width,_toast_next.frame.size.height);
+    _toast_next.frame=CGRectMake(_toast_next.frame.origin.x,_toast_next.frame.origin.y,_toast_next.frame.size.width,_toast_next.frame.size.height);
     _toast_next.layer.cornerRadius = _toast_next.frame.size.width/2;
     _toast_next.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.65f];
     UIImageView *niv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"next.png"]];
@@ -161,7 +168,7 @@ static const NSString *PlayerRateContext;
     niv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     [_toast_next addSubview:niv];
     
-    _toast_previous.frame=CGRectMake(0,_artwork.frame.origin.y-_toast_previous.frame.size.height,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
+    _toast_previous.frame=CGRectMake(0,_toast_previous.frame.origin.y,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
     _toast_previous.layer.cornerRadius = _toast_previous.frame.size.width/2;
     _toast_previous.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.65f];
     UIImageView *piv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"previous.png"]];
@@ -179,16 +186,27 @@ static const NSString *PlayerRateContext;
     
     
     UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    panRecognizer.delegate=self;
     [self.view addGestureRecognizer:panRecognizer];
     
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    tapRecognizer.delegate=self;
     [self.view addGestureRecognizer:tapRecognizer];
     /*
      UISwipeGestureRecognizer* swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
      [self.view addGestureRecognizer:swipeRecognizer];
      */
     
+#pragma mark  control button
+    [_twitter makeCircle];
+    _twitter.image=[UIImage imageNamed:@"twitter.png"];
+    _twitter_abs_point=absPoint(_twitter);
+    [_pull makeCircle];
+    _pull.image=[UIImage imageNamed:@"pull.png"];
+    _pull_abs_point=absPoint(_pull);
     
+    
+#pragma mark  audio session
     _audioSession = [AVAudioSession sharedInstance];
     _audioSession.delegate=self;
     [_audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
@@ -252,7 +270,7 @@ static const NSString *PlayerRateContext;
 
 -(void)clock:(id)something
 {
-
+    
     @try {
         
         if(_isSkipping) return;
@@ -263,16 +281,16 @@ static const NSString *PlayerRateContext;
             _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];
             
         }
+        
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"clock error");
+    }
+    @finally {
+        
+    }
     
-    
-}
-@catch (NSException *exception) {
-    NSLog(@"clock error");
-}
-@finally {
-    
-}
-
 }
 
 -(UIButton *) getControllButton{
@@ -288,7 +306,7 @@ static const NSString *PlayerRateContext;
 
 #pragma mark - controller
 -(void)play_pushed:(UIButton *)btn{
-    _out_of_queue=NO;
+ 
     if(_isPlaying){
         _isPlaying=NO;
         // [_player pause];
@@ -325,12 +343,12 @@ static const NSString *PlayerRateContext;
 {
     [self stop];
     [self dismiss:nil];
-
+    
 }
 
 -(void)next_pushed:(UIButton *)btn{
     
-    
+       _song_progress.value=0.0f;
     if ([self get_next_index]!=-1) {
         
         self.currentIndex=[self get_next_index];
@@ -347,7 +365,7 @@ static const NSString *PlayerRateContext;
         [self showToast:_toast_next];
     }else{
         [self finish];
-     
+        
         
     }
     
@@ -368,7 +386,7 @@ static const NSString *PlayerRateContext;
 {
     
     self.currentIndex = index;
-
+    
     
     dispatch_queue_t q_global;
     q_global = dispatch_get_global_queue(0, 0);
@@ -406,6 +424,7 @@ static const NSString *PlayerRateContext;
 }
 -(void)previous_pushed:(UIButton *)btn{
     if(_isSkipping) return;
+       _song_progress.value=0.0f;
     _isSkipping=YES;
     self.currentIndex=[self get_previous_index];
     
@@ -420,9 +439,6 @@ static const NSString *PlayerRateContext;
     
 }
 
--(void)slide:(UISlider*)slider{
-    _player.volume=slider.value;
-}
 
 
 #pragma mark - Remote-control event handling
@@ -497,7 +513,7 @@ static const NSString *PlayerRateContext;
             
             [songInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
         }else{
-            [songInfo setObject:[[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:@"no_artwork.png"]] forKey:MPMediaItemPropertyArtwork];
+            [songInfo setObject:[[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:@"no_artwork_with_circle.png"]] forKey:MPMediaItemPropertyArtwork];
         }
         
         
@@ -509,11 +525,6 @@ static const NSString *PlayerRateContext;
     
 }
 
--(void)MPMusicPlayerControllerVolumeDidChangeNotification:(id)something
-{
-    // _slider.value=_player.volume;
-}
-
 -(void)handle_PlaybackStateChanged:(id)something
 {
 }
@@ -523,8 +534,14 @@ static const NSString *PlayerRateContext;
     // _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
     
     //TODO: index
-     AVPlayerItem *item=[_player2 currentItem];
-     [item seekToTime:CMTimeMake(slider.value, 1)];
+    AVPlayerItem *item=[_player2 currentItem];
+    [item seekToTime:CMTimeMake(slider.value, 1)];
+    
+    if(!self.isPlaying){
+        int current_time=CMTimeGetSeconds(item.currentTime);
+        _song_progress.value=current_time;
+        _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];
+    }
     
     
 }
@@ -553,6 +570,55 @@ static const NSString *PlayerRateContext;
 }
 
 #pragma mark - gesture
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if([gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]]){
+        CGPoint point=[touch locationInView:self.view];
+        if(CGRectContainsPoint(_artwork.frame, point)){
+            _onArtwork=YES;
+        }else if(CGRectContainsPoint(CGRectMake(_twitter_abs_point.x, _twitter_abs_point.y, _twitter.frame.size.width, _twitter.frame.size.height), point)){
+            NSLog(@"Twitter Touched");
+            void (^animations)(void) = ^{
+                
+                float scale_value=1.2;
+                
+                CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+                [_twitter setTransform:scale];
+                
+            };
+      
+            [UIView animateWithDuration:0.1 animations:animations completion:nil];
+            _onTwitter=YES;
+            
+        }else if(CGRectContainsPoint(CGRectMake(_pull_abs_point.x, _pull_abs_point.y, _pull.frame.size.width, _pull.frame.size.height), point)){
+            NSLog(@"Pull TOcuhed");
+            
+            void (^animations)(void) = ^{
+                
+                float scale_value=1.2;
+                
+                CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+                [_pull setTransform:scale];
+                _onPull=YES;
+                
+            };
+            
+            [UIView animateWithDuration:0.1 animations:animations completion:nil];
+        }
+    }
+    
+    return YES;
+}
+
+CGPoint absPoint(UIView* view)
+{
+    CGPoint ret = CGPointMake(view.frame.origin.x, view.frame.origin.y);
+    if ([view superview] != nil){
+        CGPoint addPoint = absPoint([view superview]);ret = CGPointMake(ret.x + addPoint.x, ret.y + addPoint.y);
+    }
+    return ret;
+}
+
 //http://labs.techfirm.co.jp/ipad/cho/466
 - (void)handlePanGesture:(UIGestureRecognizer *)sender {
     
@@ -563,20 +629,39 @@ static const NSString *PlayerRateContext;
     float angle=atan(point.y/point.x)/2/M_PI*360;
     //NSLog(@"%lf",atan(point.y/point.x)/2/M_PI*360);
     if (sender.state == UIGestureRecognizerStateEnded){
-        if(abs(angle)<40){
-            
-            if(velocity.x>200) [self previous_pushed:nil];
-            if(velocity.x<-200) [self next_pushed:nil];
+        if(_onArtwork){
+            if(abs(angle)<40){
+                
+                if(velocity.x>200) [self previous_pushed:nil];
+                if(velocity.x<-200) [self next_pushed:nil];
+            }
         }
     }
     
     if(abs(angle)>50){
-        //!!TODO positionで決めたほうがいいかも
-        //NSLog(@"%lf",velocity.y/100000.0);
-        float v_up=MAX(-0.2, velocity.y/100000.0);
-        _player.volume-=v_up;
-        //_player.volume-=v_up;
-        
+        if(_onArtwork){
+            //!!TODO positionで決めたほうがいいかも
+            //NSLog(@"%lf",velocity.y/100000.0);
+            float v_up=MAX(-0.2, velocity.y/100000.0);
+            _player.volume-=v_up;
+            //_player.volume-=v_up;
+        }
+    }
+    
+    if (sender.state == UIGestureRecognizerStateEnded){
+        if(_onTwitter){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_twitter setTransform:scale];
+        }
+        if(_onPull){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_pull setTransform:scale];
+        }
+        _onTwitter=NO;
+        _onPull=NO;
+        _onArtwork=NO;
     }
 }
 
@@ -584,15 +669,43 @@ static const NSString *PlayerRateContext;
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         UITapGestureRecognizer *tap = (UITapGestureRecognizer*)sender;
-        CGPoint point=[tap locationInView:_artwork];
+        CGPoint point=[tap locationInView:self.view];
         // NSLog(@"Tap:%lf/%lf",[tap locationInView:_artwork].x,[tap locationInView:_artwork].y);
         //NSLog(@"%lf|%lf",sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2)),_artwork.frame.size.width/2);
         if(sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2))
            <_artwork.frame.size.width/2){
             [self play_pushed:nil];
         }
+        point=[tap locationInView:_controller];
+        if(CGRectContainsPoint(_twitter.frame, point)){
+            NSLog(@"Twitter");
+    
+                  [self tweet];
+        }else if(CGRectContainsPoint(_pull.frame, point)){
+            [self dismiss:nil];
+        }
+    }
+    
+    if (sender.state == UIGestureRecognizerStateEnded){
+        if(_onTwitter){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_twitter setTransform:scale];
+        }
+        if(_onPull){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_pull setTransform:scale];
+        }
+        _onTwitter=NO;
+        _onPull=NO;
+        _onArtwork=NO;
     }
 }
+
+
+
+
 /*
  - (void)handleSwipeGesture:(UIGestureRecognizer *)sender {
  if (sender.state == UIGestureRecognizerStateEnded)
@@ -661,6 +774,40 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 	
 	return [UIImage imageWithCGImage:imageMasked];
 }
+#pragma mark - twitter
+- (void)tweet
+{
+    SLComposeViewController *tweetViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+    
+    [tweetViewController setInitialText:@" #nowplaying with CirclePlayer"];
+    [self presentViewController:tweetViewController animated:YES completion:nil];
+    
+    /*
+     [tweetViewController setCompletionHandler:^(TWTweetComposeViewControllerResult result) {
+     switch (result) {
+     case TWTweetComposeViewControllerResultCancelled:
+     // The cancel button was tapped.
+     //NSlog(@"Tweet cancelled.");
+     
+     break;
+     case TWTweetComposeViewControllerResultDone:
+     // The tweet was sent.
+     //NSlog(@"Tweet done.");
+     break;
+     default:
+     break;
+     }
+     
+     // Dismiss the tweet composition view controller.
+     [self dismissViewControllerAnimated:YES completion:nil];
+     
+     }];
+     [self presentViewController:tweetViewController animated:YES completion:nil];
+     tweetViewController = nil;
+     */
+}
+
+
 #pragma  mark - something
 
 -(IBAction)dismiss:(id)sender{

@@ -8,14 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		180B305C1740E25300C2EA1B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180B305B1740E25300C2EA1B /* CoreMedia.framework */; };
+		180B3062174170B800C2EA1B /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B3061174170B800C2EA1B /* previous.png */; };
+		180B3064174170BE00C2EA1B /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B3063174170BE00C2EA1B /* next.png */; };
+		180B3068174173F600C2EA1B /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B3067174173F600C2EA1B /* play.png */; };
+		180B306A1741755800C2EA1B /* note_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B30691741755800C2EA1B /* note_black.png */; };
+		180B306C1741763900C2EA1B /* no_artwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B306B1741763900C2EA1B /* no_artwork.png */; };
+		180B306E1741771F00C2EA1B /* no_artwork_with_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B306D1741771F00C2EA1B /* no_artwork_with_circle.png */; };
+		180B307017424CCD00C2EA1B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B306F17424CCC00C2EA1B /* icon.png */; };
+		180B307217424CE700C2EA1B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B307117424CE700C2EA1B /* icon@2x.png */; };
+		180B307A1742551D00C2EA1B /* cell-playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B30791742551D00C2EA1B /* cell-playlist.png */; };
+		180B307D1743485E00C2EA1B /* CMIndexCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 180B307C1743485E00C2EA1B /* CMIndexCircleView.m */; };
+		180B307F1743B23900C2EA1B /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B307E1743B23900C2EA1B /* twitter.png */; };
+		180B30841743B34400C2EA1B /* CMPlayerButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 180B30831743B34400C2EA1B /* CMPlayerButtonView.m */; };
+		180B30861743C03300C2EA1B /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180B30851743C03200C2EA1B /* Social.framework */; };
 		1857F6A017368C8E00F6146D /* CMSongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1857F69E17368C8E00F6146D /* CMSongViewController.m */; };
 		1857F6A117368C8E00F6146D /* CMSongViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1857F69F17368C8E00F6146D /* CMSongViewController.xib */; };
 		1857F6A61736B3FF00F6146D /* CMPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */; };
 		1857F6A71736B3FF00F6146D /* CMPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */; };
-		1857F6A91736B9F000F6146D /* no_artwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 1857F6A81736B9F000F6146D /* no_artwork.png */; };
-		187467DB1736D46200C9F9D8 /* previous.png in Resources */ = {isa = PBXBuildFile; fileRef = 187467DA1736D46200C9F9D8 /* previous.png */; };
-		187467DD1736D48200C9F9D8 /* next.png in Resources */ = {isa = PBXBuildFile; fileRef = 187467DC1736D48200C9F9D8 /* next.png */; };
-		187467DF1736E13D00C9F9D8 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 187467DE1736E13D00C9F9D8 /* play.png */; };
 		187467E41737945A00C9F9D8 /* CMAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187467E21737945A00C9F9D8 /* CMAlbumViewController.m */; };
 		187467E51737945A00C9F9D8 /* CMAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187467E31737945A00C9F9D8 /* CMAlbumViewController.xib */; };
 		187467E81737EC4A00C9F9D8 /* CMSpiralCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 187467E71737EC4A00C9F9D8 /* CMSpiralCircleView.m */; };
@@ -52,7 +61,6 @@
 		18E4097717357B17006BB979 /* cell-artist.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E4097617357B17006BB979 /* cell-artist.png */; };
 		18E40979173584A3006BB979 /* cell-song.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E40978173584A3006BB979 /* cell-song.png */; };
 		18E4097B173584DA006BB979 /* cell-album.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E4097A173584DA006BB979 /* cell-album.png */; };
-		18E4097D1735850F006BB979 /* cell-playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E4097C1735850F006BB979 /* cell-playlist.png */; };
 		18E4097F1735854B006BB979 /* cell-info.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E4097E1735854B006BB979 /* cell-info.png */; };
 		18E4098A17358CAE006BB979 /* CMArtistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4098817358CAE006BB979 /* CMArtistViewController.m */; };
 		18E4098B17358CAE006BB979 /* CMArtistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E4098917358CAE006BB979 /* CMArtistViewController.xib */; };
@@ -76,16 +84,28 @@
 
 /* Begin PBXFileReference section */
 		180B305B1740E25300C2EA1B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		180B3061174170B800C2EA1B /* previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previous.png; sourceTree = "<group>"; };
+		180B3063174170BE00C2EA1B /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = "<group>"; };
+		180B3067174173F600C2EA1B /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		180B30691741755800C2EA1B /* note_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note_black.png; sourceTree = "<group>"; };
+		180B306B1741763900C2EA1B /* no_artwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_artwork.png; sourceTree = "<group>"; };
+		180B306D1741771F00C2EA1B /* no_artwork_with_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_artwork_with_circle.png; sourceTree = "<group>"; };
+		180B306F17424CCC00C2EA1B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		180B307117424CE700C2EA1B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		180B30791742551D00C2EA1B /* cell-playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-playlist.png"; sourceTree = "<group>"; };
+		180B307B1743485E00C2EA1B /* CMIndexCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIndexCircleView.h; sourceTree = "<group>"; };
+		180B307C1743485E00C2EA1B /* CMIndexCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMIndexCircleView.m; sourceTree = "<group>"; };
+		180B307E1743B23900C2EA1B /* twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter.png; sourceTree = "<group>"; };
+		180B30801743B2FF00C2EA1B /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		180B30821743B34300C2EA1B /* CMPlayerButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPlayerButtonView.h; sourceTree = "<group>"; };
+		180B30831743B34400C2EA1B /* CMPlayerButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPlayerButtonView.m; sourceTree = "<group>"; };
+		180B30851743C03200C2EA1B /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		1857F69D17368C8E00F6146D /* CMSongViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSongViewController.h; sourceTree = "<group>"; };
 		1857F69E17368C8E00F6146D /* CMSongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMSongViewController.m; sourceTree = "<group>"; };
 		1857F69F17368C8E00F6146D /* CMSongViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMSongViewController.xib; sourceTree = "<group>"; };
 		1857F6A31736B3FF00F6146D /* CMPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPlayerViewController.h; sourceTree = "<group>"; };
 		1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPlayerViewController.m; sourceTree = "<group>"; };
 		1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMPlayerViewController.xib; sourceTree = "<group>"; };
-		1857F6A81736B9F000F6146D /* no_artwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_artwork.png; sourceTree = "<group>"; };
-		187467DA1736D46200C9F9D8 /* previous.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previous.png; sourceTree = "<group>"; };
-		187467DC1736D48200C9F9D8 /* next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = next.png; sourceTree = "<group>"; };
-		187467DE1736E13D00C9F9D8 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		187467E11737945A00C9F9D8 /* CMAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMAlbumViewController.h; sourceTree = "<group>"; };
 		187467E21737945A00C9F9D8 /* CMAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMAlbumViewController.m; sourceTree = "<group>"; };
 		187467E31737945A00C9F9D8 /* CMAlbumViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMAlbumViewController.xib; sourceTree = "<group>"; };
@@ -133,7 +153,6 @@
 		18E4097617357B17006BB979 /* cell-artist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-artist.png"; sourceTree = "<group>"; };
 		18E40978173584A3006BB979 /* cell-song.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-song.png"; sourceTree = "<group>"; };
 		18E4097A173584DA006BB979 /* cell-album.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-album.png"; sourceTree = "<group>"; };
-		18E4097C1735850F006BB979 /* cell-playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-playlist.png"; sourceTree = "<group>"; };
 		18E4097E1735854B006BB979 /* cell-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-info.png"; sourceTree = "<group>"; };
 		18E4098717358CAE006BB979 /* CMArtistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMArtistViewController.h; sourceTree = "<group>"; };
 		18E4098817358CAE006BB979 /* CMArtistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMArtistViewController.m; sourceTree = "<group>"; };
@@ -152,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				180B30861743C03300C2EA1B /* Social.framework in Frameworks */,
 				180B305C1740E25300C2EA1B /* CoreMedia.framework in Frameworks */,
 				187C33F6173B82FF0090B5BD /* AVFoundation.framework in Frameworks */,
 				18E4098D17358F50006BB979 /* MediaPlayer.framework in Frameworks */,
@@ -191,11 +211,16 @@
 				1857F6A31736B3FF00F6146D /* CMPlayerViewController.h */,
 				1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */,
 				1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */,
-				1857F6A81736B9F000F6146D /* no_artwork.png */,
-				187467DA1736D46200C9F9D8 /* previous.png */,
-				187467DC1736D48200C9F9D8 /* next.png */,
-				187467DE1736E13D00C9F9D8 /* play.png */,
+				180B306B1741763900C2EA1B /* no_artwork.png */,
+				180B306D1741771F00C2EA1B /* no_artwork_with_circle.png */,
+				180B30691741755800C2EA1B /* note_black.png */,
 				187C33F7173FE2DF0090B5BD /* circle_mask.png */,
+				180B3063174170BE00C2EA1B /* next.png */,
+				180B3067174173F600C2EA1B /* play.png */,
+				180B3061174170B800C2EA1B /* previous.png */,
+				180B307E1743B23900C2EA1B /* twitter.png */,
+				180B30821743B34300C2EA1B /* CMPlayerButtonView.h */,
+				180B30831743B34400C2EA1B /* CMPlayerButtonView.m */,
 			);
 			name = CMPlayer;
 			sourceTree = "<group>";
@@ -210,6 +235,8 @@
 				187467E71737EC4A00C9F9D8 /* CMSpiralCircleView.m */,
 				189650C5173A964E0084F3DA /* CMIndexView.h */,
 				189650C6173A964E0084F3DA /* CMIndexView.m */,
+				180B307B1743485E00C2EA1B /* CMIndexCircleView.h */,
+				180B307C1743485E00C2EA1B /* CMIndexCircleView.m */,
 				187467F31738B84100C9F9D8 /* pull.png */,
 				187467F71738DA1B00C9F9D8 /* blur.png */,
 				187467F41738B84100C9F9D8 /* push.png */,
@@ -240,6 +267,10 @@
 		18E409161735692E006BB979 = {
 			isa = PBXGroup;
 			children = (
+				180B30851743C03200C2EA1B /* Social.framework */,
+				180B30801743B2FF00C2EA1B /* Twitter.framework */,
+				180B307117424CE700C2EA1B /* icon@2x.png */,
+				180B306F17424CCC00C2EA1B /* icon.png */,
 				18E409281735692E006BB979 /* CircleMusic */,
 				18E4094C1735692E006BB979 /* CircleMusicTests */,
 				18E409211735692E006BB979 /* Frameworks */,
@@ -334,9 +365,9 @@
 		18E4098017358B54006BB979 /* cell images */ = {
 			isa = PBXGroup;
 			children = (
+				180B30791742551D00C2EA1B /* cell-playlist.png */,
 				18E4097617357B17006BB979 /* cell-artist.png */,
 				18E4097A173584DA006BB979 /* cell-album.png */,
-				18E4097C1735850F006BB979 /* cell-playlist.png */,
 				18E4097E1735854B006BB979 /* cell-info.png */,
 				18E4097417357505006BB979 /* test.png */,
 				18E40978173584A3006BB979 /* cell-song.png */,
@@ -460,15 +491,10 @@
 				18E4097717357B17006BB979 /* cell-artist.png in Resources */,
 				18E40979173584A3006BB979 /* cell-song.png in Resources */,
 				18E4097B173584DA006BB979 /* cell-album.png in Resources */,
-				18E4097D1735850F006BB979 /* cell-playlist.png in Resources */,
 				18E4097F1735854B006BB979 /* cell-info.png in Resources */,
 				18E4098B17358CAE006BB979 /* CMArtistViewController.xib in Resources */,
 				1857F6A117368C8E00F6146D /* CMSongViewController.xib in Resources */,
 				1857F6A71736B3FF00F6146D /* CMPlayerViewController.xib in Resources */,
-				1857F6A91736B9F000F6146D /* no_artwork.png in Resources */,
-				187467DB1736D46200C9F9D8 /* previous.png in Resources */,
-				187467DD1736D48200C9F9D8 /* next.png in Resources */,
-				187467DF1736E13D00C9F9D8 /* play.png in Resources */,
 				187467E51737945A00C9F9D8 /* CMAlbumViewController.xib in Resources */,
 				187467F2173857D200C9F9D8 /* CMInfoViewController.xib in Resources */,
 				187467F51738B84200C9F9D8 /* pull.png in Resources */,
@@ -476,6 +502,16 @@
 				187467F81738DA1B00C9F9D8 /* blur.png in Resources */,
 				187C33F4173B82960090B5BD /* test.mp3 in Resources */,
 				187C33F8173FE2DF0090B5BD /* circle_mask.png in Resources */,
+				180B3062174170B800C2EA1B /* previous.png in Resources */,
+				180B3064174170BE00C2EA1B /* next.png in Resources */,
+				180B3068174173F600C2EA1B /* play.png in Resources */,
+				180B306A1741755800C2EA1B /* note_black.png in Resources */,
+				180B306C1741763900C2EA1B /* no_artwork.png in Resources */,
+				180B306E1741771F00C2EA1B /* no_artwork_with_circle.png in Resources */,
+				180B307017424CCD00C2EA1B /* icon.png in Resources */,
+				180B307217424CE700C2EA1B /* icon@2x.png in Resources */,
+				180B307A1742551D00C2EA1B /* cell-playlist.png in Resources */,
+				180B307F1743B23900C2EA1B /* twitter.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,6 +561,8 @@
 				187467E81737EC4A00C9F9D8 /* CMSpiralCircleView.m in Sources */,
 				187467F1173857D200C9F9D8 /* CMInfoViewController.m in Sources */,
 				189650C7173A964F0084F3DA /* CMIndexView.m in Sources */,
+				180B307D1743485E00C2EA1B /* CMIndexCircleView.m in Sources */,
+				180B30841743B34400C2EA1B /* CMPlayerButtonView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

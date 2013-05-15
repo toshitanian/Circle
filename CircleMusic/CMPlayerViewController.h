@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
 #include <AVFoundation/AVFoundation.h>
+#import "CMPlayerButtonView.h"
 
 @interface CMMusicItem : NSObject
 
@@ -37,7 +38,9 @@
 
 //UIimage http://iphone.moo.jp/app/?p=707
 
-@interface CMPlayerViewController : UIViewController<AVAudioSessionDelegate>
+//http://akabeko.me/blog/2012/10/ios-video/ 全体の構成
+
+@interface CMPlayerViewController : UIViewController<AVAudioSessionDelegate,UIGestureRecognizerDelegate>
 {
 
     IBOutlet UIView *_controller;
@@ -45,7 +48,6 @@
     UIButton *_btn_next;
     UIButton *_btn_previous;
     
-    IBOutlet UISlider *_slider;
     IBOutlet UILabel *_info_artist;
     IBOutlet UILabel *_info_title;
     IBOutlet UILabel *_info_album;
@@ -60,7 +62,6 @@
     IBOutlet UILabel *_queue_label;
     
     NSTimer *_tm;
-    bool _out_of_queue;
     
  
  
@@ -69,7 +70,16 @@
 
     AVAudioSession *_audioSession;
     
-    bool _isSkipping;
+    BOOL _isSkipping;
+    IBOutlet CMPlayerButtonView *_twitter;
+    IBOutlet CMPlayerButtonView *_pull;
+    
+    BOOL _onArtwork;
+    BOOL _onTwitter;
+    BOOL _onPull;
+    
+    CGPoint _twitter_abs_point;
+    CGPoint _pull_abs_point;
 }
 
 -(IBAction)dismiss:(id)sender;
@@ -78,9 +88,9 @@
 -(void)previous_pushed:(UIButton *)btn;
 
 @property MPMusicPlayerController *player;
-@property (atomic,assign) bool isPlaying;
+@property (atomic,assign) BOOL isPlaying;
 @property (atomic,assign) int currentIndex;
-@property (atomic,assign) bool needReload;
+@property (atomic,assign) BOOL needReload;
 @property (nonatomic,retain) MPMediaQuery *query;
 @property (nonatomic,retain) AVQueuePlayer *player2;
 @end

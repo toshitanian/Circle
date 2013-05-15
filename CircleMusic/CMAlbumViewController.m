@@ -219,6 +219,13 @@
     
     _scroll_speed=0.0;
     
+#pragma mark index circle view
+    _index_circle_view=[[CMIndexCircleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/4, self.view.frame.size.width/4)];
+    _index_circle_view.center=CGPointMake(_center.x, _center.y);
+    [self.view addSubview:_index_circle_view];
+    _index_circle_view.isShowing=NO;
+    
+    
 #pragma mark index_view init
      index_dic=[CMIndexView getIndexes:collections WithType:self.type];
     _index_view=[[CMIndexView alloc] initWithFrame:self.view.frame WithIndexes:index_dic];
