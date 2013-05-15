@@ -134,7 +134,7 @@
     }
     
     //views
-   
+    
     _item_num=[collections count];
     for (int i=0; i<_item_num; i++) {
         float ratio=(1-(float)i/VIEW_NUM)*1.0;
@@ -227,7 +227,7 @@
     
     
 #pragma mark index_view init
-     index_dic=[CMIndexView getIndexes:collections WithType:self.type];
+    index_dic=[CMIndexView getIndexes:collections WithType:self.type];
     _index_view=[[CMIndexView alloc] initWithFrame:self.view.frame WithIndexes:index_dic];
     [_index_view setFrame:CGRectMake(self.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height)];
     
@@ -235,6 +235,26 @@
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     [_index_view addGestureRecognizer:tapRecognizer];
     
+#pragma mark control button
+    [_btn_player makeCircle];
+    _btn_player.image=[UIImage imageNamed:@"headphone.png"];
+    [_btn_pop makeCircle];
+    _btn_pop.image=[UIImage imageNamed:@"back.png"];
+    UITapGestureRecognizer* p_tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureForController:)];
+    p_tapRecognizer.delegate=self;
+    [_controller_view addGestureRecognizer:p_tapRecognizer];
+    
+    UILongPressGestureRecognizer* p_longpressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureForController:)];
+    p_longpressRecognizer.delegate=self;
+    [_controller_view addGestureRecognizer:p_longpressRecognizer];
+    
+    UIPanGestureRecognizer *p_panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureForController:)];
+    p_panRecognizer.delegate=self;
+    [_controller_view addGestureRecognizer:p_panRecognizer];
+    
+    
+    _player_abs_point=absPoint_(_btn_player);
+    _pop_abs_point=absPoint_(_btn_pop);
     
     
 }
@@ -477,10 +497,97 @@
 //http://labs.techfirm.co.jp/ipad/cho/466
 
 
+CGPoint absPoint_(UIView* view)
+{
+    CGPoint ret = CGPointMake(view.frame.origin.x, view.frame.origin.y);
+    if ([view superview] != nil){
+        CGPoint addPoint = absPoint_([view superview]);ret = CGPointMake(ret.x + addPoint.x, ret.y + addPoint.y);
+    }
+    return ret;
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if([gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]]){
+        CGPoint point=[touch locationInView:self.view];
+        if(CGRectContainsPoint(CGRectMake(_player_abs_point.x, _player_abs_point.y, _btn_player.frame.size.width, _btn_player.frame.size.height), point)){
+            void (^animations)(void) = ^{
+                
+                float scale_value=1.2;
+                
+                CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+                [_btn_player setTransform:scale];
+                
+            };
+            
+            [UIView animateWithDuration:0.1 animations:animations completion:nil];
+            _onPlayer=YES;
+            
+        }
+        
+        if(CGRectContainsPoint(CGRectMake(_pop_abs_point.x, _pop_abs_point.y, _btn_pop.frame.size.width, _btn_pop.frame.size.height), point)){
+            void (^animations)(void) = ^{
+                
+                float scale_value=1.2;
+                
+                CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+                [_btn_pop setTransform:scale];
+                
+            };
+            
+            [UIView animateWithDuration:0.1 animations:animations completion:nil];
+            _onPop=YES;
+            
+        }
+    }
+    
+    return YES;
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    
+    return YES;
+    
+}
+
 - (void)handleTapGesture:(UIGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         [self hideIndex:nil];
+    }
+}
+
+- (void)handleTapGestureForController:(UIGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        
+        UITapGestureRecognizer *tap = (UITapGestureRecognizer*)sender;
+        CGPoint point=[tap locationInView:self.view];
+        
+        [self resetControlButtons];
+        
+        if(CGRectContainsPoint(CGRectMake(_player_abs_point.x, _player_abs_point.y, _btn_player.frame.size.width, _btn_player.frame.size.height), point)){
+            [self showPlayer:nil];
+        }
+        
+        if(CGRectContainsPoint(CGRectMake(_pop_abs_point.x, _pop_abs_point.y, _btn_pop.frame.size.width, _btn_pop.frame.size.height), point)){
+            [self pop:nil];
+        }
+        
+        
+    }else if(sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
+        [self resetControlButtons];
+    }
+}
+
+- (void)handlePanGestureForController:(UIGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        
+        [self resetControlButtons];
     }
 }
 
@@ -583,6 +690,28 @@
         }
         
     }
+    
+    if (sender.state == UIGestureRecognizerStateEnded || sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
+        [self resetControlButtons];
+    }
+}
+
+-(void)resetControlButtons
+{
+    NSLog(@"reset");
+    if(_onPlayer){
+        float scale_value=1.0;
+        CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+        [_btn_player setTransform:scale];
+    }
+    if(_onPop){
+        float scale_value=1.0;
+        CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+        [_btn_pop setTransform:scale];
+    }
+    
+    _onPop=NO;
+    
 }
 
 -(IBAction)label_touched:(id)sender

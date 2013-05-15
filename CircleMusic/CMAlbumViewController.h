@@ -11,6 +11,7 @@
 #import "CMSpiralCircleView.h"
 #import "CMIndexView.h"
 #import "CMIndexCircleView.h"
+#import "CMPlayerButtonView.h"
 
 @interface CMPanGestureRecognizer : UIPanGestureRecognizer
 @property (atomic,assign) int tag;
@@ -28,7 +29,7 @@
 
 @end
 
-@interface CMAlbumViewController : UIViewController<CMSpiralCircleViewDelegate>
+@interface CMAlbumViewController : UIViewController<CMSpiralCircleViewDelegate,UIGestureRecognizerDelegate>
 {
     
     IBOutlet UIView *_spiral;
@@ -68,6 +69,15 @@
     NSArray *index_dic;
     
     CMIndexCircleView *_index_circle_view;
+    
+    
+   IBOutlet CMPlayerButtonView *_btn_player;
+   IBOutlet CMPlayerButtonView *_btn_pop;
+    IBOutlet UIView *_controller_view;
+    CGPoint _player_abs_point;
+        CGPoint _pop_abs_point;
+    BOOL _onPlayer;
+      BOOL _onPop;
 }
 //[type] 0: artist 1: song 2:album
 @property(atomic,assign) int type;

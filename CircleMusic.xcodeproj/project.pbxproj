@@ -21,6 +21,8 @@
 		180B307F1743B23900C2EA1B /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 180B307E1743B23900C2EA1B /* twitter.png */; };
 		180B30841743B34400C2EA1B /* CMPlayerButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 180B30831743B34400C2EA1B /* CMPlayerButtonView.m */; };
 		180B30861743C03300C2EA1B /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180B30851743C03200C2EA1B /* Social.framework */; };
+		181BA41D1743F461005CF643 /* headphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 181BA41C1743F461005CF643 /* headphone.png */; };
+		181BA41F174405DE005CF643 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 181BA41E174405DE005CF643 /* back.png */; };
 		1857F6A017368C8E00F6146D /* CMSongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1857F69E17368C8E00F6146D /* CMSongViewController.m */; };
 		1857F6A117368C8E00F6146D /* CMSongViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1857F69F17368C8E00F6146D /* CMSongViewController.xib */; };
 		1857F6A61736B3FF00F6146D /* CMPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */; };
@@ -100,6 +102,8 @@
 		180B30821743B34300C2EA1B /* CMPlayerButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPlayerButtonView.h; sourceTree = "<group>"; };
 		180B30831743B34400C2EA1B /* CMPlayerButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPlayerButtonView.m; sourceTree = "<group>"; };
 		180B30851743C03200C2EA1B /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		181BA41C1743F461005CF643 /* headphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headphone.png; sourceTree = "<group>"; };
+		181BA41E174405DE005CF643 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		1857F69D17368C8E00F6146D /* CMSongViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSongViewController.h; sourceTree = "<group>"; };
 		1857F69E17368C8E00F6146D /* CMSongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMSongViewController.m; sourceTree = "<group>"; };
 		1857F69F17368C8E00F6146D /* CMSongViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMSongViewController.xib; sourceTree = "<group>"; };
@@ -240,6 +244,8 @@
 				187467F31738B84100C9F9D8 /* pull.png */,
 				187467F71738DA1B00C9F9D8 /* blur.png */,
 				187467F41738B84100C9F9D8 /* push.png */,
+				181BA41C1743F461005CF643 /* headphone.png */,
+				181BA41E174405DE005CF643 /* back.png */,
 			);
 			name = CMAlbum;
 			sourceTree = "<group>";
@@ -512,6 +518,8 @@
 				180B307217424CE700C2EA1B /* icon@2x.png in Resources */,
 				180B307A1742551D00C2EA1B /* cell-playlist.png in Resources */,
 				180B307F1743B23900C2EA1B /* twitter.png in Resources */,
+				181BA41D1743F461005CF643 /* headphone.png in Resources */,
+				181BA41F174405DE005CF643 /* back.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

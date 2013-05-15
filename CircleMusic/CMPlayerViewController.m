@@ -185,18 +185,21 @@ static const NSString *PlayerRateContext;
     [_song_progress addTarget:self action:@selector(seek:) forControlEvents:UIControlEventValueChanged];
     
     
+#pragma mark gesture
+    
     UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
     panRecognizer.delegate=self;
     [self.view addGestureRecognizer:panRecognizer];
     
+    UILongPressGestureRecognizer* longpressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    longpressRecognizer.delegate=self;
+    [self.view addGestureRecognizer:longpressRecognizer];
+    
+    
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     tapRecognizer.delegate=self;
     [self.view addGestureRecognizer:tapRecognizer];
-    /*
-     UISwipeGestureRecognizer* swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeGesture:)];
-     [self.view addGestureRecognizer:swipeRecognizer];
-     */
-    
+
 #pragma mark  control button
     [_twitter makeCircle];
     _twitter.image=[UIImage imageNamed:@"twitter.png"];
@@ -648,7 +651,7 @@ CGPoint absPoint(UIView* view)
         }
     }
     
-    if (sender.state == UIGestureRecognizerStateEnded){
+    if (sender.state == UIGestureRecognizerStateEnded || sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
         if(_onTwitter){
             float scale_value=1.0;
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
@@ -670,23 +673,37 @@ CGPoint absPoint(UIView* view)
     {
         UITapGestureRecognizer *tap = (UITapGestureRecognizer*)sender;
         CGPoint point=[tap locationInView:self.view];
-        // NSLog(@"Tap:%lf/%lf",[tap locationInView:_artwork].x,[tap locationInView:_artwork].y);
-        //NSLog(@"%lf|%lf",sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2)),_artwork.frame.size.width/2);
-        if(sqrt(pow(point.x -_artwork.frame.size.width/2,2)+pow(point.y-_artwork.frame.size.height/2,2))
-           <_artwork.frame.size.width/2){
+
+        
+        
+        if(_onTwitter){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_twitter setTransform:scale];
+        }
+        if(_onPull){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_pull setTransform:scale];
+        }
+        _onTwitter=NO;
+        _onPull=NO;
+        _onArtwork=NO;
+        
+        if(CGRectContainsPoint(_artwork.frame, point)){
             [self play_pushed:nil];
         }
         point=[tap locationInView:_controller];
         if(CGRectContainsPoint(_twitter.frame, point)){
             NSLog(@"Twitter");
-    
-                  [self tweet];
+              CMMusicItem *item=[_items objectAtIndex:self.currentIndex];
+                  [self tweetWithTitle:item.title AndArtist:item.artist];
         }else if(CGRectContainsPoint(_pull.frame, point)){
             [self dismiss:nil];
         }
-    }
-    
-    if (sender.state == UIGestureRecognizerStateEnded){
+
+
+    }else if(sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
         if(_onTwitter){
             float scale_value=1.0;
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
@@ -775,11 +792,11 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 	return [UIImage imageWithCGImage:imageMasked];
 }
 #pragma mark - twitter
-- (void)tweet
+- (void)tweetWithTitle:(NSString*)title AndArtist:(NSString*)artist
 {
     SLComposeViewController *tweetViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
     
-    [tweetViewController setInitialText:@" #nowplaying with CirclePlayer"];
+    [tweetViewController setInitialText:[NSString stringWithFormat:@"#nowplaying %@ by %@ with CirclePlayer",title,artist]];
     [self presentViewController:tweetViewController animated:YES completion:nil];
     
     /*
