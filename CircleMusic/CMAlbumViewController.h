@@ -26,6 +26,7 @@
 @protocol CMAlbumViewControllerDelegate <NSObject>
 
 -(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController *)vc;
+-(void)CMAlbumViewControllerDidFinishLoading:(CMAlbumViewController *)vc;
 
 @end
 
@@ -86,7 +87,7 @@
 @property (nonatomic,retain) id<CMAlbumViewControllerDelegate> delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withType:(int)type;
-
+-(void)prepare;
 -(void)updateCircle:(float)angle;
 -(IBAction)pop:(id)sender;
 -(IBAction)showPlayer:(id)sender;

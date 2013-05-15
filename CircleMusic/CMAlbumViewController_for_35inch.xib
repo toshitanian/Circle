@@ -44,9 +44,10 @@
 							<object class="IBUIImageView" id="857634694">
 								<reference key="NSNextResponder" ref="457312963"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{247, 28}, {60, 60}}</string>
+								<string key="NSFrame">{{260, 4}, {60, 60}}</string>
 								<reference key="NSSuperview" ref="457312963"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -54,7 +55,7 @@
 							<object class="IBUIImageView" id="369304480">
 								<reference key="NSNextResponder" ref="457312963"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{174, 28}, {60, 60}}</string>
+								<string key="NSFrame">{{192, 4}, {60, 60}}</string>
 								<reference key="NSSuperview" ref="457312963"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="857634694"/>
@@ -63,7 +64,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 						</array>
-						<string key="NSFrame">{{0, 446}, {320, 102}}</string>
+						<string key="NSFrame">{{0, 393}, {320, 67}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="369304480"/>
@@ -225,10 +226,10 @@
 								<reference key="NSNextResponder" ref="1032892795"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews"/>
-								<string key="NSFrame">{{0, 315}, {320, 130}}</string>
+								<string key="NSFrame">{{0, 264}, {320, 130}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="650020020"/>
+								<reference key="NSNextKeyView" ref="457312963"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">2</int>
@@ -240,10 +241,10 @@
 								<reference key="NSNextResponder" ref="1032892795"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews"/>
-								<string key="NSFrame">{{220, 68}, {100, 248}}</string>
+								<string key="NSFrame">{{220, 68}, {100, 196}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="457312963"/>
+								<reference key="NSNextKeyView" ref="453287358"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
@@ -255,7 +256,7 @@
 								<reference key="NSNextResponder" ref="1032892795"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews"/>
-								<string key="NSFrame">{{0, 68}, {221, 100}}</string>
+								<string key="NSFrame">{{0, 68}, {220, 67}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="571955704"/>
@@ -270,10 +271,10 @@
 								<reference key="NSNextResponder" ref="1032892795"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews"/>
-								<string key="NSFrame">{{0, 166}, {100, 150}}</string>
+								<string key="NSFrame">{{0, 136}, {100, 128}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="453287358"/>
+								<reference key="NSNextKeyView" ref="650020020"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
@@ -282,7 +283,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 						</array>
-						<string key="NSFrameSize">{320, 445}</string>
+						<string key="NSFrameSize">{320, 394}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="883657107"/>
@@ -294,7 +295,7 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 				</array>
-				<string key="NSFrame">{{0, 20}, {320, 548}}</string>
+				<string key="NSFrame">{{0, 20}, {320, 460}}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="1032892795"/>
@@ -313,13 +314,13 @@
 							<integer value="3"/>
 						</array>
 						<array key="dict.values">
-							<string>{320, 568}</string>
-							<string>{568, 320}</string>
+							<string>{320, 480}</string>
+							<string>{480, 320}</string>
 						</array>
 					</object>
 					<string key="IBUITargetRuntime">IBCocoaTouchFramework</string>
-					<string key="IBUIDisplayName">Retina 4 Full Screen</string>
-					<int key="IBUIType">2</int>
+					<string key="IBUIDisplayName">Retina 3.5 Full Screen</string>
+					<int key="IBUIType">0</int>
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
@@ -408,19 +409,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">_controller_view</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="457312963"/>
-					</object>
-					<int key="connectionID">99</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">_btn_pop</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="369304480"/>
 					</object>
 					<int key="connectionID">102</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">_controller_view</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="457312963"/>
+					</object>
+					<int key="connectionID">99</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -468,9 +469,9 @@
 							<reference ref="1036876679"/>
 							<reference ref="872685963"/>
 							<reference ref="1014476391"/>
-							<reference ref="650020020"/>
 							<reference ref="469394776"/>
 							<reference ref="571955704"/>
+							<reference ref="650020020"/>
 							<reference ref="453287358"/>
 						</array>
 						<reference key="parent" ref="191373211"/>

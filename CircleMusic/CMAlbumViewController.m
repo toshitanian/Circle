@@ -54,63 +54,28 @@
 #pragma mark - view
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withType:(int)type
 {
+    CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    if(ad.iOStype==2){
+        nibNameOrNil=@"CMAlbumViewController_for_35inch";
+    }
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.type=type;
-        // Custom initialization
+
         
     }
     return self;
 }
 
--(void)viewWillAppear:(BOOL)animated
+-(void)prepare 
 {
-    _pointPanBegan.x=-1;
-     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
-    if (ad.playerViewController.isAvailable) {
-        _btn_player.hidden=NO;
-    }else{
-        _btn_player.hidden=YES;
-    }
-}
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    _angle=0;
-    _current_target=0;
-    _center=_spiral.center;
-    _radius=_spiral.frame.size.height/2-ITEM_SIZE/2;
+    // Custom initialization
     _circles=[NSMutableArray array];
-    _label_main.backgroundColor=[UIColor whiteColor];
-    _label_sub_lower.backgroundColor=[UIColor whiteColor];
-    _label_sub_upper.backgroundColor=[UIColor whiteColor];
-    _spiral.backgroundColor=[UIColor whiteColor];
-    _label_height=_label_main.frame.size.height+_label_sub_lower.frame.size.height+_label_sub_upper.frame.size.height;
-    
-    if(self.type==0){
-        _label_sub_upper.hidden=YES;
-        _label_main.hidden=NO;
-        _label_sub_lower.hidden=YES;
-    }else if(self.type==1){
-        _label_sub_upper.hidden=NO;
-        _label_main.hidden=NO;
-        _label_sub_lower.hidden=NO;
-    }else if(self.type==2){
-        _label_sub_upper.hidden=NO;
-        _label_main.hidden=NO;
-        _label_sub_lower.hidden=YES;
-    }else if(self.type==3){
-        _label_sub_upper.hidden=YES;
-        _label_main.hidden=NO;
-        _label_sub_lower.hidden=YES;
-    }
-    
-    //Query
+
+#pragma mark Query
     MPMediaQuery *query;
     NSArray *collections;
-    NSLog(@"0");
     if(self.type==0){
         query = [MPMediaQuery  artistsQuery];
         [query setGroupingType: MPMediaGroupingArtist];
@@ -139,12 +104,11 @@
         collections = [query collections];
     }
     
-    //views
+#pragma mark - make views
     
     _item_num=[collections count];
     for (int i=0; i<_item_num; i++) {
         float ratio=(1-(float)i/VIEW_NUM)*1.0;
-        // NSLog(@"%lf",ratio);
         CMSpiralCircleView *view=[[CMSpiralCircleView alloc] initWithFrame:CGRectMake(0,0, ITEM_SIZE*ratio, ITEM_SIZE*ratio)];
         
         //media
@@ -161,9 +125,83 @@
         view.album_name=albumName;
         view.title=title;
         view.artwork=artwork;
+        
         if(self.type==3){
             view.playlist_name=playlist;
         }
+        
+  
+        
+        [view setImage];
+        [_circles addObject:view];
+        @try {
+            if(i%20==0){
+            [self.delegate CMAlbumViewControllerDidChangeProgressOfLoad:(float)i/(float)_item_num From:self];
+            }
+        }
+        @catch (NSException *exception) {
+            
+        }
+        @finally {
+            
+        }
+        
+    }
+    [self.delegate CMAlbumViewControllerDidFinishLoading:self];
+}
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    _pointPanBegan.x=-1;
+     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    if (ad.playerViewController.isAvailable) {
+        _btn_player.hidden=NO;
+    }else{
+        _btn_player.hidden=YES;
+    }
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    _angle=0;
+    _current_target=0;
+    _center=_spiral.center;
+    _radius=_spiral.frame.size.height/2-ITEM_SIZE/2;
+
+    _label_main.backgroundColor=[UIColor whiteColor];
+    _label_sub_lower.backgroundColor=[UIColor whiteColor];
+    _label_sub_upper.backgroundColor=[UIColor whiteColor];
+    _spiral.backgroundColor=[UIColor whiteColor];
+    _label_height=_label_main.frame.size.height+_label_sub_lower.frame.size.height+_label_sub_upper.frame.size.height;
+
+    
+    if(self.type==0){
+        _label_sub_upper.hidden=YES;
+        _label_main.hidden=NO;
+        _label_sub_lower.hidden=YES;
+    }else if(self.type==1){
+        _label_sub_upper.hidden=NO;
+        _label_main.hidden=NO;
+        _label_sub_lower.hidden=NO;
+    }else if(self.type==2){
+        _label_sub_upper.hidden=NO;
+        _label_main.hidden=NO;
+        _label_sub_lower.hidden=YES;
+    }else if(self.type==3){
+        _label_sub_upper.hidden=YES;
+        _label_main.hidden=NO;
+        _label_sub_lower.hidden=YES;
+    }
+    
+    for (int i=0; i<_item_num; i++) {
+        
+        CMSpiralCircleView *view=[_circles objectAtIndex:i];
+        
+        view.delegate=self;
+        
         if(i==0){
             if(self.type==0){
                 _label_main.text=[NSString stringWithFormat:@"%@",view.artist_name];
@@ -179,24 +217,16 @@
             }
         }
         
-        view.delegate=self;
         
+        float ratio=(1-(float)i/VIEW_NUM)*1.0;
         //view
         view.center=CGPointMake(_center.x+_radius*(float)sin(M_PI/CIRCLES_IN_PI*i)*ratio, _center.y+_radius*(float)cos(M_PI/CIRCLES_IN_PI*i)*ratio);
-        
-        [view setImage];
-        
-        
-        
         if(i<VIEW_NUM){
             [_spiral addSubview:view];
             [_spiral sendSubviewToBack:view];
         }else{
             view.frame=CGRectMake(0,0,0,0);
         }
-        [_circles addObject:view];
-        
-        
         @try {
             [self.delegate CMAlbumViewControllerDidChangeProgressOfLoad:(float)i/(float)_item_num From:self];
         }
@@ -233,6 +263,7 @@
     
     
 #pragma mark index_view init
+    /*
     index_dic=[CMIndexView getIndexes:collections WithType:self.type];
     _index_view=[[CMIndexView alloc] initWithFrame:self.view.frame WithIndexes:index_dic];
     [_index_view setFrame:CGRectMake(self.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height)];
@@ -240,6 +271,7 @@
     [self.view addSubview:_index_view];
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     [_index_view addGestureRecognizer:tapRecognizer];
+     */
     
 #pragma mark control button
     [_btn_player makeCircle];
@@ -765,6 +797,8 @@ CGPoint absPoint_(UIView* view)
         [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
         CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
         vc.query_keyword=view.artist_name;
+        [vc prepare];
+   
         vc.view.alpha=0.0;
         [self.view addSubview:vc.view];
         [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {

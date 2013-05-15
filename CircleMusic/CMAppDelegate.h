@@ -17,5 +17,6 @@
 
 @property (strong, nonatomic) CMViewController *viewController;
 @property (strong,nonatomic) CMPlayerViewController *playerViewController;
+@property (atomic,assign) int iOStype;
 
 @end

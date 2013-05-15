@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CMAlbumViewController.h"
 #import <Social/Social.h>
+#import "CMAppDelegate.h"
 static const NSString *PlayerStatusContext;
 static const NSString *CurrentItemChangedContext;
 static const NSString *PlayerRateContext;
@@ -32,6 +33,10 @@ static const NSString *PlayerRateContext;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    if(ad.iOStype==2){
+        nibNameOrNil=@"CMAlbumViewController_for_35inch";
+    }
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization

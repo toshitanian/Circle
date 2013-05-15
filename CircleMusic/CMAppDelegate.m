@@ -16,7 +16,15 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-
+    CGRect r = [[UIScreen mainScreen] bounds];
+    CGFloat h = r.size.height;
+    NSLog(@"Screen Size %lf",h);
+    if(h==568.0f){
+        self.iOStype=1;
+    }else if(h==480.0f){
+        self.iOStype=2;
+    }
+    
     CMViewController *vc=[[CMViewController alloc] initWithNibName:@"CMViewController" bundle:nil];
     UINavigationController *nav =[[UINavigationController alloc] initWithRootViewController:vc];
     self.viewController = nav;

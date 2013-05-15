@@ -84,6 +84,8 @@
     _interval_angle=2.0*M_PI/5.0;
     _views=[NSMutableArray array];
     
+   
+    
     
     CMPlayerButtonView *artist=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
     [artist makeCircle];
@@ -91,6 +93,7 @@
     artist.image=[UIImage imageNamed:@"cell-artist.png"];
     [self.view addSubview:artist];
     [_views addObject:artist];
+   
     
     CMPlayerButtonView *song=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
     [song makeCircle];
@@ -98,6 +101,7 @@
     song.image=[UIImage imageNamed:@"cell-song.png"];
     [self.view addSubview:song];
     [_views addObject:song];
+
     
     CMPlayerButtonView *album=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
     [album makeCircle];
@@ -106,12 +110,14 @@
     [self.view addSubview:album];
     [_views addObject:album];
     
+    
     CMPlayerButtonView *list=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
     [list makeCircle];
     list.center=CGPointMake(_center.x+_radius*cos(_angle-3.0*_interval_angle),_center.y-_radius*sin(_angle-3.0*_interval_angle));
     list.image=[UIImage imageNamed:@"cell-playlist.png"];
     [self.view addSubview:list];
     [_views addObject:list];
+    
     
     CMPlayerButtonView *info=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
     [info makeCircle];
@@ -351,7 +357,9 @@
     //各種Viewの読み込み
     if(_artistViewController==NULL){
         _artistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:0];
+        _artistViewController.type=0;
         _artistViewController.delegate=self;
+        [_artistViewController prepare];
     }
     
 }
@@ -360,22 +368,27 @@
     
     if(_songViewController==NULL){
         _songViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
+        _songViewController.type=1;
         _songViewController.delegate=self;
-        
+        [_songViewController prepare];
     }
     
 }
 - (void)albumvcThread {
     if(_albumViewController==NULL){
         _albumViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
+        _albumViewController.type=2;
         _albumViewController.delegate=self;
+        [_albumViewController prepare];
     }
 }
 - (void)playlistvcThread {
     
     if(_playlistViewController==NULL){
         _playlistViewController=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:3];
+        _playlistViewController.type=3;
         _playlistViewController.delegate=self;
+        [_playlistViewController prepare];
         
     }
     
@@ -384,7 +397,14 @@
 
 -(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController*)vc
 {
-    // NSLog(@"%lf",progress);
+     NSLog(@"%d|%lf",vc.type,progress);
+    
+}
+
+-(void)CMAlbumViewControllerDidFinishLoading:(CMAlbumViewController *)vc
+{
+    NSLog(@"%d FINISH",vc.type);
+
 }
 
 # pragma mark - collection view
