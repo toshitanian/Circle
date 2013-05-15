@@ -588,6 +588,8 @@ CGPoint absPoint_(UIView* view)
     {
         
         [self resetControlButtons];
+    }else if(sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
+        [self resetControlButtons];
     }
 }
 
