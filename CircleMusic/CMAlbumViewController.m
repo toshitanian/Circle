@@ -66,6 +66,12 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     _pointPanBegan.x=-1;
+     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    if (ad.playerViewController.isAvailable) {
+        _btn_player.hidden=NO;
+    }else{
+        _btn_player.hidden=YES;
+    }
 }
 
 - (void)viewDidLoad

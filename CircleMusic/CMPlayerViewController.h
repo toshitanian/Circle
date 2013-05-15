@@ -80,6 +80,8 @@
     
     CGPoint _twitter_abs_point;
     CGPoint _pull_abs_point;
+    
+    BOOL _should_resume;
 }
 
 -(IBAction)dismiss:(id)sender;
@@ -93,4 +95,5 @@
 @property (atomic,assign) BOOL needReload;
 @property (nonatomic,retain) MPMediaQuery *query;
 @property (nonatomic,retain) AVQueuePlayer *player2;
+@property (atomic,assign) BOOL isAvailable;
 @end

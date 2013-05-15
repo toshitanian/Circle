@@ -49,6 +49,8 @@ static const NSString *PlayerRateContext;
 -(void)viewDidAppear:(BOOL)animated
 {
     //[self updatePlayingMusicInfo:nil];
+    
+    _should_resume=NO;
     if(self.needReload){
         [self.player setQueueWithQuery:self.query];
         self.needReload=NO;
@@ -93,6 +95,7 @@ static const NSString *PlayerRateContext;
         
         [self updatePlayingMusicInfo:nil];
         
+        self.isAvailable=YES;
         
     }
     
@@ -199,7 +202,7 @@ static const NSString *PlayerRateContext;
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     tapRecognizer.delegate=self;
     [self.view addGestureRecognizer:tapRecognizer];
-
+    
 #pragma mark  control button
     [_twitter makeCircle];
     _twitter.image=[UIImage imageNamed:@"twitter.png"];
@@ -309,7 +312,7 @@ static const NSString *PlayerRateContext;
 
 #pragma mark - controller
 -(void)play_pushed:(UIButton *)btn{
- 
+    
     if(_isPlaying){
         _isPlaying=NO;
         // [_player pause];
@@ -351,7 +354,7 @@ static const NSString *PlayerRateContext;
 
 -(void)next_pushed:(UIButton *)btn{
     
-       _song_progress.value=0.0f;
+    _song_progress.value=0.0f;
     if ([self get_next_index]!=-1) {
         
         self.currentIndex=[self get_next_index];
@@ -427,17 +430,23 @@ static const NSString *PlayerRateContext;
 }
 -(void)previous_pushed:(UIButton *)btn{
     if(_isSkipping) return;
-       _song_progress.value=0.0f;
+    
+    AVPlayerItem *item=[_player2 currentItem];
+    int current_time=CMTimeGetSeconds(item.currentTime);
     _isSkipping=YES;
-    self.currentIndex=[self get_previous_index];
-    
-    [self playAtIndex:self.currentIndex];
+    if(current_time>10){
+        [self backToStart];
+    }else{
+        
+        _song_progress.value=0.0f;
+        
+        self.currentIndex=[self get_previous_index];
+        [self playAtIndex:self.currentIndex];
+        [self showToast:_toast_previous];
+        
+        
+    }
     [self updatePlayingMusicInfo:nil];
-    [self showToast:_toast_previous];
-    
-    [self updatePlayingMusicInfo:nil];
-    
-    
     _isSkipping=NO;
     
 }
@@ -468,6 +477,37 @@ static const NSString *PlayerRateContext;
         }
     }
 }
+
+#pragma mark Interruption event handling
+- (void)beginInterruption
+{
+    if(_isPlaying){
+        _isPlaying=NO;
+        // [_player pause];
+        [_player2 pause];
+        _artwork.alpha=0.5f;
+        _shadow.hidden=NO;
+        _should_resume=YES;
+    }
+}
+
+- (void)endInterruptionWithFlags:(NSUInteger)flags
+{
+    //NSLog(@"endInterruptionWithFlags:%d %d %d",self.playingMusic,_shouldResume,flags);
+    if (flags == AVAudioSessionInterruptionFlags_ShouldResume){
+        [[AVAudioSession sharedInstance] setActive: YES error: nil];
+        if(_should_resume){
+            _isPlaying=YES;
+            //  [_player play];
+            [_player2 play];
+            _artwork.alpha=1.0f;
+            _shadow.hidden=YES;
+            _should_resume=NO;
+        }
+        
+    }
+}
+
 
 - (void)inputIsAvailableChanged:(BOOL)isInputAvailable
 {
@@ -536,7 +576,7 @@ static const NSString *PlayerRateContext;
     // _player.currentPlaybackTime=_song_progress.value;
     // _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
     
-    //TODO: index
+
     AVPlayerItem *item=[_player2 currentItem];
     [item seekToTime:CMTimeMake(slider.value, 1)];
     
@@ -545,8 +585,21 @@ static const NSString *PlayerRateContext;
         _song_progress.value=current_time;
         _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];
     }
+}
+
+-(void)backToStart{
+    // _player.currentPlaybackTime=_song_progress.value;
+    // _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
     
+
+    AVPlayerItem *item=[_player2 currentItem];
+    [item seekToTime:CMTimeMake(0, 1)];
+    _song_progress.value=0.0f;
     
+    if(!self.isPlaying){
+        int current_time=CMTimeGetSeconds(item.currentTime);
+        _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];
+    }
 }
 
 #pragma  mark - toast
@@ -589,7 +642,7 @@ static const NSString *PlayerRateContext;
                 [_twitter setTransform:scale];
                 
             };
-      
+            
             [UIView animateWithDuration:0.1 animations:animations completion:nil];
             _onTwitter=YES;
             
@@ -673,7 +726,7 @@ CGPoint absPoint(UIView* view)
     {
         UITapGestureRecognizer *tap = (UITapGestureRecognizer*)sender;
         CGPoint point=[tap locationInView:self.view];
-
+        
         
         
         if(_onTwitter){
@@ -696,13 +749,13 @@ CGPoint absPoint(UIView* view)
         point=[tap locationInView:_controller];
         if(CGRectContainsPoint(_twitter.frame, point)){
             NSLog(@"Twitter");
-              CMMusicItem *item=[_items objectAtIndex:self.currentIndex];
-                  [self tweetWithTitle:item.title AndArtist:item.artist];
+            CMMusicItem *item=[_items objectAtIndex:self.currentIndex];
+            [self tweetWithTitle:item.title AndArtist:item.artist];
         }else if(CGRectContainsPoint(_pull.frame, point)){
             [self dismiss:nil];
         }
-
-
+        
+        
     }else if(sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
         if(_onTwitter){
             float scale_value=1.0;
@@ -842,6 +895,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 }
 - (void)dealloc
 {
+    self.isAvailable=NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [self resignFirstResponder];
