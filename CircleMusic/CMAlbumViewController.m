@@ -162,6 +162,11 @@
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [self.delegate CMAlbumViewControllerDidFinishShowing:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

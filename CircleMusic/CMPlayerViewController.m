@@ -672,7 +672,7 @@ CGPoint absPoint(UIView* view)
             //NSLog(@"%lf",velocity.y/100000.0);
             float v_up=MAX(-0.2, velocity.y/100000.0);
             _player.volume-=v_up;
-            //_player.volume-=v_up;
+       
         }
     }
     

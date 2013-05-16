@@ -27,6 +27,7 @@
 
 -(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController *)vc;
 -(void)CMAlbumViewControllerDidFinishLoading:(CMAlbumViewController *)vc;
+-(void)CMAlbumViewControllerDidFinishShowing:(CMAlbumViewController *)vc;
 
 @end
 

@@ -40,6 +40,8 @@
 
 //http://akabeko.me/blog/2012/10/ios-video/ 全体の構成
 
+//http://stackoverflow.com/questions/8106818/how-can-i-index-a-uitableview-with-the-users-ipod-library-artists インデックスの付け方．
+
 @interface CMPlayerViewController : UIViewController<AVAudioSessionDelegate,UIGestureRecognizerDelegate>
 {
 

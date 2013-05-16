@@ -15,7 +15,7 @@
 #import "CMPlayerButtonView.h"
 
 
-@interface CMViewController : UIViewController<UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,CMAlbumViewControllerDelegate,UIGestureRecognizerDelegate>
+@interface CMViewController : UIViewController<UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,CMAlbumViewControllerDelegate,CMInfoViewControllerDelegate,UIGestureRecognizerDelegate>
 {
     UICollectionView *_cv;
     CMAlbumViewController *_artistViewController;
@@ -36,6 +36,8 @@
     
     float _scroll_speed;
     NSTimer *_tm;
+    
+    BOOL _isEnabled;
 }
 
 @property (nonatomic, assign) NSInteger cellCount;

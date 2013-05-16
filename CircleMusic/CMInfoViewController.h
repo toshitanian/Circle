@@ -8,9 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #include <AVFoundation/AVFoundation.h>
+
+@class CMInfoViewController;
+@protocol CMInfoViewControllerDelegate <NSObject>
+-(void)CMInfoViewControllerDidFinishShowing:(CMInfoViewController *)vc;
+
+@end
+
 @interface CMInfoViewController : UIViewController<AVAudioPlayerDelegate>
 
 
 -(IBAction)pop:(id)sender;
 -(IBAction)showPlayer:(id)sender;
+@property (nonatomic,retain) id<CMInfoViewControllerDelegate> delegate;
 @end

@@ -8,6 +8,9 @@
 
 #import "CMViewController.h"
 #define TIMER 0.05f
+
+#define SCROLL_SPEED 1.0
+
 @interface CMViewController ()
 
 @end
@@ -19,6 +22,13 @@
 {
     //  self.cellCount=5;
     // [_cv reloadData];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    
+    
+    
 }
 
 - (void)viewDidLoad
@@ -71,6 +81,7 @@
     
     if(_infoViewController==NULL){
         _infoViewController=[[CMInfoViewController alloc] initWithNibName:@"CMInfoViewController" bundle:nil];
+        _infoViewController.delegate=self;
         
     }
     
@@ -84,7 +95,7 @@
     _interval_angle=2.0*M_PI/5.0;
     _views=[NSMutableArray array];
     
-   
+    
     
     
     CMPlayerButtonView *artist=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
@@ -93,7 +104,7 @@
     artist.image=[UIImage imageNamed:@"cell-artist.png"];
     [self.view addSubview:artist];
     [_views addObject:artist];
-   
+    
     
     CMPlayerButtonView *song=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
     [song makeCircle];
@@ -101,7 +112,7 @@
     song.image=[UIImage imageNamed:@"cell-song.png"];
     [self.view addSubview:song];
     [_views addObject:song];
-
+    
     
     CMPlayerButtonView *album=[[CMPlayerButtonView alloc] initWithFrame:CGRectMake(0, 0, size, size)];
     [album makeCircle];
@@ -140,15 +151,21 @@
     
     _point_tap_began.x=-99;
     
+    
+    _scroll_speed=SCROLL_SPEED;
+    _tm =
+    [NSTimer scheduledTimerWithTimeInterval:TIMER target:self selector:@selector(clock:) userInfo:nil repeats:YES];
+    
+    [_tm fire];
+    
 }
 
 #pragma mark gesture
--(void)updateCircle:(float)angle
+-(void)updateCircle:(float)angle WithRatio:(float)ratio
 {
     angle*=1.5;
     _angle+=angle;
     for (int i=0; i<[_views count]; i++) {
-
         CMPlayerButtonView *view=_views[i];
         view.center=CGPointMake(_center.x+_radius*cos(_angle-i*_interval_angle)*ratio,_center.y-_radius*sin(_angle-i*_interval_angle)*ratio);
     }
@@ -158,24 +175,74 @@
 
 -(void)clock:(id)something
 {
-    if(_scroll_speed>0.005 || _scroll_speed<-0.005){
-        [self updateCircle:_scroll_speed*1.2];
+    if(_scroll_speed>0.01 || _scroll_speed<-0.01){
+        float scale_value=1.0-_scroll_speed/SCROLL_SPEED;
+        [self updateCircle:_scroll_speed WithRatio:scale_value];
         _scroll_speed*=0.96;
         //NSLog(@"SPEED:%lf",_scroll_speed);
+        for (int i=0; i<[_views count]; i++) {
+            CMPlayerButtonView *view=_views[i];
+            
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [view setTransform:scale];
+        }
         
     }else{
-        _scroll_speed=0.0;
-        //  NSLog(@"scroll_end");
-        [_tm invalidate];
+        CMPlayerButtonView *artist=_views[0];
+        if(abs(artist.center.x-_center.x)<1 &&  artist.center.y < _center.y){
+            _scroll_speed=0.0;
+            //  NSLog(@"scroll_end");
+            [_tm invalidate];
+            [self enable];
+        }else{
+            
+            [self updateCircle:_scroll_speed WithRatio:1.0];
+            
+        }
         
     }
+    
+}
+
+-(void)enable{
+    for (int i=0; i<[_views count]; i++) {
+        CMPlayerButtonView *view=_views[i];
+        void (^animations)(void) = ^{
+            
+            float scale_value=1.25;
+            
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [view setTransform:scale];
+            
+        };
+        
+        void (^completionAnimation)(BOOL) = ^(BOOL finished) {
+           
+           [self performSelector:@selector(enabled:) withObject:view afterDelay:0.1];
+        };
+        
+        [UIView animateWithDuration:0.5 animations:animations completion:completionAnimation];
+    }
+    
+}
+
+-(void)enabled:(UIView *)view
+{
+    void (^animations)(void) = ^{
+        float scale_value=1.0;
+        
+        CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+        [view setTransform:scale];
+    };
+    
+    [UIView animateWithDuration:0.7 animations:animations completion:^(BOOL finished){_isEnabled=YES;}];
     
 }
 
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    
+    if(!_isEnabled) return YES;
     
     if([gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]]){
         _scroll_speed=0.0;
@@ -212,6 +279,9 @@
 
 - (void)handlePanGesture:(UIGestureRecognizer *)sender
 {
+    if(!_isEnabled) return;
+    [self resetControlButtons];
+    return;
     
     UIPanGestureRecognizer *pan = (UIPanGestureRecognizer*)sender;
     CGPoint point = [pan translationInView:self.view];
@@ -220,79 +290,81 @@
     if(sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
         [self resetControlButtons];
     }else{
-        float side=self.view.frame.size.width/3;
-        float div2=self.view.frame.size.width/2;
-        
-        float angle=0;
-        if(CGRectContainsPoint(CGRectMake(0, _center.y-div2, side, side), current_point)){
-            NSLog(@"0-0");
-            angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
-            if(velocity.x>0)  angle*=-1;
-            if(velocity.x<0) angle*=1;
-            
-             [self updateCircle:angle]; 
-            
-        }else if(CGRectContainsPoint(CGRectMake(side, _center.y-div2, side, side), current_point)){
-            NSLog(@"0-1");
-            angle=sqrt(pow(velocity.x*0.0001,2));
-            if(velocity.x>0)  angle*=-1;
-            if(velocity.x<0) angle*=1;
-             [self updateCircle:1*angle]; 
-            
-            
-        }else if(CGRectContainsPoint(CGRectMake(side*2, _center.y-div2, side, side), current_point)){
-            NSLog(@"0-2");
-            angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
-            if(velocity.x>0) angle*=-1;
-            if(velocity.x<0) angle*=1;
-             [self updateCircle:1*angle]; 
-        }else if(CGRectContainsPoint(CGRectMake(0, _center.y-div2+side, side, side), current_point)){
-            NSLog(@"1-0");
-            angle=sqrt(pow(velocity.y*0.0001,2));
-            if(velocity.y>0) angle*=1;
-            if(velocity.y<0) angle*=-1;
-             [self updateCircle:1*angle]; 
-        }else if(CGRectContainsPoint(CGRectMake(side*2, _center.y-div2+side, side, side), current_point)){
-            NSLog(@"1-2");
-            angle=sqrt(pow(velocity.y*0.0001,2));
-            if(velocity.y>0) angle*=-1;
-            if(velocity.y<0) angle*=1;
-             [self updateCircle:1*angle]; 
-        }else if(CGRectContainsPoint(CGRectMake(0, _center.y+div2-side, side, side), current_point)){
-            NSLog(@"2-0");
-            angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
-            if(velocity.x>0) angle*=1;
-            if(velocity.x<0) angle*=-1;
-             [self updateCircle:1*angle]; 
-        }else if(CGRectContainsPoint(CGRectMake(side, _center.y+div2-side, side, side), current_point)){
-            NSLog(@"2-1");
-            angle=sqrt(pow(velocity.x*0.0001,2));
-            if(velocity.x>0) angle*=1;
-            if(velocity.x<0) angle*=-1;
-             [self updateCircle:1*angle]; 
-        }else if(CGRectContainsPoint(CGRectMake(side*2, _center.y+div2-side, side, side), current_point)){
-            NSLog(@"2-2");
-            angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
-            if(velocity.x>0) angle*=1;
-            if(velocity.x<0) angle*=-1;
-             [self updateCircle:1*angle]; 
-        }
-        
-        if (sender.state == UIGestureRecognizerStateEnded){
-            _scroll_speed=angle;
-            //  NSLog(@"Tag:%d",tag);
-            _tm =
-            [NSTimer scheduledTimerWithTimeInterval:TIMER target:self selector:@selector(clock:) userInfo:nil repeats:YES];
-            
-            [_tm fire];
-            [self resetControlButtons];
-        }
-        
+        /*
+         float side=self.view.frame.size.width/3;
+         float div2=self.view.frame.size.width/2;
+         
+         float angle=0;
+         if(CGRectContainsPoint(CGRectMake(0, _center.y-div2, side, side), current_point)){
+         NSLog(@"0-0");
+         angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
+         if(velocity.x>0)  angle*=-1;
+         if(velocity.x<0) angle*=1;
+         
+         [self updateCircle:angle];
+         
+         }else if(CGRectContainsPoint(CGRectMake(side, _center.y-div2, side, side), current_point)){
+         NSLog(@"0-1");
+         angle=sqrt(pow(velocity.x*0.0001,2));
+         if(velocity.x>0)  angle*=-1;
+         if(velocity.x<0) angle*=1;
+         [self updateCircle:1*angle];
+         
+         
+         }else if(CGRectContainsPoint(CGRectMake(side*2, _center.y-div2, side, side), current_point)){
+         NSLog(@"0-2");
+         angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
+         if(velocity.x>0) angle*=-1;
+         if(velocity.x<0) angle*=1;
+         [self updateCircle:1*angle];
+         }else if(CGRectContainsPoint(CGRectMake(0, _center.y-div2+side, side, side), current_point)){
+         NSLog(@"1-0");
+         angle=sqrt(pow(velocity.y*0.0001,2));
+         if(velocity.y>0) angle*=1;
+         if(velocity.y<0) angle*=-1;
+         [self updateCircle:1*angle];
+         }else if(CGRectContainsPoint(CGRectMake(side*2, _center.y-div2+side, side, side), current_point)){
+         NSLog(@"1-2");
+         angle=sqrt(pow(velocity.y*0.0001,2));
+         if(velocity.y>0) angle*=-1;
+         if(velocity.y<0) angle*=1;
+         [self updateCircle:1*angle];
+         }else if(CGRectContainsPoint(CGRectMake(0, _center.y+div2-side, side, side), current_point)){
+         NSLog(@"2-0");
+         angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
+         if(velocity.x>0) angle*=1;
+         if(velocity.x<0) angle*=-1;
+         [self updateCircle:1*angle];
+         }else if(CGRectContainsPoint(CGRectMake(side, _center.y+div2-side, side, side), current_point)){
+         NSLog(@"2-1");
+         angle=sqrt(pow(velocity.x*0.0001,2));
+         if(velocity.x>0) angle*=1;
+         if(velocity.x<0) angle*=-1;
+         [self updateCircle:1*angle];
+         }else if(CGRectContainsPoint(CGRectMake(side*2, _center.y+div2-side, side, side), current_point)){
+         NSLog(@"2-2");
+         angle=sqrt(pow(velocity.x*0.0001,2)+pow(MAX(velocity.y,0)*0.0001,2));
+         if(velocity.x>0) angle*=1;
+         if(velocity.x<0) angle*=-1;
+         [self updateCircle:1*angle];
+         }
+         
+         if (sender.state == UIGestureRecognizerStateEnded){
+         _scroll_speed=angle;
+         //  NSLog(@"Tag:%d",tag);
+         _tm =
+         [NSTimer scheduledTimerWithTimeInterval:TIMER target:self selector:@selector(clock:) userInfo:nil repeats:YES];
+         
+         [_tm fire];
+         [self resetControlButtons];
+         }
+         */
         
     }
 }
 - (void)handleTapGesture:(UIGestureRecognizer *)sender
 {
+     if(!_isEnabled) return;
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         
@@ -304,30 +376,8 @@
         for(int i=0;i<[_views count];i++){
             CMPlayerButtonView *view=_views[i];
             if(CGRectContainsPoint(view.frame, point)){
-                
-                switch (i) {
-                        
-                    case 0:
-                        [self.navigationController pushViewController:_artistViewController animated:NO];
-                        break;
-                    case 1:
-                        [self.navigationController pushViewController:_songViewController animated:NO];
-                        break;
-                    case 2:
-                        [self.navigationController pushViewController:_albumViewController animated:NO];
-                        break;
-                    case 3:
-                        [self.navigationController pushViewController:_playlistViewController animated:NO];
-                        break;
-                    case 4:
-                        [self.navigationController pushViewController:_infoViewController animated:NO];
-                        break;
-                        
-                    default:
-                        break;
-                }
-                
-                
+                [self goCenter:i];
+ 
             }
         }
         
@@ -338,6 +388,43 @@
     }else if(sender.state==UIGestureRecognizerStateCancelled ||sender.state==UIGestureRecognizerStateFailed){
         [self resetControlButtons];
     }
+}
+
+-(void)goCenter:(int) i
+{
+    CMPlayerButtonView *view=_views[i];
+    void (^animations)(void) = ^{
+        
+        view.center=_center;
+        
+    };
+    
+    void (^completionAnimation)(BOOL) = ^(BOOL finished) {
+        
+        switch (i) {
+            case 0:
+                [self.navigationController pushViewController:_artistViewController animated:NO];
+                break;
+            case 1:
+                [self.navigationController pushViewController:_songViewController animated:NO];
+                break;
+            case 2:
+                [self.navigationController pushViewController:_albumViewController animated:NO];
+                break;
+            case 3:
+                [self.navigationController pushViewController:_playlistViewController animated:NO];
+                break;
+            case 4:
+                [self.navigationController pushViewController:_infoViewController animated:NO];
+                break;
+                
+            default:
+                break;
+        }
+        
+        
+    };
+    [UIView animateWithDuration:0.5 animations:animations completion:completionAnimation];
 }
 
 -(void)resetControlButtons
@@ -398,13 +485,25 @@
 
 -(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController*)vc
 {
-     NSLog(@"%d|%lf",vc.type,progress);
+    NSLog(@"%d|%lf",vc.type,progress);
     
 }
 
 -(void)CMAlbumViewControllerDidFinishLoading:(CMAlbumViewController *)vc
 {
     NSLog(@"%d FINISH",vc.type);
+    
+}
+
+-(void)CMAlbumViewControllerDidFinishShowing:(CMAlbumViewController *)vc
+{
+    [self updateCircle:0 WithRatio:1.0];
+
+}
+
+-(void)CMInfoViewControllerDidFinishShowing:(CMAlbumViewController *)vc
+{
+    [self updateCircle:0 WithRatio:1.0];
 
 }
 
