@@ -24,7 +24,7 @@
         _angle=0.0f;
         _index_strings=[NSMutableArray array];
         for (int i=0; i<[indexChars count]; i++) {
-            NSString *c =[[indexChars objectAtIndex:i] objectForKey:@"char"];
+            NSString *c =indexChars[i][@"char"];
             [_index_strings addObject:c];
         }
         
@@ -48,7 +48,7 @@
             UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, index_circle.frame.size.width, index_circle.frame.size.height)];
             label.backgroundColor=[UIColor clearColor];
             label.textAlignment=  NSTextAlignmentCenter;
-            label.text=[_index_strings objectAtIndex:i];
+            label.text=_index_strings[i];
             [index_circle addSubview:label];
             
             
@@ -112,7 +112,7 @@
     NSLog(@"%lf",_angle);
     int num=[_index_strings count];
     for (int i=0; i<num;i++) {
-        UIImageView *index_circle=[_index_views objectAtIndex:i];
+        UIImageView *index_circle=_index_views[i];
         if(i<4)
         index_circle.center=CGPointMake(_center.x+_radius*cos(i*2*M_PI/DIV+_angle-M_PI),_center.y+ _radius*sin(i*2*M_PI/DIV+_angle+M_PI));
       
@@ -218,7 +218,7 @@
         //media
         
         
-        MPMediaItem *representativeItem = [[collections objectAtIndex:i] representativeItem];
+        MPMediaItem *representativeItem = [collections[i] representativeItem];
         
         NSString *str;
         if(type==0){
@@ -239,7 +239,7 @@
         if([current rangeOfString:c].location==NSNotFound){
             
             [current appendString:c];
-            NSDictionary *dic=[NSDictionary dictionaryWithObjectsAndKeys: c,@"char",[NSNumber numberWithInt:i],@"index",nil];
+            NSDictionary *dic=@{@"char": c,@"index": @(i)};
             [indexes addObject:dic];
         }
     }

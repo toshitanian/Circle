@@ -148,8 +148,9 @@
     angle*=1.5;
     _angle+=angle;
     for (int i=0; i<[_views count]; i++) {
-        CMPlayerButtonView *view=[_views objectAtIndex:i];
-        view.center=CGPointMake(_center.x+_radius*cos(_angle-i*_interval_angle),_center.y-_radius*sin(_angle-i*_interval_angle));
+
+        CMPlayerButtonView *view=_views[i];
+        view.center=CGPointMake(_center.x+_radius*cos(_angle-i*_interval_angle)*ratio,_center.y-_radius*sin(_angle-i*_interval_angle)*ratio);
     }
     
 }
@@ -181,7 +182,7 @@
         CGPoint point=[touch locationInView:self.view];
         if(_point_tap_began.x==-99){
             for(int i=0;i<[_views count];i++){
-                CMPlayerButtonView *view=[_views objectAtIndex:i];
+                CMPlayerButtonView *view=_views[i];
                 if(CGRectContainsPoint(view.frame, point)){
                     void (^animations)(void) = ^{
                         
@@ -301,7 +302,7 @@
         [self resetControlButtons];
         
         for(int i=0;i<[_views count];i++){
-            CMPlayerButtonView *view=[_views objectAtIndex:i];
+            CMPlayerButtonView *view=_views[i];
             if(CGRectContainsPoint(view.frame, point)){
                 
                 switch (i) {
@@ -343,7 +344,7 @@
 {
     for(int i=0;i<[_views count];i++){
         _on[i]=NO;
-        CMPlayerButtonView *view=[_views objectAtIndex:i];
+        CMPlayerButtonView *view=_views[i];
         float scale_value=1.0;
         CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
         [view setTransform:scale];

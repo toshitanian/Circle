@@ -44,9 +44,6 @@
 {
 
     IBOutlet UIView *_controller;
-    UIButton *_btn_play;
-    UIButton *_btn_next;
-    UIButton *_btn_previous;
     
     IBOutlet UILabel *_info_artist;
     IBOutlet UILabel *_info_title;

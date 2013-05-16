@@ -35,7 +35,7 @@ static const NSString *PlayerRateContext;
 {
     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
     if(ad.iOStype==2){
-        nibNameOrNil=@"CMAlbumViewController_for_35inch";
+        nibNameOrNil=@"CMPlayerViewController_for_35inch";
     }
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -72,7 +72,7 @@ static const NSString *PlayerRateContext;
         self.currentIndex=0;
         for (int i = 0 ; i < [collections count];  i++){
             CMMusicItem *item=[[CMMusicItem alloc] init];
-            MPMediaItem *representativeItem = [[collections objectAtIndex:i] representativeItem];
+            MPMediaItem *representativeItem = [collections[i] representativeItem];
             NSURL *url = [representativeItem valueForProperty:MPMediaItemPropertyAssetURL];
             item.artist=  [representativeItem valueForProperty:MPMediaItemPropertyArtist];
             item.title=  [representativeItem valueForProperty:MPMediaItemPropertyTitle];
@@ -113,40 +113,7 @@ static const NSString *PlayerRateContext;
     
     self.player = [MPMusicPlayerController applicationMusicPlayer];
     
-    
-    
-    _btn_play = [self getControllButton];
-    _btn_play.center=CGPointMake(_controller.center.x,_controller.frame.size.height/2);
-    [_btn_play addTarget:self
-                  action:@selector(play_pushed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _btn_next = [self getControllButton];
-    _btn_next.center=CGPointMake(_controller.center.x+_btn_next.frame.size.width*3/2,_controller.frame.size.height/2);
-    //何故かうまくいかない
-    [_btn_next setImage:[UIImage imageNamed:@"next.png"] forState:UIControlStateNormal];
-    //[_btn_next setImage:[UIImage imageNamed:@"next.png"] forState:UIControlStateHighlighted];
-    
-    [_btn_next addTarget:self
-                  action:@selector(next_pushed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    _btn_previous = [self getControllButton];
-    _btn_previous.center=CGPointMake(_controller.center.x-_btn_previous.frame.size.width*3/2,_controller.frame.size.height/2);
-    //何故かうまくいかない
-    [_btn_previous setImage:[UIImage imageNamed:@"previous.png"] forState:UIControlStateNormal];
-    [_btn_previous setImage:[UIImage imageNamed:@"previous.png"] forState:UIControlStateHighlighted];
-    [_btn_previous addTarget:self
-                      action:@selector(previous_pushed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    ///ボタンaddsubview
-    //[_controller addSubview:_btn_play];
-    //[_controller addSubview:_btn_next];
-    //[_controller addSubview:_btn_previous];
-    ///ここまで
-    
-    
-    
-    
+
     _artwork.layer.cornerRadius = _artwork.frame.size.width/2;
     _artwork.layer.borderWidth = 5.0f;
     _artwork.layer.borderColor = [UIColor grayColor].CGColor;
@@ -410,7 +377,7 @@ static const NSString *PlayerRateContext;
         int musicCount = [_items count];
         // palyerItems に　AVPlayerItemを追加
         for (int i = index ; i < musicCount ; i++){
-            NSURL *url = [_urls objectAtIndex:i];
+            NSURL *url = _urls[i];
             if (url != nil){
                 AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
                 [_playerItems addObject:playerItem];
@@ -529,7 +496,7 @@ static const NSString *PlayerRateContext;
     //!!TODO index
     _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
     
-    CMMusicItem *item=[_items objectAtIndex:self.currentIndex];
+    CMMusicItem *item=_items[self.currentIndex];
     _full_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)item.fulltime/60,(int)item.fulltime%60];
     _song_progress.maximumValue=item.fulltime;
     _info_artist.text=  item.artist;
@@ -545,12 +512,12 @@ static const NSString *PlayerRateContext;
     Class playingInfoCenter = NSClassFromString(@"MPNowPlayingInfoCenter");
     
     if (playingInfoCenter) {
-        CMMusicItem *item = [_items objectAtIndex:self.currentIndex];
+        CMMusicItem *item = _items[self.currentIndex];
         
         NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
-        [songInfo setObject:item.title  forKey:MPMediaItemPropertyTitle];
-        [songInfo setObject:item.artist forKey:MPMediaItemPropertyArtist];
-        [songInfo setObject:item.album  forKey:MPMediaItemPropertyAlbumTitle];
+        songInfo[MPMediaItemPropertyTitle] = item.title;
+        songInfo[MPMediaItemPropertyArtist] = item.artist;
+        songInfo[MPMediaItemPropertyAlbumTitle] = item.album;
         
         // UIImage *img=[self roundCornersOfImage:[UIImage imageWithCGImage:item.artwork.CGImage]];
         
@@ -559,9 +526,9 @@ static const NSString *PlayerRateContext;
         if (item.artwork){
             MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:item.artwork];
             
-            [songInfo setObject:artwork forKey:MPMediaItemPropertyArtwork];
+            songInfo[MPMediaItemPropertyArtwork] = artwork;
         }else{
-            [songInfo setObject:[[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:@"no_artwork_with_circle.png"]] forKey:MPMediaItemPropertyArtwork];
+            songInfo[MPMediaItemPropertyArtwork] = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:@"no_artwork_with_circle.png"]];
         }
         
         
@@ -754,7 +721,7 @@ CGPoint absPoint(UIView* view)
         point=[tap locationInView:_controller];
         if(CGRectContainsPoint(_twitter.frame, point)){
             NSLog(@"Twitter");
-            CMMusicItem *item=[_items objectAtIndex:self.currentIndex];
+            CMMusicItem *item=_items[self.currentIndex];
             [self tweetWithTitle:item.title AndArtist:item.artist];
         }else if(CGRectContainsPoint(_pull.frame, point)){
             [self dismiss:nil];

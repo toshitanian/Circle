@@ -112,7 +112,7 @@
         CMSpiralCircleView *view=[[CMSpiralCircleView alloc] initWithFrame:CGRectMake(0,0, ITEM_SIZE*ratio, ITEM_SIZE*ratio)];
         
         //media
-        MPMediaItem *representativeItem = [[collections objectAtIndex:i] representativeItem];
+        MPMediaItem *representativeItem = [collections[i] representativeItem];
         NSString *artistName =
         [representativeItem valueForProperty: MPMediaItemPropertyAlbumArtist];
         NSString *albumName =
@@ -198,7 +198,7 @@
     
     for (int i=0; i<_item_num; i++) {
         
-        CMSpiralCircleView *view=[_circles objectAtIndex:i];
+        CMSpiralCircleView *view=_circles[i];
         
         view.delegate=self;
         
@@ -360,7 +360,7 @@
     
     if(target_changed!=0){
         @try {
-            CMSpiralCircleView *view=[_circles objectAtIndex:target];
+            CMSpiralCircleView *view=_circles[target];
             if(self.type==0){
                 _label_main.text=[NSString stringWithFormat:@"%@",view.artist_name];
             }else if(self.type==1){
@@ -392,7 +392,7 @@
                 //左に消えていく
                 
                 @try {
-                    CMSpiralCircleView *view=[_circles objectAtIndex:_current_target-2];
+                    CMSpiralCircleView *view=_circles[_current_target-2];
                     CGPoint center=CGPointMake(-1*view.frame.size.width/2,view.center.y);
                     [view removeFromSuperview];
                     /*
@@ -426,7 +426,7 @@
             if(_current_target<_item_num-VIEW_NUM+1){
                 //中心から現れる
                 @try {
-                    CMSpiralCircleView * view=[_circles objectAtIndex:_current_target+VIEW_NUM-1];
+                    CMSpiralCircleView * view=_circles[_current_target+VIEW_NUM-1];
                     NSLog(@"%@",view.album_name);
                     [_spiral addSubview:view];
                     [_spiral sendSubviewToBack:view];
@@ -444,7 +444,7 @@
             if(_current_target<_item_num-VIEW_NUM+1){
                 //中心に消えていく
                 @try {
-                    [[_circles objectAtIndex:_current_target+VIEW_NUM] removeFromSuperview];
+                    [_circles[_current_target+VIEW_NUM] removeFromSuperview];
                 }
                 @catch (NSException *exception) {
                     NSLog(@"CenterDisApper:%@",exception);
@@ -458,7 +458,7 @@
             if(_current_target>-1){
                 //左から現れる
                 @try {
-                    CMSpiralCircleView *view=[_circles objectAtIndex:_current_target];
+                    CMSpiralCircleView *view=_circles[_current_target];
                     [_spiral addSubview:view];
                     [_spiral bringSubviewToFront:view];
                 }
@@ -488,7 +488,7 @@
         @try {
             
             
-            CMSpiralCircleView *view=[_circles objectAtIndex:i];
+            CMSpiralCircleView *view=_circles[i];
             view.frame=CGRectMake(view.frame.origin.x,view.frame.origin.y ,MIN(ITEM_SIZE*ratio,ITEM_SIZE), MIN(ITEM_SIZE*ratio,ITEM_SIZE));
             float x=_center.x+_radius*(float)sin(M_PI/CIRCLES_IN_PI*i+_angle)*ratio;
             float y =_center.y+_radius*(float)cos(M_PI/CIRCLES_IN_PI*i+_angle)*ratio;
@@ -756,7 +756,7 @@ CGPoint absPoint_(UIView* view)
 
 -(IBAction)label_touched:(id)sender
 {
-    CMSpiralCircleView *view=[_circles objectAtIndex:_current_target];
+    CMSpiralCircleView *view=_circles[_current_target];
     
     [self CircleDidTouched:view];
 }

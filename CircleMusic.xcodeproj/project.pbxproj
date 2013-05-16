@@ -25,8 +25,6 @@
 		181BA41F174405DE005CF643 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 181BA41E174405DE005CF643 /* back.png */; };
 		181BA42217444F5A005CF643 /* CMAlbumViewController_for_35inch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181BA42117444F5A005CF643 /* CMAlbumViewController_for_35inch.xib */; };
 		181BA4241744516B005CF643 /* CMPlayerViewController_for_35inch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181BA4231744516A005CF643 /* CMPlayerViewController_for_35inch.xib */; };
-		1857F6A017368C8E00F6146D /* CMSongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1857F69E17368C8E00F6146D /* CMSongViewController.m */; };
-		1857F6A117368C8E00F6146D /* CMSongViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1857F69F17368C8E00F6146D /* CMSongViewController.xib */; };
 		1857F6A61736B3FF00F6146D /* CMPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */; };
 		1857F6A71736B3FF00F6146D /* CMPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */; };
 		187467E41737945A00C9F9D8 /* CMAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187467E21737945A00C9F9D8 /* CMAlbumViewController.m */; };
@@ -66,14 +64,7 @@
 		18E40979173584A3006BB979 /* cell-song.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E40978173584A3006BB979 /* cell-song.png */; };
 		18E4097B173584DA006BB979 /* cell-album.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E4097A173584DA006BB979 /* cell-album.png */; };
 		18E4097F1735854B006BB979 /* cell-info.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E4097E1735854B006BB979 /* cell-info.png */; };
-		18E4098A17358CAE006BB979 /* CMArtistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4098817358CAE006BB979 /* CMArtistViewController.m */; };
-		18E4098B17358CAE006BB979 /* CMArtistViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E4098917358CAE006BB979 /* CMArtistViewController.xib */; };
 		18E4098D17358F50006BB979 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E4098C17358F50006BB979 /* MediaPlayer.framework */; };
-		18E4099117363CA9006BB979 /* CMSpiralLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4099017363CA9006BB979 /* CMSpiralLayout.m */; };
-		18E4099217363D04006BB979 /* CMSpiralLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4099017363CA9006BB979 /* CMSpiralLayout.m */; };
-		18E4099517363D26006BB979 /* CMSpiralLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4099417363D26006BB979 /* CMSpiralLayoutAttributes.m */; };
-		18E4099617363D83006BB979 /* CMSpiralLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4099417363D26006BB979 /* CMSpiralLayoutAttributes.m */; };
-		18E4099A1736649A006BB979 /* CMSpiralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E409991736649A006BB979 /* CMSpiralCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,9 +99,6 @@
 		181BA41E174405DE005CF643 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		181BA42117444F5A005CF643 /* CMAlbumViewController_for_35inch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMAlbumViewController_for_35inch.xib; sourceTree = "<group>"; };
 		181BA4231744516A005CF643 /* CMPlayerViewController_for_35inch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMPlayerViewController_for_35inch.xib; sourceTree = "<group>"; };
-		1857F69D17368C8E00F6146D /* CMSongViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSongViewController.h; sourceTree = "<group>"; };
-		1857F69E17368C8E00F6146D /* CMSongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMSongViewController.m; sourceTree = "<group>"; };
-		1857F69F17368C8E00F6146D /* CMSongViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMSongViewController.xib; sourceTree = "<group>"; };
 		1857F6A31736B3FF00F6146D /* CMPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPlayerViewController.h; sourceTree = "<group>"; };
 		1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPlayerViewController.m; sourceTree = "<group>"; };
 		1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMPlayerViewController.xib; sourceTree = "<group>"; };
@@ -162,16 +150,7 @@
 		18E40978173584A3006BB979 /* cell-song.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-song.png"; sourceTree = "<group>"; };
 		18E4097A173584DA006BB979 /* cell-album.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-album.png"; sourceTree = "<group>"; };
 		18E4097E1735854B006BB979 /* cell-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-info.png"; sourceTree = "<group>"; };
-		18E4098717358CAE006BB979 /* CMArtistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMArtistViewController.h; sourceTree = "<group>"; };
-		18E4098817358CAE006BB979 /* CMArtistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMArtistViewController.m; sourceTree = "<group>"; };
-		18E4098917358CAE006BB979 /* CMArtistViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMArtistViewController.xib; sourceTree = "<group>"; };
 		18E4098C17358F50006BB979 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		18E4098F17363CA9006BB979 /* CMSpiralLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSpiralLayout.h; sourceTree = "<group>"; };
-		18E4099017363CA9006BB979 /* CMSpiralLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMSpiralLayout.m; sourceTree = "<group>"; };
-		18E4099317363D26006BB979 /* CMSpiralLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSpiralLayoutAttributes.h; sourceTree = "<group>"; };
-		18E4099417363D26006BB979 /* CMSpiralLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMSpiralLayoutAttributes.m; sourceTree = "<group>"; };
-		18E409981736649A006BB979 /* CMSpiralCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMSpiralCell.h; sourceTree = "<group>"; };
-		18E409991736649A006BB979 /* CMSpiralCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMSpiralCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,16 +197,6 @@
 			name = img;
 			sourceTree = "<group>";
 		};
-		1857F69917368C6500F6146D /* ___CMSong */ = {
-			isa = PBXGroup;
-			children = (
-				1857F69D17368C8E00F6146D /* CMSongViewController.h */,
-				1857F69E17368C8E00F6146D /* CMSongViewController.m */,
-				1857F69F17368C8E00F6146D /* CMSongViewController.xib */,
-			);
-			name = "___CMSong";
-			sourceTree = "<group>";
-		};
 		1857F6A21736B3F000F6146D /* CMPlayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,15 +233,6 @@
 			name = CMAlbum;
 			sourceTree = "<group>";
 		};
-		187467E91738579200C9F9D8 /* Trush */ = {
-			isa = PBXGroup;
-			children = (
-				1857F69917368C6500F6146D /* ___CMSong */,
-				18E4098417358B8C006BB979 /* ___CMArtist */,
-			);
-			name = Trush;
-			sourceTree = "<group>";
-		};
 		187467EA173857A800C9F9D8 /* CMInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,8 +247,6 @@
 		18E409161735692E006BB979 = {
 			isa = PBXGroup;
 			children = (
-				180B30851743C03200C2EA1B /* Social.framework */,
-				180B30801743B2FF00C2EA1B /* Twitter.framework */,
 				180B307117424CE700C2EA1B /* icon@2x.png */,
 				180B306F17424CCC00C2EA1B /* icon.png */,
 				18E409281735692E006BB979 /* CircleMusic */,
@@ -310,6 +268,8 @@
 		18E409211735692E006BB979 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				180B30851743C03200C2EA1B /* Social.framework */,
+				180B30801743B2FF00C2EA1B /* Twitter.framework */,
 				180B305B1740E25300C2EA1B /* CoreMedia.framework */,
 				187C33F5173B82FF0090B5BD /* AVFoundation.framework */,
 				18E4098C17358F50006BB979 /* MediaPlayer.framework */,
@@ -331,7 +291,6 @@
 				18E4099717364D9E006BB979 /* CMHome */,
 				187467E01737944300C9F9D8 /* CMAlbum */,
 				187467EA173857A800C9F9D8 /* CMInfo */,
-				187467E91738579200C9F9D8 /* Trush */,
 				18E409291735692E006BB979 /* Supporting Files */,
 			);
 			path = CircleMusic;
@@ -393,30 +352,6 @@
 				18E40978173584A3006BB979 /* cell-song.png */,
 			);
 			name = "cell images";
-			sourceTree = "<group>";
-		};
-		18E4098417358B8C006BB979 /* ___CMArtist */ = {
-			isa = PBXGroup;
-			children = (
-				18E4098717358CAE006BB979 /* CMArtistViewController.h */,
-				18E4098817358CAE006BB979 /* CMArtistViewController.m */,
-				18E4098917358CAE006BB979 /* CMArtistViewController.xib */,
-				18E4098E17362110006BB979 /* CMSpiral */,
-			);
-			name = "___CMArtist";
-			sourceTree = "<group>";
-		};
-		18E4098E17362110006BB979 /* CMSpiral */ = {
-			isa = PBXGroup;
-			children = (
-				18E4099317363D26006BB979 /* CMSpiralLayoutAttributes.h */,
-				18E4099417363D26006BB979 /* CMSpiralLayoutAttributes.m */,
-				18E4098F17363CA9006BB979 /* CMSpiralLayout.h */,
-				18E4099017363CA9006BB979 /* CMSpiralLayout.m */,
-				18E409981736649A006BB979 /* CMSpiralCell.h */,
-				18E409991736649A006BB979 /* CMSpiralCell.m */,
-			);
-			name = CMSpiral;
 			sourceTree = "<group>";
 		};
 		18E4099717364D9E006BB979 /* CMHome */ = {
@@ -512,8 +447,6 @@
 				18E40979173584A3006BB979 /* cell-song.png in Resources */,
 				18E4097B173584DA006BB979 /* cell-album.png in Resources */,
 				18E4097F1735854B006BB979 /* cell-info.png in Resources */,
-				18E4098B17358CAE006BB979 /* CMArtistViewController.xib in Resources */,
-				1857F6A117368C8E00F6146D /* CMSongViewController.xib in Resources */,
 				1857F6A71736B3FF00F6146D /* CMPlayerViewController.xib in Resources */,
 				187467E51737945A00C9F9D8 /* CMAlbumViewController.xib in Resources */,
 				187467F2173857D200C9F9D8 /* CMInfoViewController.xib in Resources */,
@@ -570,16 +503,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18E4099617363D83006BB979 /* CMSpiralLayoutAttributes.m in Sources */,
-				18E4099217363D04006BB979 /* CMSpiralLayout.m in Sources */,
 				18E40972173571E4006BB979 /* CMCircleLayout.m in Sources */,
 				18E4092F1735692E006BB979 /* main.m in Sources */,
 				18E409331735692E006BB979 /* CMAppDelegate.m in Sources */,
 				18E4093C1735692E006BB979 /* CMViewController.m in Sources */,
 				18E40962173569DE006BB979 /* CMContentCell.m in Sources */,
-				18E4098A17358CAE006BB979 /* CMArtistViewController.m in Sources */,
-				18E4099A1736649A006BB979 /* CMSpiralCell.m in Sources */,
-				1857F6A017368C8E00F6146D /* CMSongViewController.m in Sources */,
 				1857F6A61736B3FF00F6146D /* CMPlayerViewController.m in Sources */,
 				187467E41737945A00C9F9D8 /* CMAlbumViewController.m in Sources */,
 				187467E81737EC4A00C9F9D8 /* CMSpiralCircleView.m in Sources */,
@@ -596,8 +524,6 @@
 			files = (
 				18E409541735692E006BB979 /* CircleMusicTests.m in Sources */,
 				18E40971173571AB006BB979 /* CMCircleLayout.m in Sources */,
-				18E4099117363CA9006BB979 /* CMSpiralLayout.m in Sources */,
-				18E4099517363D26006BB979 /* CMSpiralLayoutAttributes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
