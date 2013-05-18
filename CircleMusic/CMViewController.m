@@ -485,7 +485,7 @@
 
 -(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController*)vc
 {
-    NSLog(@"%d|%lf",vc.type,progress);
+   // NSLog(@"%d|%lf",vc.type,progress);
     
 }
 

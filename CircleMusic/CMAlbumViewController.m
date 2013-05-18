@@ -104,6 +104,9 @@
         collections = [query collections];
     }
     
+    //TODO: index
+   // NSArray *indexes=[self partitionObjects:collections collationStringSelector:@selector(albumArtist)];
+//    NSLog(@"%@",indexes);
 #pragma mark - make views
     
     _item_num=[collections count];
@@ -894,7 +897,26 @@ CGPoint absPoint_(UIView* view)
     [UIView animateWithDuration:0.5 animations:animations completion:completionAnimation];
 }
 
-
+- (NSArray *)partitionObjects:(NSArray *)array collationStringSelector:(SEL)selector
+{
+//    self.collation = [UILocalizedIndexedCollation currentCollation];
+  UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
+    NSInteger sectionCount = [[collation sectionTitles] count];
+    NSMutableArray *unsortedSections = [NSMutableArray arrayWithCapacity:sectionCount];
+    for(int i = 0; i < sectionCount; i++)
+        [unsortedSections addObject:[NSMutableArray array]];
+    
+    for (id object in array)
+    {
+        NSInteger index = [collation sectionForObject:object collationStringSelector:selector];
+        [[unsortedSections objectAtIndex:index] addObject:object];
+    }
+    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:sectionCount];
+    for (NSMutableArray *section in unsortedSections)
+        [sections addObject:[collation sortedArrayFromArray:section collationStringSelector:selector]];
+    
+    return sections;
+}
 
 
 #pragma mark - something
@@ -908,8 +930,11 @@ CGPoint absPoint_(UIView* view)
 -(IBAction)showPlayer:(id)sender
 {
     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
-    ad.playerViewController.query=nil;
-    [self presentViewController:ad.playerViewController animated:YES completion: nil];
+    if(!(ad.playerViewController.isViewLoaded && ad.playerViewController.view.window)){
+        ad.playerViewController.query=nil;
+        [self presentViewController:ad.playerViewController animated:YES completion: nil];
+    }
+ 
     
 }
 - (void)didReceiveMemoryWarning
