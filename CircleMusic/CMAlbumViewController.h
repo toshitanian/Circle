@@ -64,7 +64,7 @@
     float _scroll_speed;
     NSTimer *_tm;
     
-    UIView *_touching_view;
+    CMSpiralCircleView *_touching_view;
     
     CMIndexView *_index_view;
     

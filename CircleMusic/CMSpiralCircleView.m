@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CMAlbumViewController.h"
 
+#define TIMER 0.1f
 
 
 @implementation CMSpiralCircleView
@@ -44,6 +45,22 @@
 
 }
 
+-(void)clock:(id)something
+{
+    _count++;
+    if(fabs(_start_point.x-self.frame.origin.x)>5 || fabs(_start_point.y-self.frame.origin.y)>5){
+        [_tm invalidate];
+        touching=NO;
+    }
+    
+    if(_count>8){
+        [self.delegate CircleDidLongTouched:self];
+        [_tm invalidate];
+        touching=NO;
+    }
+    NSLog(@"%d",_count);
+}
+
 
 #pragma mark - touch
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
@@ -52,8 +69,18 @@
    // NSLog(@"BEGIN:%@",self.album_name);
 
     [self.delegate CircleDidStartTouching:self WithTouch:[touches anyObject] ];
+    _tm =
+    [NSTimer scheduledTimerWithTimeInterval:TIMER target:self selector:@selector(clock:) userInfo:nil repeats:YES];
+    _count=0;
+    _start_point=self.frame.origin;
+    [_tm fire];
 }
 
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    _count=0;
+    [_tm invalidate];
+}
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
@@ -67,12 +94,16 @@
            // NSLog(@"END:%@",self.album_name);
             //[self showToast:self];
            // self.original_center=self.center;
-            [self.delegate CircleDidTouched:self];
-        }
     
+                [self.delegate CircleDidTouched:self];
+       
+        }
+        _count=0;
+        [_tm invalidate];
         touching=NO;
     }else{
-        
+        _count=0;
+        [_tm invalidate];
         [self.delegate CircleDidTouchedOutOfView:self WithTouch:[touches anyObject]];
     }
     
@@ -82,6 +113,8 @@
 {
     [self.delegate CircleDidCanceledTouching:self];
     touching=NO;
+    _count=0;
+    [_tm invalidate];
 }
 
 #pragma mark - animation

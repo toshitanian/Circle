@@ -781,6 +781,78 @@ CGPoint absPoint_(UIView* view)
     NSLog(@"Out Of View");
 }
 
+-(void)CircleDidLongTouched:(CMSpiralCircleView *)view
+{
+    if(_touching_view==view){
+        // NSLog(@"TouchUp Cancel");
+        _touching_view=nil;
+        return;
+    }
+    _touching_view=nil;
+    
+    
+    if(_presenting_player) return;
+    
+    view.original_center=view.center;
+    
+    
+    CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    
+    
+    
+    if(self.type==0){
+        
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
+        CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
+        vc.query_keyword=view.artist_name;
+        [vc prepare];
+        
+        vc.view.alpha=0.0;
+        [self.view addSubview:vc.view];
+        [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
+            vc.view.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            [self.navigationController pushViewController:vc animated:NO];
+            [vc.view removeFromSuperview];
+        }];
+        return;
+        
+    }else if(self.type==1){
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
+        _presenting_player=YES;
+        MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
+        [songQuery addFilterPredicate: [MPMediaPropertyPredicate
+                                        predicateWithValue: view.title
+                                        forProperty: MPMediaItemPropertyTitle]];
+        
+        ad.playerViewController.query=songQuery;
+        ad.playerViewController.needReload=YES;
+        
+        
+        
+        [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
+    }else if(self.type==2){
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
+        MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
+        [songQuery addFilterPredicate: [MPMediaPropertyPredicate
+                                        predicateWithValue: view.album_name
+                                        forProperty: MPMediaItemPropertyAlbumTitle]];
+        
+        ad.playerViewController.query=songQuery;
+        ad.playerViewController.needReload=YES;
+        [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
+    }else if(self.type==3){
+        MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
+        [songQuery addFilterPredicate: [MPMediaPropertyPredicate
+                                        predicateWithValue: view.playlist_name
+                                        forProperty: MPMediaPlaylistPropertyName]];
+        ad.playerViewController.query=songQuery;
+        ad.playerViewController.needReload=YES;
+        [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
+    }
+
+}
+
 -(void)CircleDidTouched:(CMSpiralCircleView *)view
 {
     
@@ -800,8 +872,10 @@ CGPoint absPoint_(UIView* view)
     
     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
     
+    
+    
     if(self.type==0){
-        ///
+   
         [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
         CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
         vc.query_keyword=view.artist_name;

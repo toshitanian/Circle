@@ -14,6 +14,7 @@
 
 @protocol CMSpiralCircleViewDelegate
 - (void) CircleDidTouched:(CMSpiralCircleView *)view;
+- (void) CircleDidLongTouched:(CMSpiralCircleView *)view;
 - (void) CircleDidTouchedOutOfView:(CMSpiralCircleView *)view WithTouch:(UITouch *)touch;
 - (void) CircleDidCanceledTouching:(CMSpiralCircleView *)view;
 - (void) CircleDidStartTouching:(CMSpiralCircleView *)view WithTouch:(UITouch *)touch;
@@ -23,6 +24,10 @@
 {
     bool touching;
     UIView *shadow;
+    NSTimer *_tm;
+    int _count;
+    CGPoint _start_point;
+    
 }
 @property(nonatomic,retain) NSString *title;
 @property(nonatomic,retain) NSString *artist_name;

@@ -133,21 +133,21 @@ static const NSString *PlayerRateContext;
     playiv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     [_shadow addSubview:playiv];
     
-    _toast_next.frame=CGRectMake(_toast_next.frame.origin.x,_toast_next.frame.origin.y,_toast_next.frame.size.width,_toast_next.frame.size.height);
+    _toast_next.frame=CGRectMake(_toast_next.frame.origin.x,_toast_next.frame.origin.y,_toast_next.frame.size.width,_toast_next.frame.size.width);
     _toast_next.layer.cornerRadius = _toast_next.frame.size.width/2;
     _toast_next.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.65f];
     UIImageView *niv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"next.png"]];
-    niv.frame=CGRectMake(0,0,_toast_next.frame.size.width,_toast_next.frame.size.height);
+    niv.frame=CGRectMake(0,0,_toast_next.frame.size.width,_toast_next.frame.size.width);
     niv.layer.cornerRadius=_toast_next.layer.cornerRadius;
     niv.clipsToBounds=YES;
     niv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
     [_toast_next addSubview:niv];
     
-    _toast_previous.frame=CGRectMake(0,_toast_previous.frame.origin.y,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
+    _toast_previous.frame=CGRectMake(0,_toast_previous.frame.origin.y,_toast_previous.frame.size.width,_toast_previous.frame.size.width);
     _toast_previous.layer.cornerRadius = _toast_previous.frame.size.width/2;
     _toast_previous.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.65f];
     UIImageView *piv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"previous.png"]];
-    piv.frame=CGRectMake(0,0,_toast_previous.frame.size.width,_toast_previous.frame.size.height);
+    piv.frame=CGRectMake(0,0,_toast_previous.frame.size.width,_toast_previous.frame.size.width);
     piv.layer.cornerRadius=_toast_previous.layer.cornerRadius;
     piv.clipsToBounds=YES;
     piv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
@@ -201,7 +201,7 @@ static const NSString *PlayerRateContext;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    NSLog(@"observer start");
+ 
     
     if (context == &PlayerStatusContext) {
         AVPlayer *thePlayer = (AVPlayer *)object;
@@ -238,7 +238,7 @@ static const NSString *PlayerRateContext;
     }else if (context == &PlayerRateContext){
         
     }
-    NSLog(@"observer end");
+ 
     return;
     
 }
@@ -320,6 +320,7 @@ static const NSString *PlayerRateContext;
 -(void)finish
 {
     [self stop];
+    self.isAvailable=NO;
     [self dismiss:nil];
     
 }
@@ -354,7 +355,7 @@ static const NSString *PlayerRateContext;
 
 -(int)get_previous_index
 {
-    if(self.currentIndex-1<0) return 0;
+    if(self.currentIndex-1<0) return -1;
     
     return self.currentIndex-1;
 }
@@ -412,9 +413,14 @@ static const NSString *PlayerRateContext;
         
         _song_progress.value=0.0f;
         
+        if([self get_previous_index]==-1){
+            self.currentIndex=0;
+             [self finish];
+        }else{
         self.currentIndex=[self get_previous_index];
         [self playAtIndex:self.currentIndex];
         [self showToast:_toast_previous];
+        }
         
         
     }
