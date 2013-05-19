@@ -53,7 +53,7 @@
         touching=NO;
     }
     
-    if(_count>8){
+    if(_count>6){
         [self.delegate CircleDidLongTouched:self];
         [_tm invalidate];
         touching=NO;

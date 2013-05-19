@@ -61,18 +61,18 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.type=type;
-
+        
         
     }
     return self;
 }
 
--(void)prepare 
+-(void)prepare
 {
-
+    
     // Custom initialization
     _circles=[NSMutableArray array];
-
+    
 #pragma mark Query
     MPMediaQuery *query;
     NSArray *collections;
@@ -84,9 +84,15 @@
         query = [MPMediaQuery  songsQuery];
         [query setGroupingType: MPMediaGroupingTitle];
         if(self.query_keyword!=nil){
+            if(!self.isSongFromPlaylist){
             [query addFilterPredicate: [MPMediaPropertyPredicate
                                         predicateWithValue: self.query_keyword
                                         forProperty: MPMediaItemPropertyAlbumTitle]];
+            }else{
+                [query addFilterPredicate: [MPMediaPropertyPredicate
+                                            predicateWithValue: self.query_keyword
+                                            forProperty: MPMediaPlaylistPropertyName]];
+            }
         }
         collections = [query collections];
     }else if(self.type==2){
@@ -98,15 +104,16 @@
                                         forProperty: MPMediaItemPropertyAlbumArtist]];
         }
         collections = [query collections];
+        NSLog(@"Here");
     }else if(self.type==3){
         query = [MPMediaQuery  playlistsQuery];
-        //[query setGroupingType: MPMediaGroupingPlaylist];
+        [query setGroupingType: MPMediaGroupingPlaylist];
         collections = [query collections];
     }
     
     //TODO: index
-   // NSArray *indexes=[self partitionObjects:collections collationStringSelector:@selector(albumArtist)];
-//    NSLog(@"%@",indexes);
+    // NSArray *indexes=[self partitionObjects:collections collationStringSelector:@selector(albumArtist)];
+    //    NSLog(@"%@",indexes);
 #pragma mark - make views
     
     _item_num=[collections count];
@@ -114,32 +121,37 @@
         float ratio=(1-(float)i/VIEW_NUM)*1.0;
         CMSpiralCircleView *view=[[CMSpiralCircleView alloc] initWithFrame:CGRectMake(0,0, ITEM_SIZE*ratio, ITEM_SIZE*ratio)];
         
-        //media
-        MPMediaItem *representativeItem = [collections[i] representativeItem];
-        NSString *artistName =
-        [representativeItem valueForProperty: MPMediaItemPropertyAlbumArtist];
-        NSString *albumName =
-        [representativeItem valueForProperty: MPMediaItemPropertyAlbumTitle];
-        NSString *title= [representativeItem valueForProperty: MPMediaItemPropertyTitle];
-        NSString *playlist= [representativeItem valueForProperty: MPMediaPlaylistPropertyName];
-        MPMediaItemArtwork *artwork= [representativeItem valueForProperty:  MPMediaItemPropertyArtwork];
         
-        view.artist_name=artistName;
-        view.album_name=albumName;
-        view.title=title;
-        view.artwork=artwork;
+    
+            //media
+            MPMediaItem *representativeItem = [collections[i] representativeItem];
+            NSString *artistName =
+            [representativeItem valueForProperty: MPMediaItemPropertyAlbumArtist];
+            NSString *albumName =
+            [representativeItem valueForProperty: MPMediaItemPropertyAlbumTitle];
+            NSString *title= [representativeItem valueForProperty: MPMediaItemPropertyTitle];
+            MPMediaItemArtwork *artwork= [representativeItem valueForProperty:  MPMediaItemPropertyArtwork];
+            
+            view.artist_name=artistName;
+            view.album_name=albumName;
+            view.title=title;
+            view.artwork=artwork;
+        
+        
         
         if(self.type==3){
+            MPMediaPlaylist *pl=collections[i];
+            NSString *playlist= [pl valueForProperty: MPMediaPlaylistPropertyName];
             view.playlist_name=playlist;
+            
         }
         
-  
         
         [view setImage];
         [_circles addObject:view];
         @try {
             if(i%20==0){
-            [self.delegate CMAlbumViewControllerDidChangeProgressOfLoad:(float)i/(float)_item_num From:self];
+                [self.delegate CMAlbumViewControllerDidChangeProgressOfLoad:(float)i/(float)_item_num From:self];
             }
         }
         @catch (NSException *exception) {
@@ -157,7 +169,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     _pointPanBegan.x=-1;
-     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
     if (ad.playerViewController.isAvailable) {
         _btn_player.hidden=NO;
     }else{
@@ -178,13 +190,13 @@
     _current_target=0;
     _center=_spiral.center;
     _radius=_spiral.frame.size.height/2-ITEM_SIZE/2;
-
+    
     _label_main.backgroundColor=[UIColor whiteColor];
     _label_sub_lower.backgroundColor=[UIColor whiteColor];
     _label_sub_upper.backgroundColor=[UIColor whiteColor];
     _spiral.backgroundColor=[UIColor whiteColor];
     _label_height=_label_main.frame.size.height+_label_sub_lower.frame.size.height+_label_sub_upper.frame.size.height;
-
+    
     
     if(self.type==0){
         _label_sub_upper.hidden=YES;
@@ -272,13 +284,13 @@
     
 #pragma mark index_view init
     /*
-    index_dic=[CMIndexView getIndexes:collections WithType:self.type];
-    _index_view=[[CMIndexView alloc] initWithFrame:self.view.frame WithIndexes:index_dic];
-    [_index_view setFrame:CGRectMake(self.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height)];
-    
-    [self.view addSubview:_index_view];
-    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [_index_view addGestureRecognizer:tapRecognizer];
+     index_dic=[CMIndexView getIndexes:collections WithType:self.type];
+     _index_view=[[CMIndexView alloc] initWithFrame:self.view.frame WithIndexes:index_dic];
+     [_index_view setFrame:CGRectMake(self.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height)];
+     
+     [self.view addSubview:_index_view];
+     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+     [_index_view addGestureRecognizer:tapRecognizer];
      */
     
 #pragma mark control button
@@ -658,6 +670,10 @@ CGPoint absPoint_(UIView* view)
     }
     if(sender.state==UIGestureRecognizerStateEnded){
         self.pointPanBegan=CGPointMake(-1,-1);
+        if(_index_circle_view.isShowing){
+            _index_circle_view.isShowing=NO;
+            _index_circle_view.hidden=YES;
+        }
     }
     
     if(sender.state==UIGestureRecognizerStateBegan){
@@ -783,11 +799,13 @@ CGPoint absPoint_(UIView* view)
 
 -(void)CircleDidLongTouched:(CMSpiralCircleView *)view
 {
-    if(_touching_view==view){
-        // NSLog(@"TouchUp Cancel");
-        _touching_view=nil;
-        return;
-    }
+    /*
+     if(_touching_view==view){
+     // NSLog(@"TouchUp Cancel");
+     _touching_view=nil;
+     return;
+     }
+     */
     _touching_view=nil;
     
     
@@ -832,25 +850,40 @@ CGPoint absPoint_(UIView* view)
         
         [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
     }else if(self.type==2){
-        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
-        MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
-        [songQuery addFilterPredicate: [MPMediaPropertyPredicate
-                                        predicateWithValue: view.album_name
-                                        forProperty: MPMediaItemPropertyAlbumTitle]];
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
+        CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
+        vc.query_keyword=view.album_name;
+        [vc prepare];
         
-        ad.playerViewController.query=songQuery;
-        ad.playerViewController.needReload=YES;
-        [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
+        vc.view.alpha=0.0;
+        [self.view addSubview:vc.view];
+        [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
+            vc.view.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            [self.navigationController pushViewController:vc animated:NO];
+            [vc.view removeFromSuperview];
+        }];
+        return;
+        
     }else if(self.type==3){
-        MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
-        [songQuery addFilterPredicate: [MPMediaPropertyPredicate
-                                        predicateWithValue: view.playlist_name
-                                        forProperty: MPMediaPlaylistPropertyName]];
-        ad.playerViewController.query=songQuery;
-        ad.playerViewController.needReload=YES;
-        [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
+        CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
+        vc.isSongFromPlaylist=YES;
+        vc.query_keyword=view.playlist_name;
+        [vc prepare];
+        
+        vc.view.alpha=0.0;
+        [self.view addSubview:vc.view];
+        [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
+            vc.view.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            [self.navigationController pushViewController:vc animated:NO];
+            [vc.view removeFromSuperview];
+        }];
+        return;
+        
     }
-
+    
 }
 
 -(void)CircleDidTouched:(CMSpiralCircleView *)view
@@ -875,21 +908,20 @@ CGPoint absPoint_(UIView* view)
     
     
     if(self.type==0){
-   
-        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
-        CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:2];
-        vc.query_keyword=view.artist_name;
-        [vc prepare];
-   
-        vc.view.alpha=0.0;
-        [self.view addSubview:vc.view];
-        [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
-            vc.view.alpha = 1.0;
-        } completion:^(BOOL finished) {
-            [self.navigationController pushViewController:vc animated:NO];
-            [vc.view removeFromSuperview];
-        }];
-        return;
+        
+        [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
+        _presenting_player=YES;
+        MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
+        [songQuery addFilterPredicate: [MPMediaPropertyPredicate
+                                        predicateWithValue: view.artist_name
+                                        forProperty: MPMediaItemPropertyAlbumArtist]];
+        
+        ad.playerViewController.query=songQuery;
+        ad.playerViewController.needReload=YES;
+        
+        
+        
+        [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
         
     }else if(self.type==1){
         [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
@@ -973,8 +1005,8 @@ CGPoint absPoint_(UIView* view)
 
 - (NSArray *)partitionObjects:(NSArray *)array collationStringSelector:(SEL)selector
 {
-//    self.collation = [UILocalizedIndexedCollation currentCollation];
-  UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
+    //    self.collation = [UILocalizedIndexedCollation currentCollation];
+    UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
     NSInteger sectionCount = [[collation sectionTitles] count];
     NSMutableArray *unsortedSections = [NSMutableArray arrayWithCapacity:sectionCount];
     for(int i = 0; i < sectionCount; i++)
@@ -1008,7 +1040,7 @@ CGPoint absPoint_(UIView* view)
         ad.playerViewController.query=nil;
         [self presentViewController:ad.playerViewController animated:YES completion: nil];
     }
- 
+    
     
 }
 - (void)didReceiveMemoryWarning

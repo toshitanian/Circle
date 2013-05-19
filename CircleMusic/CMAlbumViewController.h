@@ -50,7 +50,7 @@
     NSMutableArray *_items;
     
     bool _presenting_player;
-  
+    
     
     UIImageView *_shadow;
     
@@ -73,16 +73,18 @@
     CMIndexCircleView *_index_circle_view;
     
     
-   IBOutlet CMPlayerButtonView *_btn_player;
-   IBOutlet CMPlayerButtonView *_btn_pop;
+    IBOutlet CMPlayerButtonView *_btn_player;
+    IBOutlet CMPlayerButtonView *_btn_pop;
     IBOutlet UIView *_controller_view;
     CGPoint _player_abs_point;
-        CGPoint _pop_abs_point;
+    CGPoint _pop_abs_point;
     BOOL _onPlayer;
-      BOOL _onPop;
+    BOOL _onPop;
+
 }
 //[type] 0: artist 1: song 2:album
 @property(atomic,assign) int type;
+@property(atomic,assign) BOOL isSongFromPlaylist;
 @property(atomic,assign) CGPoint pointPanBegan;
 @property(nonatomic,retain) NSString *query_keyword;
 @property (nonatomic,retain) id<CMAlbumViewControllerDelegate> delegate;
