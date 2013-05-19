@@ -113,7 +113,7 @@ static const NSString *PlayerRateContext;
     
     self.player = [MPMusicPlayerController applicationMusicPlayer];
     
-
+    
     _artwork.layer.cornerRadius = _artwork.frame.size.width/2;
     _artwork.layer.borderWidth = 5.0f;
     _artwork.layer.borderColor = [UIColor grayColor].CGColor;
@@ -183,6 +183,11 @@ static const NSString *PlayerRateContext;
     _pull.image=[UIImage imageNamed:@"pull.png"];
     _pull_abs_point=absPoint(_pull);
     
+    [_repeat makeCircle];
+    _repeat.image=[UIImage imageNamed:@"repeat.png"];
+    _repeat_abs_point=absPoint(_repeat);
+    _repeat.alpha=0.7f;
+    
     
 #pragma mark  audio session
     _audioSession = [AVAudioSession sharedInstance];
@@ -201,7 +206,7 @@ static const NSString *PlayerRateContext;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
- 
+    
     
     if (context == &PlayerStatusContext) {
         AVPlayer *thePlayer = (AVPlayer *)object;
@@ -232,13 +237,13 @@ static const NSString *PlayerRateContext;
             self.currentIndex = [_urls indexOfObject:asset.URL];
             [self updatePlayingMusicInfo:nil];
         }else{
-            [self finish];
+            [self finishOrRepeat];
         }
         
     }else if (context == &PlayerRateContext){
         
     }
- 
+    
     return;
     
 }
@@ -317,6 +322,28 @@ static const NSString *PlayerRateContext;
     return self.currentIndex+1;
 }
 
+-(void)finishOrRepeat
+{
+    if(_repeat_type==2){
+        self.currentIndex=0;
+        [self playAtIndex:0];
+        [self updatePlayingMusicInfo:nil];
+    }else if(_repeat_type==1){
+        self.currentIndex=0;
+        [self playAtIndex:0];
+        _repeat_type=0;
+        _repeat.image=[UIImage imageNamed:@"repeat.png"];
+        _repeat.alpha=0.7f;
+        [self updatePlayingMusicInfo:nil];
+    }else{
+        [self stop];
+        self.isAvailable=NO;
+        [self dismiss:nil];
+    }
+    
+}
+
+
 -(void)finish
 {
     [self stop];
@@ -343,7 +370,9 @@ static const NSString *PlayerRateContext;
         
         [self showToast:_toast_next];
     }else{
-        [self finish];
+   
+            [self finishOrRepeat];
+   
         
         
     }
@@ -415,11 +444,11 @@ static const NSString *PlayerRateContext;
         
         if([self get_previous_index]==-1){
             self.currentIndex=0;
-             [self finish];
+            [self finish];
         }else{
-        self.currentIndex=[self get_previous_index];
-        [self playAtIndex:self.currentIndex];
-        [self showToast:_toast_previous];
+            self.currentIndex=[self get_previous_index];
+            [self playAtIndex:self.currentIndex];
+            [self showToast:_toast_previous];
         }
         
         
@@ -554,7 +583,7 @@ static const NSString *PlayerRateContext;
     // _player.currentPlaybackTime=_song_progress.value;
     // _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
     
-
+    
     AVPlayerItem *item=[_player2 currentItem];
     [item seekToTime:CMTimeMake(slider.value, 1)];
     
@@ -569,7 +598,7 @@ static const NSString *PlayerRateContext;
     // _player.currentPlaybackTime=_song_progress.value;
     // _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)_player.currentPlaybackTime/60,(int)_player.currentPlaybackTime%60];
     
-
+    
     AVPlayerItem *item=[_player2 currentItem];
     [item seekToTime:CMTimeMake(0, 1)];
     _song_progress.value=0.0f;
@@ -625,7 +654,7 @@ static const NSString *PlayerRateContext;
             _onTwitter=YES;
             
         }else if(CGRectContainsPoint(CGRectMake(_pull_abs_point.x, _pull_abs_point.y, _pull.frame.size.width, _pull.frame.size.height), point)){
-            NSLog(@"Pull TOcuhed");
+            NSLog(@"Pull Tocuhed");
             
             void (^animations)(void) = ^{
                 
@@ -634,6 +663,20 @@ static const NSString *PlayerRateContext;
                 CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
                 [_pull setTransform:scale];
                 _onPull=YES;
+                
+            };
+            
+            [UIView animateWithDuration:0.1 animations:animations completion:nil];
+        }else if(CGRectContainsPoint(CGRectMake(_repeat_abs_point.x, _repeat_abs_point.y, _repeat.frame.size.width, _repeat.frame.size.height), point)){
+            NSLog(@"Repeat Tocuhed");
+            
+            void (^animations)(void) = ^{
+                
+                float scale_value=1.2;
+                
+                CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+                [_repeat setTransform:scale];
+                _onRepeat=YES;
                 
             };
             
@@ -678,7 +721,7 @@ CGPoint absPoint(UIView* view)
             //NSLog(@"%lf",velocity.y/100000.0);
             float v_up=MAX(-0.2, velocity.y/100000.0);
             _player.volume-=v_up;
-       
+            
         }
     }
     
@@ -693,9 +736,15 @@ CGPoint absPoint(UIView* view)
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
             [_pull setTransform:scale];
         }
+        if(_onRepeat){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_repeat setTransform:scale];
+        }
         _onTwitter=NO;
         _onPull=NO;
         _onArtwork=NO;
+        _onRepeat=NO;
     }
 }
 
@@ -717,9 +766,15 @@ CGPoint absPoint(UIView* view)
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
             [_pull setTransform:scale];
         }
+        if(_onRepeat){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_repeat setTransform:scale];
+        }
         _onTwitter=NO;
         _onPull=NO;
         _onArtwork=NO;
+        _onRepeat=NO;
         
         if(CGRectContainsPoint(_artwork.frame, point)){
             [self play_pushed:nil];
@@ -731,6 +786,21 @@ CGPoint absPoint(UIView* view)
             [self tweetWithTitle:item.title AndArtist:item.artist];
         }else if(CGRectContainsPoint(_pull.frame, point)){
             [self dismiss:nil];
+        }else if(CGRectContainsPoint(_repeat.frame, point)){
+            //TODO: repeat
+            if(_repeat_type==0){
+                _repeat_type=1;
+                _repeat.image= [UIImage imageNamed:@"repeat_once.png"];
+                _repeat.alpha=1.0f;
+            }else if(_repeat_type==1){
+                _repeat_type=2;
+                _repeat.image= [UIImage imageNamed:@"repeat.png"];
+                _repeat.alpha=1.0f;
+            }else{
+                _repeat_type=0;
+                _repeat.image= [UIImage imageNamed:@"repeat.png"];
+                _repeat.alpha=0.7f;
+            }
         }
         
         
@@ -745,9 +815,15 @@ CGPoint absPoint(UIView* view)
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
             [_pull setTransform:scale];
         }
+        if(_onRepeat){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_repeat setTransform:scale];
+        }
         _onTwitter=NO;
         _onPull=NO;
         _onArtwork=NO;
+        _onRepeat=NO;
     }
 }
 

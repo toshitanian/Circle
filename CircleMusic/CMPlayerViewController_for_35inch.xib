@@ -167,6 +167,16 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
+							<object class="IBUIImageView" id="610629280">
+								<reference key="NSNextResponder" ref="58470395"/>
+								<int key="NSvFlags">292</int>
+								<string key="NSFrame">{{166, 66}, {60, 60}}</string>
+								<reference key="NSSuperview" ref="58470395"/>
+								<reference key="NSWindow"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							</object>
 							<object class="IBUIImageView" id="58799977">
 								<reference key="NSNextResponder" ref="58470395"/>
 								<int key="NSvFlags">292</int>
@@ -196,7 +206,6 @@
 						<string key="NSFrame">{{40, 90}, {240, 240}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -494,6 +503,14 @@
 					</object>
 					<int key="connectionID">53</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">_repeat</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="610629280"/>
+					</object>
+					<int key="connectionID">310</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -569,6 +586,7 @@
 							<reference ref="280802906"/>
 							<reference ref="1015833255"/>
 							<reference ref="58799977"/>
+							<reference ref="610629280"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 						<string key="objectName">Cotroller</string>
@@ -618,6 +636,11 @@
 						<reference key="object" ref="638636709"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">309</int>
+						<reference key="object" ref="610629280"/>
+						<reference key="parent" ref="58470395"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -637,6 +660,8 @@
 				<string key="305.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="307.CustomClassName">CMPlayerButtonView</string>
 				<string key="307.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="309.CustomClassName">CMPlayerButtonView</string>
+				<string key="309.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="35.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="54.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -647,7 +672,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">308</int>
+			<int key="maxID">310</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -683,6 +708,7 @@
 						<string key="_info_title">UILabel</string>
 						<string key="_pull">CMPlayerButtonView</string>
 						<string key="_queue_label">UILabel</string>
+						<string key="_repeat">CMPlayerButtonView</string>
 						<string key="_shadow">UIView</string>
 						<string key="_song_progress">UISlider</string>
 						<string key="_toast_next">UIView</string>
@@ -725,6 +751,10 @@
 						<object class="IBToOneOutletInfo" key="_queue_label">
 							<string key="name">_queue_label</string>
 							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_repeat">
+							<string key="name">_repeat</string>
+							<string key="candidateClassName">CMPlayerButtonView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="_shadow">
 							<string key="name">_shadow</string>

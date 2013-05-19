@@ -44,7 +44,7 @@
 
 @interface CMPlayerViewController : UIViewController<AVAudioSessionDelegate,UIGestureRecognizerDelegate>
 {
-
+    
     IBOutlet UIView *_controller;
     
     IBOutlet UILabel *_info_artist;
@@ -62,25 +62,30 @@
     
     NSTimer *_tm;
     
- 
- 
+    
+    
     NSMutableArray *_items;
     NSMutableArray *_urls;
-
+    
     AVAudioSession *_audioSession;
     
     BOOL _isSkipping;
     IBOutlet CMPlayerButtonView *_twitter;
     IBOutlet CMPlayerButtonView *_pull;
+    IBOutlet CMPlayerButtonView *_repeat;
     
     BOOL _onArtwork;
     BOOL _onTwitter;
     BOOL _onPull;
+    BOOL _onRepeat;
     
     CGPoint _twitter_abs_point;
     CGPoint _pull_abs_point;
+    CGPoint _repeat_abs_point;
     
     BOOL _should_resume;
+    
+    int _repeat_type;
 }
 
 -(IBAction)dismiss:(id)sender;
