@@ -137,6 +137,7 @@
             view.title=title;
             view.artwork=artwork;
         
+         
         
         
         if(self.type==3){
@@ -146,8 +147,7 @@
             
         }
         
-        
-        [view setImage];
+   
         [_circles addObject:view];
         @try {
             if(i%20==0){
@@ -242,6 +242,7 @@
         //view
         view.center=CGPointMake(_center.x+_radius*(float)sin(M_PI/CIRCLES_IN_PI*i)*ratio, _center.y+_radius*(float)cos(M_PI/CIRCLES_IN_PI*i)*ratio);
         if(i<VIEW_NUM){
+            [view setImage];
             [_spiral addSubview:view];
             [_spiral sendSubviewToBack:view];
         }else{
@@ -414,6 +415,7 @@
                 @try {
                     CMSpiralCircleView *view=_circles[_current_target-2];
                     CGPoint center=CGPointMake(-1*view.frame.size.width/2,view.center.y);
+                    [view removeImage];
                     [view removeFromSuperview];
                     /*
                      void (^animations)(void) = ^{
@@ -447,9 +449,11 @@
                 //中心から現れる
                 @try {
                     CMSpiralCircleView * view=_circles[_current_target+VIEW_NUM-1];
+                    [view setImage];
                     NSLog(@"%@",view.album_name);
                     [_spiral addSubview:view];
                     [_spiral sendSubviewToBack:view];
+                    
                 }
                 @catch (NSException *exception) {
                     NSLog(@"CenterApper:%@",exception);
@@ -464,7 +468,9 @@
             if(_current_target<_item_num-VIEW_NUM+1){
                 //中心に消えていく
                 @try {
-                    [_circles[_current_target+VIEW_NUM] removeFromSuperview];
+                    CMSpiralCircleView *view=_circles[_current_target+VIEW_NUM];
+                    [view removeFromSuperview];
+                    [view removeImage];
                 }
                 @catch (NSException *exception) {
                     NSLog(@"CenterDisApper:%@",exception);
@@ -479,6 +485,7 @@
                 //左から現れる
                 @try {
                     CMSpiralCircleView *view=_circles[_current_target];
+                            [view setImage];
                     [_spiral addSubview:view];
                     [_spiral bringSubviewToFront:view];
                 }

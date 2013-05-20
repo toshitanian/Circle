@@ -39,6 +39,7 @@
 @property (atomic,assign) CGPoint original_center;
 
 -(void)setImage;
+-(void)removeImage;
 -(void)gotPlayed:(CGPoint)target;
 @end
 

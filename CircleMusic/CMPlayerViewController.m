@@ -11,19 +11,14 @@
 #import "CMAlbumViewController.h"
 #import <Social/Social.h>
 #import "CMAppDelegate.h"
+#import "CMCrashReporter.h"
+
 static const NSString *PlayerStatusContext;
 static const NSString *CurrentItemChangedContext;
 static const NSString *PlayerRateContext;
 
-
-
-
-
-
-
 @implementation CMMusicItem
 @end
-
 
 @interface CMPlayerViewController ()
 
@@ -101,6 +96,13 @@ static const NSString *PlayerRateContext;
         [self updatePlayingMusicInfo:nil];
         
         self.isAvailable=YES;
+        
+        _repeat_type=0;
+        _repeat.image=[UIImage imageNamed:@"repeat.png"];
+        _repeat.alpha=0.7f;
+        
+        _shuffle.alpha=0.7f;
+        _isShuffling=NO;
         
     }
     
@@ -988,6 +990,8 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    [CMCrashReporter reportCrash:@"didReceiveMemoryWarning@CMPlayerViewController"];
+    
 }
 
 - (BOOL)canBecomeFirstResponder {

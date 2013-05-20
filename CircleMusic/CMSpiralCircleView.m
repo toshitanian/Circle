@@ -44,6 +44,11 @@
     }
 
 }
+-(void)removeImage
+{
+    self.image=nil;
+
+}
 
 -(void)clock:(id)something
 {
