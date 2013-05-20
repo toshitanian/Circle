@@ -161,10 +161,19 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
-							<object class="IBUIImageView" id="1031998852">
+							<object class="IBUIImageView" id="907243075">
 								<reference key="NSNextResponder" ref="58470395"/>
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{166, 67}, {60, 60}}</string>
+								<reference key="NSSuperview" ref="58470395"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							</object>
+							<object class="IBUIImageView" id="80235164">
+								<reference key="NSNextResponder" ref="58470395"/>
+								<int key="NSvFlags">292</int>
+								<string key="NSFrame">{{93, 66}, {60, 60}}</string>
 								<reference key="NSSuperview" ref="58470395"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -489,9 +498,17 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">_repeat</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="1031998852"/>
+						<reference key="destination" ref="907243075"/>
 					</object>
 					<int key="connectionID">310</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">_shuffle</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="80235164"/>
+					</object>
+					<int key="connectionID">312</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -568,7 +585,8 @@
 							<reference ref="280802906"/>
 							<reference ref="1015833255"/>
 							<reference ref="58799977"/>
-							<reference ref="1031998852"/>
+							<reference ref="907243075"/>
+							<reference ref="80235164"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 						<string key="objectName">Cotroller</string>
@@ -621,7 +639,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">309</int>
-						<reference key="object" ref="1031998852"/>
+						<reference key="object" ref="907243075"/>
+						<reference key="parent" ref="58470395"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">311</int>
+						<reference key="object" ref="80235164"/>
 						<reference key="parent" ref="58470395"/>
 					</object>
 				</array>
@@ -645,6 +668,8 @@
 				<string key="307.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="309.CustomClassName">CMPlayerButtonView</string>
 				<string key="309.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="311.CustomClassName">CMPlayerButtonView</string>
+				<string key="311.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="35.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="54.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -655,7 +680,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">310</int>
+			<int key="maxID">312</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

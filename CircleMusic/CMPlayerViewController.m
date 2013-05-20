@@ -188,6 +188,11 @@ static const NSString *PlayerRateContext;
     _repeat_abs_point=absPoint(_repeat);
     _repeat.alpha=0.7f;
     
+    [_shuffle makeCircle];
+    _shuffle.image=[UIImage imageNamed:@"shuffle.png"];
+    _shuffle_abs_point=absPoint(_shuffle);
+    _shuffle.alpha=0.7f;
+    
     
 #pragma mark  audio session
     _audioSession = [AVAudioSession sharedInstance];
@@ -681,6 +686,20 @@ static const NSString *PlayerRateContext;
             };
             
             [UIView animateWithDuration:0.1 animations:animations completion:nil];
+        }else if(CGRectContainsPoint(CGRectMake(_shuffle_abs_point.x, _shuffle_abs_point.y, _shuffle.frame.size.width, _shuffle.frame.size.height), point)){
+            NSLog(@"Shuffle Tocuhed");
+            
+            void (^animations)(void) = ^{
+                
+                float scale_value=1.2;
+                
+                CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+                [_shuffle setTransform:scale];
+                _onShuffle=YES;
+                
+            };
+            
+            [UIView animateWithDuration:0.1 animations:animations completion:nil];
         }
     }
     
@@ -741,10 +760,16 @@ CGPoint absPoint(UIView* view)
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
             [_repeat setTransform:scale];
         }
+        if(_onShuffle){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_shuffle setTransform:scale];
+        }
         _onTwitter=NO;
         _onPull=NO;
         _onArtwork=NO;
         _onRepeat=NO;
+        _onShuffle=NO;
     }
 }
 
@@ -771,10 +796,16 @@ CGPoint absPoint(UIView* view)
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
             [_repeat setTransform:scale];
         }
+        if(_onShuffle){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_shuffle setTransform:scale];
+        }
         _onTwitter=NO;
         _onPull=NO;
         _onArtwork=NO;
         _onRepeat=NO;
+        _onShuffle=NO;
         
         if(CGRectContainsPoint(_artwork.frame, point)){
             [self play_pushed:nil];
@@ -787,7 +818,7 @@ CGPoint absPoint(UIView* view)
         }else if(CGRectContainsPoint(_pull.frame, point)){
             [self dismiss:nil];
         }else if(CGRectContainsPoint(_repeat.frame, point)){
-            //TODO: repeat
+   
             if(_repeat_type==0){
                 _repeat_type=1;
                 _repeat.image= [UIImage imageNamed:@"repeat_once.png"];
@@ -800,6 +831,15 @@ CGPoint absPoint(UIView* view)
                 _repeat_type=0;
                 _repeat.image= [UIImage imageNamed:@"repeat.png"];
                 _repeat.alpha=0.7f;
+            }
+        }else if(CGRectContainsPoint(_shuffle.frame, point)){
+            //TODO: shuffle
+            if(!_isShuffling){
+                _shuffle.alpha=1.0f;
+                _isShuffling=YES;
+            }else{
+                _shuffle.alpha=0.7f;
+                _isShuffling=NO;
             }
         }
         
@@ -820,10 +860,16 @@ CGPoint absPoint(UIView* view)
             CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
             [_repeat setTransform:scale];
         }
+        if(_onShuffle){
+            float scale_value=1.0;
+            CGAffineTransform scale = CGAffineTransformMakeScale(scale_value, scale_value);
+            [_shuffle setTransform:scale];
+        }
         _onTwitter=NO;
         _onPull=NO;
         _onArtwork=NO;
         _onRepeat=NO;
+        _onShuffle=NO;
     }
 }
 

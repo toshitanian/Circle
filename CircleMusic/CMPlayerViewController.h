@@ -73,19 +73,23 @@
     IBOutlet CMPlayerButtonView *_twitter;
     IBOutlet CMPlayerButtonView *_pull;
     IBOutlet CMPlayerButtonView *_repeat;
+        IBOutlet CMPlayerButtonView *_shuffle;
     
     BOOL _onArtwork;
     BOOL _onTwitter;
     BOOL _onPull;
     BOOL _onRepeat;
+        BOOL _onShuffle;
     
     CGPoint _twitter_abs_point;
     CGPoint _pull_abs_point;
     CGPoint _repeat_abs_point;
+        CGPoint _shuffle_abs_point;
     
     BOOL _should_resume;
     
     int _repeat_type;
+    BOOL _isShuffling;
 }
 
 -(IBAction)dismiss:(id)sender;

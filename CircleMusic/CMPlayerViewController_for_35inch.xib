@@ -167,10 +167,20 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
-							<object class="IBUIImageView" id="610629280">
+							<object class="IBUIImageView" id="1025678703">
 								<reference key="NSNextResponder" ref="58470395"/>
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{166, 66}, {60, 60}}</string>
+								<reference key="NSSuperview" ref="58470395"/>
+								<reference key="NSWindow"/>
+								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							</object>
+							<object class="IBUIImageView" id="195989476">
+								<reference key="NSNextResponder" ref="58470395"/>
+								<int key="NSvFlags">292</int>
+								<string key="NSFrame">{{93, 66}, {60, 60}}</string>
 								<reference key="NSSuperview" ref="58470395"/>
 								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -507,9 +517,17 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">_repeat</string>
 						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="610629280"/>
+						<reference key="destination" ref="1025678703"/>
 					</object>
 					<int key="connectionID">310</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">_shuffle</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="195989476"/>
+					</object>
+					<int key="connectionID">312</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -586,7 +604,8 @@
 							<reference ref="280802906"/>
 							<reference ref="1015833255"/>
 							<reference ref="58799977"/>
-							<reference ref="610629280"/>
+							<reference ref="1025678703"/>
+							<reference ref="195989476"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 						<string key="objectName">Cotroller</string>
@@ -638,7 +657,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">309</int>
-						<reference key="object" ref="610629280"/>
+						<reference key="object" ref="1025678703"/>
+						<reference key="parent" ref="58470395"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">311</int>
+						<reference key="object" ref="195989476"/>
 						<reference key="parent" ref="58470395"/>
 					</object>
 				</array>
@@ -662,6 +686,8 @@
 				<string key="307.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="309.CustomClassName">CMPlayerButtonView</string>
 				<string key="309.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="311.CustomClassName">CMPlayerButtonView</string>
+				<string key="311.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="35.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="54.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -672,7 +698,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">310</int>
+			<int key="maxID">312</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -710,6 +736,7 @@
 						<string key="_queue_label">UILabel</string>
 						<string key="_repeat">CMPlayerButtonView</string>
 						<string key="_shadow">UIView</string>
+						<string key="_shuffle">CMPlayerButtonView</string>
 						<string key="_song_progress">UISlider</string>
 						<string key="_toast_next">UIView</string>
 						<string key="_toast_previous">UIView</string>
@@ -759,6 +786,10 @@
 						<object class="IBToOneOutletInfo" key="_shadow">
 							<string key="name">_shadow</string>
 							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="_shuffle">
+							<string key="name">_shuffle</string>
+							<string key="candidateClassName">CMPlayerButtonView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="_song_progress">
 							<string key="name">_song_progress</string>
