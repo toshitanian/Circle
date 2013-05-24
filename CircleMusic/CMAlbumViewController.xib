@@ -240,7 +240,7 @@
 								<reference key="NSNextResponder" ref="1032892795"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews"/>
-								<string key="NSFrame">{{220, 68}, {100, 248}}</string>
+								<string key="NSFrame">{{176, 68}, {144, 248}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="457312963"/>
@@ -255,7 +255,7 @@
 								<reference key="NSNextResponder" ref="1032892795"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews"/>
-								<string key="NSFrame">{{0, 68}, {221, 100}}</string>
+								<string key="NSFrame">{{0, 68}, {177, 147}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="571955704"/>
@@ -270,7 +270,7 @@
 								<reference key="NSNextResponder" ref="1032892795"/>
 								<int key="NSvFlags">274</int>
 								<array class="NSMutableArray" key="NSSubviews"/>
-								<string key="NSFrame">{{0, 166}, {100, 150}}</string>
+								<string key="NSFrame">{{0, 209}, {134, 107}}</string>
 								<reference key="NSSuperview" ref="1032892795"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="453287358"/>

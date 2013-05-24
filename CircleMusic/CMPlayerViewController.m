@@ -13,6 +13,8 @@
 #import "CMAppDelegate.h"
 #import "CMCrashReporter.h"
 
+#define ALPHA 0.5f
+
 static const NSString *PlayerStatusContext;
 static const NSString *CurrentItemChangedContext;
 static const NSString *PlayerRateContext;
@@ -99,9 +101,9 @@ static const NSString *PlayerRateContext;
         
         _repeat_type=0;
         _repeat.image=[UIImage imageNamed:@"repeat.png"];
-        _repeat.alpha=0.7f;
+        _repeat.alpha=ALPHA;
         
-        _shuffle.alpha=0.7f;
+        _shuffle.alpha=ALPHA;
         _isShuffling=NO;
         
     }
@@ -188,12 +190,12 @@ static const NSString *PlayerRateContext;
     [_repeat makeCircle];
     _repeat.image=[UIImage imageNamed:@"repeat.png"];
     _repeat_abs_point=absPoint(_repeat);
-    _repeat.alpha=0.7f;
+    _repeat.alpha=ALPHA;
     
     [_shuffle makeCircle];
     _shuffle.image=[UIImage imageNamed:@"shuffle.png"];
     _shuffle_abs_point=absPoint(_shuffle);
-    _shuffle.alpha=0.7f;
+    _shuffle.alpha=ALPHA;
     
     
 #pragma mark  audio session
@@ -340,7 +342,7 @@ static const NSString *PlayerRateContext;
         [self playAtIndex:0];
         _repeat_type=0;
         _repeat.image=[UIImage imageNamed:@"repeat.png"];
-        _repeat.alpha=0.7f;
+        _repeat.alpha=ALPHA;
         [self updatePlayingMusicInfo:nil];
     }else{
         [self stop];
@@ -832,7 +834,7 @@ CGPoint absPoint(UIView* view)
             }else{
                 _repeat_type=0;
                 _repeat.image= [UIImage imageNamed:@"repeat.png"];
-                _repeat.alpha=0.7f;
+                _repeat.alpha=ALPHA;
             }
         }else if(CGRectContainsPoint(_shuffle.frame, point)){
             //TODO: shuffle
@@ -840,7 +842,7 @@ CGPoint absPoint(UIView* view)
                 _shuffle.alpha=1.0f;
                 _isShuffling=YES;
             }else{
-                _shuffle.alpha=0.7f;
+                _shuffle.alpha=ALPHA;
                 _isShuffling=NO;
             }
         }

@@ -24,7 +24,7 @@
 {
     self=[super initWithTarget:target action:action];
     if(self){
-        
+    
     }
     return self;
 }
@@ -320,7 +320,7 @@
 
 -(void)initSlider
 {
-    _slider1.frame=CGRectMake(0,_spiral.frame.size.height-ITEM_SIZE,self.view.frame.size.width,ITEM_SIZE);
+    //_slider1.frame=CGRectMake(0,_spiral.frame.size.height-ITEM_SIZE,self.view.frame.size.width,ITEM_SIZE);
     CMPanGestureRecognizer* panRecognizer = [[CMPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:) ];
     panRecognizer.tag=1;
     [_slider1 addGestureRecognizer:panRecognizer];
@@ -328,14 +328,14 @@
     _slider1.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.2f];
     
     
-    _slider2.frame=CGRectMake(_spiral.frame.size.width-ITEM_SIZE*0.8,_label_height,ITEM_SIZE*0.8,_spiral.frame.size.height-_label_height-_slider1.frame.size.height);
+   // _slider2.frame=CGRectMake(_spiral.frame.size.width-ITEM_SIZE*0.8,_label_height,ITEM_SIZE*0.8,_spiral.frame.size.height-_label_height-_slider1.frame.size.height);
     CMPanGestureRecognizer* panRecognizer2 = [[CMPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:) ];
     panRecognizer2.tag=2;
     [_slider2 addGestureRecognizer:panRecognizer2];
     [self.view bringSubviewToFront:_slider2];
     _slider2.backgroundColor=[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:0.2f];
     
-    _slider3.frame=CGRectMake(0,_label_height,_spiral.frame.size.width-_slider2.frame.size.width,ITEM_SIZE*0.7);
+    //_slider3.frame=CGRectMake(0,_label_height,_spiral.frame.size.width-_slider2.frame.size.width,ITEM_SIZE*0.7);
     CMPanGestureRecognizer* panRecognizer3 = [[CMPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:) ];
     panRecognizer3.tag=3;
     [_slider3 addGestureRecognizer:panRecognizer3];
@@ -343,12 +343,13 @@
     _slider3.backgroundColor=[UIColor colorWithRed:0.0f green:1.0f blue:0.0f alpha:0.2f];
     
     
-    _slider4.frame=CGRectMake(0,_label_height+_slider3.frame.size.height,ITEM_SIZE,ITEM_SIZE*1.3);
+   // _slider4.frame=CGRectMake(0,_label_height+_slider3.frame.size.height,ITEM_SIZE,ITEM_SIZE*1.3);
     CMPanGestureRecognizer* panRecognizer4 = [[CMPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:) ];
     panRecognizer4.tag=4;
     [_slider4 addGestureRecognizer:panRecognizer4];
     [self.view bringSubviewToFront:_slider4];
     _slider4.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:1.0f alpha:0.2f];
+    
     
     _slider1.hidden=YES;
     _slider2.hidden=YES;
@@ -1047,8 +1048,6 @@ CGPoint absPoint_(UIView* view)
         ad.playerViewController.query=nil;
         [self presentViewController:ad.playerViewController animated:YES completion: nil];
     }
-    
-    
 }
 - (void)didReceiveMemoryWarning
 {
