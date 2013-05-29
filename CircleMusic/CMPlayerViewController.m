@@ -80,14 +80,10 @@ static const NSString *PlayerRateContext;
             MPMediaItemArtwork *artwork= [representativeItem valueForProperty: MPMediaItemPropertyArtwork];
             item.artwork=[artwork imageWithSize: _artwork.bounds.size];
             [_items addObject:item];
-            if(url!=nil){
-                [_urls addObject:url];
-            }
-            //NSLog(@"%@",url);
-            if (url != nil){
+            if(url!=nil && [AVPlayerItem playerItemWithURL:url].status!=AVPlayerItemStatusFailed){
+                [_urls addObject:url];  
                 AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
                 [_playerItems addObject:playerItem];
-                
             }
         }
         _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
@@ -252,6 +248,7 @@ static const NSString *PlayerRateContext;
             }
             [self updatePlayingMusicInfo:nil];
         }else{
+      
             [self finishOrRepeat];
         }
         
@@ -437,16 +434,25 @@ static const NSString *PlayerRateContext;
         // palyerItems に　AVPlayerItemを追加
         for (int i = index ; i < musicCount ; i++){
             NSURL *url;
-            if(!_isShuffling){
-                url= _urls[i];
-            }else{
-                url=_shuffled_urls[i];
+            @try {
+                if(!_isShuffling){
+                    url= _urls[i];
+                }else{
+                    url=_shuffled_urls[i];
+                }
+                if (url != nil){
+                    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
+                    [_playerItems addObject:playerItem];
+                }
+                
             }
-            if (url != nil){
-                AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
-                [_playerItems addObject:playerItem];
+            @catch (NSException *exception) {
+                NSLog(@"%@",exception);
             }
-            
+            @finally {
+                
+            }
+          
             
         }
         
@@ -478,7 +484,6 @@ static const NSString *PlayerRateContext;
     if(current_time>10){
         [self backToStart];
     }else{
-        
         _song_progress.value=0.0f;
         
         if([self get_previous_index]==-1){
@@ -1027,7 +1032,16 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
     _shuffled_urls=[NSMutableArray array];
     _needShuffleReload=YES;
     for(int i=0;i<[_items count];i++){
-        _shuffled_urls[i]=_urls[[_shuffle_hash[i] intValue]];
+        @try {
+            _shuffled_urls[i]=_urls[[_shuffle_hash[i] intValue]];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"%@",exception);
+        }
+        @finally {
+            
+        }
+        
     }
     
     
