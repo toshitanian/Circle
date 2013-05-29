@@ -78,7 +78,7 @@
     NSArray *collections;
     if(self.type==0){
         query = [MPMediaQuery  artistsQuery];
-        [query setGroupingType: MPMediaGroupingArtist];
+        [query setGroupingType: MPMediaGroupingAlbumArtist];
         collections = [query collections];
     }else if(self.type==1){
         query = [MPMediaQuery  songsQuery];
@@ -279,7 +279,7 @@
 #pragma mark index circle view
     _index_circle_view=[[CMIndexCircleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/4, self.view.frame.size.width/4)];
     _index_circle_view.center=CGPointMake(_center.x, _center.y);
-    [self.view addSubview:_index_circle_view];
+   //TODO: [self.view addSubview:_index_circle_view];
     _index_circle_view.isShowing=NO;
     
     
@@ -505,10 +505,10 @@
                 
             }
             
-            if(_current_target>-1){
+            if(_current_target>-2){
                 //左から現れる
                 @try {
-                    CMSpiralCircleView *view=_circles[_current_target];
+                    CMSpiralCircleView *view=_circles[_current_target-1];
                     [view setImage];
                     [_spiral addSubview:view];
                     [_spiral bringSubviewToFront:view];
@@ -838,6 +838,8 @@ CGPoint absPoint_(UIView* view)
      }
      */
     _touching_view=nil;
+    
+    view.original_center=view.center;
     
     
     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];

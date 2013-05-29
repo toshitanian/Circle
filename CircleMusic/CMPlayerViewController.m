@@ -64,8 +64,9 @@ static const NSString *PlayerRateContext;
         _artwork.alpha=1.0f;
         _items = [NSMutableArray array];
         _urls=[NSMutableArray array];
+        _shuffle_hash=[NSMutableArray array];
         NSArray *collections=[self.query collections];
-        NSMutableArray *_playerItems = [NSMutableArray array];
+        NSMutableArray* _playerItems = [NSMutableArray array];
         self.currentIndex=0;
         for (int i = 0 ; i < [collections count];  i++){
             CMMusicItem *item=[[CMMusicItem alloc] init];
@@ -95,16 +96,16 @@ static const NSString *PlayerRateContext;
         [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
         [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
         
-        [self updatePlayingMusicInfo:nil];
+        
         
         self.isAvailable=YES;
-        
         _repeat_type=0;
         _repeat.image=[UIImage imageNamed:@"repeat.png"];
         _repeat.alpha=ALPHA;
         
         _shuffle.alpha=ALPHA;
         _isShuffling=NO;
+        [self updatePlayingMusicInfo:nil];
         
     }
     
@@ -243,7 +244,12 @@ static const NSString *PlayerRateContext;
         //  NSLog(@"currentItem%@.asset:%@",currentItem,currentItem.asset);
         
         if (currentItem != nil){
-            self.currentIndex = [_urls indexOfObject:asset.URL];
+            if(!_isShuffling){
+                self.currentIndex = [_urls indexOfObject:asset.URL];
+                
+            }else{
+                self.currentIndex = [_shuffled_urls indexOfObject:asset.URL];
+            }
             [self updatePlayingMusicInfo:nil];
         }else{
             [self finishOrRepeat];
@@ -356,6 +362,7 @@ static const NSString *PlayerRateContext;
 -(void)finish
 {
     [self stop];
+    
     self.isAvailable=NO;
     [self dismiss:nil];
     
@@ -363,25 +370,39 @@ static const NSString *PlayerRateContext;
 
 -(void)next_pushed:(UIButton *)btn{
     
+    
+    
     _song_progress.value=0.0f;
     if ([self get_next_index]!=-1) {
-        
         self.currentIndex=[self get_next_index];
-        
         if (self.isPlaying) {
-            [_player2 advanceToNextItem];
+            if(!_needShuffleReload){
+                
+                [_player2 advanceToNextItem];
+            }else{
+                _needShuffleReload=NO;
+                [self playAtIndex:self.currentIndex];
+                [self updatePlayingMusicInfo:nil];
+            }
             NSLog(@"nextPlayWithPlaying:%d",self.currentIndex);
         }else{
-            [_player2 advanceToNextItem];
-            //[self updatePlayingMusicInfo:nil];
+            
+            if(!_needShuffleReload){
+                
+                [_player2 advanceToNextItem];
+            }else{
+                _needShuffleReload=NO;
+                [self playAtIndex:self.currentIndex];
+                [self updatePlayingMusicInfo:nil];
+            }
             NSLog(@"nextPlayNotPlaying:%d",self.currentIndex);
         }
         
         [self showToast:_toast_next];
     }else{
-   
-            [self finishOrRepeat];
-   
+        
+        [self finishOrRepeat];
+        
         
         
     }
@@ -404,7 +425,6 @@ static const NSString *PlayerRateContext;
     
     self.currentIndex = index;
     
-    
     dispatch_queue_t q_global;
     q_global = dispatch_get_global_queue(0, 0);
     dispatch_async(q_global, ^{
@@ -412,15 +432,22 @@ static const NSString *PlayerRateContext;
         //[self stop];
         
         
-        NSMutableArray *_playerItems = [NSMutableArray array];
+        NSMutableArray* _playerItems = [NSMutableArray array];
         int musicCount = [_items count];
         // palyerItems に　AVPlayerItemを追加
         for (int i = index ; i < musicCount ; i++){
-            NSURL *url = _urls[i];
+            NSURL *url;
+            if(!_isShuffling){
+                url= _urls[i];
+            }else{
+                url=_shuffled_urls[i];
+            }
             if (url != nil){
                 AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
                 [_playerItems addObject:playerItem];
             }
+            
+            
         }
         
         // AVQueuePlayerのインスタンスつくる
@@ -437,8 +464,11 @@ static const NSString *PlayerRateContext;
         }
         
         
+        
     });
 }
+
+
 -(void)previous_pushed:(UIButton *)btn{
     if(_isSkipping) return;
     
@@ -459,6 +489,7 @@ static const NSString *PlayerRateContext;
             [self playAtIndex:self.currentIndex];
             [self showToast:_toast_previous];
         }
+        
         
         
     }
@@ -535,12 +566,15 @@ static const NSString *PlayerRateContext;
 #pragma mark - player
 -(void)updatePlayingMusicInfo:(id *)something
 {
-    
     _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",self.currentIndex+1,[_items count]];
     //!!TODO index
     _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
-    
-    CMMusicItem *item=_items[self.currentIndex];
+    CMMusicItem *item;
+    if(!_isShuffling){
+        item=_items[self.currentIndex];
+    }else{
+        item=_items[[_shuffle_hash[self.currentIndex] intValue]];
+    }
     _full_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)item.fulltime/60,(int)item.fulltime%60];
     _song_progress.maximumValue=item.fulltime;
     _info_artist.text=  item.artist;
@@ -822,7 +856,7 @@ CGPoint absPoint(UIView* view)
         }else if(CGRectContainsPoint(_pull.frame, point)){
             [self dismiss:nil];
         }else if(CGRectContainsPoint(_repeat.frame, point)){
-   
+            
             if(_repeat_type==0){
                 _repeat_type=1;
                 _repeat.image= [UIImage imageNamed:@"repeat_once.png"];
@@ -840,10 +874,12 @@ CGPoint absPoint(UIView* view)
             //TODO: shuffle
             if(!_isShuffling){
                 _shuffle.alpha=1.0f;
-                _isShuffling=YES;
+                
+                [self setShuffle];
             }else{
                 _shuffle.alpha=ALPHA;
-                _isShuffling=NO;
+                
+                [self removeShuffle];
             }
         }
         
@@ -981,6 +1017,66 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
      */
 }
 
+
+#pragma mark - shuffle
+
+-(void)setShuffle
+{
+    _isShuffling=YES;
+    _shuffle_hash= [self getShuffledHash:[_items count] Except:self.currentIndex];
+    _shuffled_urls=[NSMutableArray array];
+    _needShuffleReload=YES;
+    for(int i=0;i<[_items count];i++){
+        _shuffled_urls[i]=_urls[[_shuffle_hash[i] intValue]];
+    }
+    
+    
+    self.currentIndex=0;
+    //[self playAtIndex:self.currentIndex];
+    [self updatePlayingMusicInfo:nil];
+}
+
+-(void)removeShuffle
+{
+    _isShuffling=NO;
+    _needShuffleReload=YES;
+    AVPlayerItem *currentItem = [_player2 currentItem];
+    AVURLAsset *asset = (AVURLAsset *)currentItem.asset;
+    //  NSLog(@"currentItem%@.asset:%@",currentItem,currentItem.asset);
+    self.currentIndex = [_urls indexOfObject:asset.URL];
+    
+    //[self playAtIndex:self.currentIndex];
+    [self updatePlayingMusicInfo:nil];
+}
+
+- (NSMutableArray *)getShuffledHash:(int)length Except:(int)index{
+    
+    if(length==1){
+        NSMutableArray *retArray=[NSMutableArray array];
+        [retArray addObject:[NSNumber numberWithInt:index]];
+        return  retArray;
+    }
+    
+    
+    srand([[NSDate date] timeIntervalSinceReferenceDate]);
+    int i = length;
+    NSMutableArray *array=[NSMutableArray array];
+    for (i=0; i<length; i++) {
+        if(i!=index){
+            [array addObject:[NSNumber numberWithInt:i]];
+        }
+    }
+    i-=1;
+    while(--i) {
+        int j = rand() % (i+1);
+        [array exchangeObjectAtIndex:i withObjectAtIndex:j];
+    }
+    NSMutableArray *retArray=[NSMutableArray array];
+    [retArray addObject:[NSNumber numberWithInt:index]];
+    [retArray addObjectsFromArray:array];
+    
+    return retArray;
+}
 
 #pragma  mark - something
 

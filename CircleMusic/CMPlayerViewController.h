@@ -66,6 +66,7 @@
     
     NSMutableArray *_items;
     NSMutableArray *_urls;
+       NSMutableArray *_shuffled_urls;
     
     AVAudioSession *_audioSession;
     
@@ -73,23 +74,27 @@
     IBOutlet CMPlayerButtonView *_twitter;
     IBOutlet CMPlayerButtonView *_pull;
     IBOutlet CMPlayerButtonView *_repeat;
-        IBOutlet CMPlayerButtonView *_shuffle;
+    IBOutlet CMPlayerButtonView *_shuffle;
     
     BOOL _onArtwork;
     BOOL _onTwitter;
     BOOL _onPull;
     BOOL _onRepeat;
-        BOOL _onShuffle;
+    BOOL _onShuffle;
     
     CGPoint _twitter_abs_point;
     CGPoint _pull_abs_point;
     CGPoint _repeat_abs_point;
-        CGPoint _shuffle_abs_point;
+    CGPoint _shuffle_abs_point;
     
     BOOL _should_resume;
     
     int _repeat_type;
     BOOL _isShuffling;
+    
+    NSArray *_shuffle_hash;
+    //int _original_Index;
+    BOOL _needShuffleReload;
 }
 
 -(IBAction)dismiss:(id)sender;
@@ -100,6 +105,7 @@
 @property MPMusicPlayerController *player;
 @property (atomic,assign) BOOL isPlaying;
 @property (atomic,assign) int currentIndex;
+
 @property (atomic,assign) BOOL needReload;
 @property (nonatomic,retain) MPMediaQuery *query;
 @property (nonatomic,retain) AVQueuePlayer *player2;
