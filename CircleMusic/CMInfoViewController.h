@@ -30,4 +30,5 @@
 -(IBAction)pop:(id)sender;
 -(IBAction)showPlayer:(id)sender;
 @property (nonatomic,retain) id<CMInfoViewControllerDelegate> delegate;
+@property (atomic,assign) BOOL hasLoaded;
 @end

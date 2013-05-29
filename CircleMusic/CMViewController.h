@@ -38,6 +38,8 @@
     NSTimer *_tm;
     
     BOOL _isEnabled;
+    UIView *_progress_view;
+    UIProgressView *_progress_bar;
 }
 
 @property (nonatomic, assign) NSInteger cellCount;

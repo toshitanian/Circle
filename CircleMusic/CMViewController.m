@@ -151,12 +151,34 @@
     
     _point_tap_began.x=-99;
     
+    /*
+     _scroll_speed=SCROLL_SPEED;
+     _tm =
+     [NSTimer scheduledTimerWithTimeInterval:TIMER target:self selector:@selector(clock:) userInfo:nil repeats:YES];
+     
+     [_tm fire];
+     */
+    _isEnabled=NO;
+    _progress_view=[[UIView alloc] initWithFrame:self.view.frame];
+    _progress_view.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.65f];
+    [self.view addSubview:_progress_view];
     
-    _scroll_speed=SCROLL_SPEED;
-    _tm =
-    [NSTimer scheduledTimerWithTimeInterval:TIMER target:self selector:@selector(clock:) userInfo:nil repeats:YES];
+    _progress_bar= [[UIProgressView alloc]
+                    initWithProgressViewStyle:UIProgressViewStyleBar];
+    _progress_bar.progressTintColor=[UIColor grayColor];
+    _progress_bar.trackTintColor=[UIColor whiteColor];
+    _progress_bar.frame = CGRectMake(0, 0, 200, 10);
+    _progress_bar.center=_progress_view.center;
+    _progress_bar.progress=0.0f;
+    [_progress_view addSubview:_progress_bar];
     
-    [_tm fire];
+    UILabel *label=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
+    label.text=@"Now Loading...";
+    label.center=CGPointMake(self.view.center.x,self.view.center.y+_progress_bar.frame.size.height*2);
+    label.backgroundColor=[UIColor clearColor];
+    label.textColor=[UIColor whiteColor];
+    label.textAlignment=NSTextAlignmentCenter;
+    [_progress_view addSubview:label];
     
 }
 
@@ -204,16 +226,16 @@
         }
     }else{
         /*
-        if(_scroll_speed>0.01 || _scroll_speed<-0.01){
-            [self updateCircle:_scroll_speed WithRatio:1.0];
-            _scroll_speed*=0.96;
-            
-        }else{
-            
-            _scroll_speed=0.0;
-            //  NSLog(@"scroll_end");
-            [_tm invalidate];
-        }
+         if(_scroll_speed>0.01 || _scroll_speed<-0.01){
+         [self updateCircle:_scroll_speed WithRatio:1.0];
+         _scroll_speed*=0.96;
+         
+         }else{
+         
+         _scroll_speed=0.0;
+         //  NSLog(@"scroll_end");
+         [_tm invalidate];
+         }
          */
         
         
@@ -393,6 +415,35 @@
         for(int i=0;i<[_views count];i++){
             CMPlayerButtonView *view=_views[i];
             if(CGRectContainsPoint(view.frame, point)){
+                [self.view bringSubviewToFront:_views[i]];
+                
+                BOOL hasLoaded;
+                switch (i) {
+                    case 0:
+                        hasLoaded=_artistViewController.hasLoaded;
+                        break;
+                    case 1:
+                          hasLoaded=_songViewController.hasLoaded;
+                        break;
+                    case 2:
+                          hasLoaded=_albumViewController.hasLoaded;
+                        break;
+                    case 3:
+                          hasLoaded=_playlistViewController.hasLoaded;
+                        break;
+                    case 4:
+                          hasLoaded=_infoViewController.hasLoaded;
+                        break;
+                        
+
+                }
+                
+                if(!hasLoaded){
+                    _progress_bar.progress=0.0f;
+                    [self.view addSubview:_progress_view];
+                }
+                _isEnabled=NO;
+                
                 [self goCenter:i];
                 
             }
@@ -502,25 +553,68 @@
 
 -(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController*)vc
 {
-    // NSLog(@"%d|%lf",vc.type,progress);
     
+    if(vc.type==1){
+        NSLog(@"%d|%lf",vc.type,progress);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // your code here
+            _progress_bar.progress=progress;
+        });
+    }
+}
+
+-(void)CMAlbumViewControllerDidChangeProgressOfShow:(float)progress From:(CMAlbumViewController*)vc
+{
+    
+    NSLog(@"Show%d|%lf",vc.type,progress);
+    // your code here
+    @try {
+        [self performSelectorInBackground:@selector(updateProgress:)
+                               withObject:[NSNumber numberWithFloat:progress]];
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
+    
+    
+}
+
+-(void)updateProgress:(NSNumber*)progress
+{
+    _progress_bar.progress=[progress floatValue];
 }
 
 -(void)CMAlbumViewControllerDidFinishLoading:(CMAlbumViewController *)vc
 {
     NSLog(@"%d FINISH",vc.type);
+    if (vc.type==1) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // your code here
+            [_progress_view removeFromSuperview];
+            _isEnabled=YES;
+        });
+        
+    }
+    
     
 }
 
 -(void)CMAlbumViewControllerDidFinishShowing:(CMAlbumViewController *)vc
 {
     [self updateCircle:0 WithRatio:1.0];
+    _isEnabled=YES;
+    [_progress_view removeFromSuperview];
     
 }
 
 -(void)CMInfoViewControllerDidFinishShowing:(CMAlbumViewController *)vc
 {
     [self updateCircle:0 WithRatio:1.0];
+    _isEnabled=YES;
+    [_progress_view removeFromSuperview];
     
 }
 

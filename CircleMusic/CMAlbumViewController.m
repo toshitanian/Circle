@@ -249,7 +249,7 @@
             view.frame=CGRectMake(0,0,0,0);
         }
         @try {
-            [self.delegate CMAlbumViewControllerDidChangeProgressOfLoad:(float)i/(float)_item_num From:self];
+            [self.delegate CMAlbumViewControllerDidChangeProgressOfShow:(float)i/(float)_item_num From:self];
         }
         @catch (NSException *exception) {
             
@@ -361,6 +361,7 @@
     panRecognizer_spiral.tag=9;
     [_spiral addGestureRecognizer:panRecognizer_spiral];
     
+    self.hasLoaded=YES;
     
 }
 
@@ -409,7 +410,10 @@
         
         
         if(target_changed<0){
-            
+            CMSpiralCircleView *view_6=_circles[_current_target+6];
+            [view_6 setImage];
+            CMSpiralCircleView *view_1=_circles[_current_target+1];
+            [view_1 setImage];
             if(_current_target>1){
                 //左に消えていく
                 

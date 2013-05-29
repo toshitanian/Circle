@@ -26,6 +26,7 @@
 @protocol CMAlbumViewControllerDelegate <NSObject>
 
 -(void)CMAlbumViewControllerDidChangeProgressOfLoad:(float)progress From:(CMAlbumViewController *)vc;
+-(void)CMAlbumViewControllerDidChangeProgressOfShow:(float)progress From:(CMAlbumViewController *)vc;
 -(void)CMAlbumViewControllerDidFinishLoading:(CMAlbumViewController *)vc;
 -(void)CMAlbumViewControllerDidFinishShowing:(CMAlbumViewController *)vc;
 
@@ -85,6 +86,7 @@
 //[type] 0: artist 1: song 2:album
 @property(atomic,assign) int type;
 @property(atomic,assign) BOOL isSongFromPlaylist;
+@property(atomic,assign) BOOL hasLoaded;
 @property(atomic,assign) CGPoint pointPanBegan;
 @property(nonatomic,retain) NSString *query_keyword;
 @property (nonatomic,retain) id<CMAlbumViewControllerDelegate> delegate;

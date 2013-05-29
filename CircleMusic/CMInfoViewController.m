@@ -45,6 +45,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.hasLoaded=YES;
     
 #pragma mark control button
     [_btn_player makeCircle];
