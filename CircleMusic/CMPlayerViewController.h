@@ -95,6 +95,12 @@
     NSArray *_shuffle_hash;
     //int _original_Index;
     BOOL _needShuffleReload;
+    NSArray *_collections;
+    
+    int _count;
+
+    UIImageView *_intro;
+    int _intro_type;
 }
 
 -(IBAction)dismiss:(id)sender;
@@ -110,4 +116,6 @@
 @property (nonatomic,retain) MPMediaQuery *query;
 @property (nonatomic,retain) AVQueuePlayer *player2;
 @property (atomic,assign) BOOL isAvailable;
+
+@property (atomic,assign)     int index_for_play;
 @end

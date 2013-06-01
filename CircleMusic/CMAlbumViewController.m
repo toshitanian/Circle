@@ -94,6 +94,7 @@
                                             forProperty: MPMediaPlaylistPropertyName]];
             }
         }
+        current_query=query;
         collections = [query collections];
     }else if(self.type==2){
         query = [MPMediaQuery  albumsQuery];
@@ -104,7 +105,7 @@
                                         forProperty: MPMediaItemPropertyAlbumArtist]];
         }
         collections = [query collections];
-        NSLog(@"Here");
+
     }else if(self.type==3){
         query = [MPMediaQuery  playlistsQuery];
         [query setGroupingType: MPMediaGroupingPlaylist];
@@ -174,6 +175,17 @@
         _btn_player.hidden=NO;
     }else{
         _btn_player.hidden=YES;
+    }
+    
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"album_intro"]){
+        _intro=[[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,MAX(self.view.frame.size.width*1093/640,self.view.frame.size.height))];
+        _intro.image=[UIImage imageNamed:@"intro_select"];
+        [self.view addSubview:_intro];
+        _intro_type=1;
+        UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        _intro.userInteractionEnabled=YES;
+        [_intro addGestureRecognizer:tapRecognizer];
+        
     }
 }
 
@@ -314,6 +326,12 @@
     
     _player_abs_point=absPoint_(_btn_player);
     _pop_abs_point=absPoint_(_btn_pop);
+    
+    /*
+    UIImageView *iv=[[UIImageView alloc] initWithFrame:self.view.frame];
+    iv.image=[UIImage imageNamed:@"intro_spiral_4inch"];
+    [self.view addSubview:iv];
+     */
     
     
 }
@@ -595,8 +613,27 @@ CGPoint absPoint_(UIView* view)
     return ret;
 }
 
+-(void)intro{
+    
+    
+    if(_intro_type==1){
+        _intro.image=[UIImage imageNamed:@"intro_album"];
+        _intro_type=2;
+    }else{
+        [_intro removeFromSuperview];
+        _intro_type=0;
+    }
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"album_intro"];
+    
+}
+
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
+    if(_intro_type!=0){
+      
+        return NO;
+    }
+    
     if([gestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]]){
         CGPoint point=[touch locationInView:self.view];
         if(CGRectContainsPoint(CGRectMake(_player_abs_point.x, _player_abs_point.y, _btn_player.frame.size.width, _btn_player.frame.size.height), point)){
@@ -641,14 +678,16 @@ CGPoint absPoint_(UIView* view)
 }
 
 - (void)handleTapGesture:(UIGestureRecognizer *)sender {
+
     if (sender.state == UIGestureRecognizerStateEnded)
     {
-        [self hideIndex:nil];
+        [self intro];
     }
 }
 
 - (void)handleTapGestureForController:(UIGestureRecognizer *)sender
 {
+
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         
@@ -673,6 +712,8 @@ CGPoint absPoint_(UIView* view)
 
 - (void)handlePanGestureForController:(UIGestureRecognizer *)sender
 {
+
+    
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         
@@ -683,6 +724,7 @@ CGPoint absPoint_(UIView* view)
 }
 
 - (void)handlePanGesture:(UIGestureRecognizer *)sender {
+
     _touching_view=nil;
     CMPanGestureRecognizer *pan = (CMPanGestureRecognizer*)sender;
     int tag=pan.tag;
@@ -811,6 +853,7 @@ CGPoint absPoint_(UIView* view)
 
 -(IBAction)label_touched:(id)sender
 {
+
     CMSpiralCircleView *view=_circles[_current_target];
     
     [self CircleDidTouched:view];
@@ -830,6 +873,8 @@ CGPoint absPoint_(UIView* view)
 
 -(void)CircleDidLongTouched:(CMSpiralCircleView *)view
 {
+    
+
     /*
      if(_touching_view==view){
      // NSLog(@"TouchUp Cancel");
@@ -871,7 +916,9 @@ CGPoint absPoint_(UIView* view)
                                             predicateWithValue: view.title
                                             forProperty: MPMediaItemPropertyTitle]];
             
-            ad.playerViewController.query=songQuery;
+        //ad.playerViewController.query=songQuery;
+            ad.playerViewController.query=current_query;
+                  ad.playerViewController.index_for_play = [_circles indexOfObject:view];
             ad.playerViewController.needReload=YES;
             
             
@@ -927,7 +974,6 @@ CGPoint absPoint_(UIView* view)
 -(void)CircleDidTouched:(CMSpiralCircleView *)view
 {
     
-    
     if(_touching_view==view){
         // NSLog(@"TouchUp Cancel");
         _touching_view=nil;
@@ -958,7 +1004,7 @@ CGPoint absPoint_(UIView* view)
         
         ad.playerViewController.query=songQuery;
         ad.playerViewController.needReload=YES;
-        
+        ad.playerViewController.index_for_play=-1;
         
         
         [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
@@ -966,12 +1012,16 @@ CGPoint absPoint_(UIView* view)
     }else if(self.type==1){
         [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
         _presenting_player=YES;
+        
         MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
         [songQuery addFilterPredicate: [MPMediaPropertyPredicate
                                         predicateWithValue: view.title
                                         forProperty: MPMediaItemPropertyTitle]];
         
-        ad.playerViewController.query=songQuery;
+          [songQuery setGroupingType: MPMediaGroupingTitle];
+        //ad.playerViewController.query=songQuery;
+             ad.playerViewController.query=current_query;
+        ad.playerViewController.index_for_play = [_circles indexOfObject:view];
         ad.playerViewController.needReload=YES;
         
         
@@ -985,6 +1035,7 @@ CGPoint absPoint_(UIView* view)
                                         forProperty: MPMediaItemPropertyAlbumTitle]];
         
         ad.playerViewController.query=songQuery;
+        ad.playerViewController.index_for_play=-1;
         ad.playerViewController.needReload=YES;
         [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
     }else if(self.type==3){
@@ -994,6 +1045,7 @@ CGPoint absPoint_(UIView* view)
                                         forProperty: MPMediaPlaylistPropertyName]];
         ad.playerViewController.query=songQuery;
         ad.playerViewController.needReload=YES;
+        ad.playerViewController.index_for_play=-1;
         [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
     }
         
@@ -1009,6 +1061,11 @@ CGPoint absPoint_(UIView* view)
 
 -(void)CircleDidStartTouching:(CMSpiralCircleView *)view WithTouch:(UITouch *)touch
 {
+    if(_intro_type!=0){
+        [self intro];
+        return;
+        
+    }
     
     if(_scroll_speed){
         _scroll_speed=0.0;

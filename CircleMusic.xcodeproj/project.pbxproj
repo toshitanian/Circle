@@ -24,6 +24,11 @@
 		181BA41F174405DE005CF643 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 181BA41E174405DE005CF643 /* back.png */; };
 		181BA42217444F5A005CF643 /* CMAlbumViewController_for_35inch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181BA42117444F5A005CF643 /* CMAlbumViewController_for_35inch.xib */; };
 		181BA4241744516B005CF643 /* CMPlayerViewController_for_35inch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181BA4231744516A005CF643 /* CMPlayerViewController_for_35inch.xib */; };
+		184D17A6175A60F000453151 /* intro_tap.png in Resources */ = {isa = PBXBuildFile; fileRef = 184D17A5175A60F000453151 /* intro_tap.png */; };
+		184D17A8175A60F300453151 /* intro_swipe.png in Resources */ = {isa = PBXBuildFile; fileRef = 184D17A7175A60F300453151 /* intro_swipe.png */; };
+		184D17AA175A651C00453151 /* CMInfoViewController_for_35inch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184D17A9175A651C00453151 /* CMInfoViewController_for_35inch.xib */; };
+		184D17AD175A688F00453151 /* intro_album.png in Resources */ = {isa = PBXBuildFile; fileRef = 184D17AB175A688F00453151 /* intro_album.png */; };
+		184D17AE175A688F00453151 /* intro_select.png in Resources */ = {isa = PBXBuildFile; fileRef = 184D17AC175A688F00453151 /* intro_select.png */; };
 		1857F6A61736B3FF00F6146D /* CMPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */; };
 		1857F6A71736B3FF00F6146D /* CMPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */; };
 		18616667174782BD0043037D /* cell-artist.png in Resources */ = {isa = PBXBuildFile; fileRef = 18616666174782BD0043037D /* cell-artist.png */; };
@@ -37,7 +42,6 @@
 		187467F51738B84200C9F9D8 /* pull.png in Resources */ = {isa = PBXBuildFile; fileRef = 187467F31738B84100C9F9D8 /* pull.png */; };
 		187467F61738B84200C9F9D8 /* push.png in Resources */ = {isa = PBXBuildFile; fileRef = 187467F41738B84100C9F9D8 /* push.png */; };
 		187467F81738DA1B00C9F9D8 /* blur.png in Resources */ = {isa = PBXBuildFile; fileRef = 187467F71738DA1B00C9F9D8 /* blur.png */; };
-		187C33F4173B82960090B5BD /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 187C33F3173B82960090B5BD /* test.mp3 */; };
 		187C33F6173B82FF0090B5BD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187C33F5173B82FF0090B5BD /* AVFoundation.framework */; };
 		187C33F8173FE2DF0090B5BD /* circle_mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 187C33F7173FE2DF0090B5BD /* circle_mask.png */; };
 		188B33A21747A9FC0010AECC /* CMCrashReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 188B33A11747A9FC0010AECC /* CMCrashReporter.m */; };
@@ -46,6 +50,7 @@
 		188B33AF1749A57C0010AECC /* shuffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 188B33AE1749A57C0010AECC /* shuffle.png */; };
 		189650C7173A964F0084F3DA /* CMIndexView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189650C6173A964E0084F3DA /* CMIndexView.m */; };
 		18A087EC17562EA800EA56C8 /* cell-playlist.png in Resources */ = {isa = PBXBuildFile; fileRef = 18A087EB17562EA800EA56C8 /* cell-playlist.png */; };
+		18A087EE17567C3100EA56C8 /* intro_spiral_4inch.png in Resources */ = {isa = PBXBuildFile; fileRef = 18A087ED17567C3100EA56C8 /* intro_spiral_4inch.png */; };
 		18A7916617476CD30049AC9F /* cell-song.png in Resources */ = {isa = PBXBuildFile; fileRef = 18A7916517476CD30049AC9F /* cell-song.png */; };
 		18E409231735692E006BB979 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E409221735692E006BB979 /* UIKit.framework */; };
 		18E409251735692E006BB979 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E409241735692E006BB979 /* Foundation.framework */; };
@@ -101,6 +106,11 @@
 		181BA41E174405DE005CF643 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		181BA42117444F5A005CF643 /* CMAlbumViewController_for_35inch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMAlbumViewController_for_35inch.xib; sourceTree = "<group>"; };
 		181BA4231744516A005CF643 /* CMPlayerViewController_for_35inch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMPlayerViewController_for_35inch.xib; sourceTree = "<group>"; };
+		184D17A5175A60F000453151 /* intro_tap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_tap.png; sourceTree = "<group>"; };
+		184D17A7175A60F300453151 /* intro_swipe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_swipe.png; sourceTree = "<group>"; };
+		184D17A9175A651C00453151 /* CMInfoViewController_for_35inch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMInfoViewController_for_35inch.xib; sourceTree = "<group>"; };
+		184D17AB175A688F00453151 /* intro_album.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_album.png; sourceTree = "<group>"; };
+		184D17AC175A688F00453151 /* intro_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_select.png; sourceTree = "<group>"; };
 		1857F6A31736B3FF00F6146D /* CMPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMPlayerViewController.h; sourceTree = "<group>"; };
 		1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMPlayerViewController.m; sourceTree = "<group>"; };
 		1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMPlayerViewController.xib; sourceTree = "<group>"; };
@@ -118,7 +128,6 @@
 		187467F31738B84100C9F9D8 /* pull.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pull.png; sourceTree = "<group>"; };
 		187467F41738B84100C9F9D8 /* push.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = push.png; sourceTree = "<group>"; };
 		187467F71738DA1B00C9F9D8 /* blur.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blur.png; sourceTree = "<group>"; };
-		187C33F3173B82960090B5BD /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
 		187C33F5173B82FF0090B5BD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		187C33F7173FE2DF0090B5BD /* circle_mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_mask.png; sourceTree = "<group>"; };
 		188B33A01747A9FC0010AECC /* CMCrashReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMCrashReporter.h; sourceTree = "<group>"; };
@@ -129,6 +138,7 @@
 		189650C5173A964E0084F3DA /* CMIndexView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIndexView.h; sourceTree = "<group>"; };
 		189650C6173A964E0084F3DA /* CMIndexView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMIndexView.m; sourceTree = "<group>"; };
 		18A087EB17562EA800EA56C8 /* cell-playlist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-playlist.png"; sourceTree = "<group>"; };
+		18A087ED17567C3100EA56C8 /* intro_spiral_4inch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = intro_spiral_4inch.png; sourceTree = "<group>"; };
 		18A7916517476CD30049AC9F /* cell-song.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-song.png"; sourceTree = "<group>"; };
 		18E4091F1735692E006BB979 /* CircleMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CircleMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18E409221735692E006BB979 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -192,6 +202,8 @@
 		181BA42017443948005CF643 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				184D17A5175A60F000453151 /* intro_tap.png */,
+				184D17A7175A60F300453151 /* intro_swipe.png */,
 				180B306B1741763900C2EA1B /* no_artwork.png */,
 				180B306D1741771F00C2EA1B /* no_artwork_with_circle.png */,
 				187C33F7173FE2DF0090B5BD /* circle_mask.png */,
@@ -236,9 +248,12 @@
 				180B307C1743485E00C2EA1B /* CMIndexCircleView.m */,
 				187467F31738B84100C9F9D8 /* pull.png */,
 				187467F71738DA1B00C9F9D8 /* blur.png */,
+				184D17AB175A688F00453151 /* intro_album.png */,
+				184D17AC175A688F00453151 /* intro_select.png */,
 				187467F41738B84100C9F9D8 /* push.png */,
 				181BA41C1743F461005CF643 /* headphone.png */,
 				181BA41E174405DE005CF643 /* back.png */,
+				18A087ED17567C3100EA56C8 /* intro_spiral_4inch.png */,
 			);
 			name = CMAlbum;
 			sourceTree = "<group>";
@@ -246,10 +261,10 @@
 		187467EA173857A800C9F9D8 /* CMInfo */ = {
 			isa = PBXGroup;
 			children = (
-				187C33F3173B82960090B5BD /* test.mp3 */,
 				187467EE173857D200C9F9D8 /* CMInfoViewController.h */,
 				187467EF173857D200C9F9D8 /* CMInfoViewController.m */,
 				187467F0173857D200C9F9D8 /* CMInfoViewController.xib */,
+				184D17A9175A651C00453151 /* CMInfoViewController_for_35inch.xib */,
 			);
 			name = CMInfo;
 			sourceTree = "<group>";
@@ -459,7 +474,6 @@
 				187467F51738B84200C9F9D8 /* pull.png in Resources */,
 				187467F61738B84200C9F9D8 /* push.png in Resources */,
 				187467F81738DA1B00C9F9D8 /* blur.png in Resources */,
-				187C33F4173B82960090B5BD /* test.mp3 in Resources */,
 				187C33F8173FE2DF0090B5BD /* circle_mask.png in Resources */,
 				180B3062174170B800C2EA1B /* previous.png in Resources */,
 				180B3064174170BE00C2EA1B /* next.png in Resources */,
@@ -482,6 +496,12 @@
 				188B33AD174998F80010AECC /* repeat.png in Resources */,
 				188B33AF1749A57C0010AECC /* shuffle.png in Resources */,
 				18A087EC17562EA800EA56C8 /* cell-playlist.png in Resources */,
+				18A087EE17567C3100EA56C8 /* intro_spiral_4inch.png in Resources */,
+				184D17A6175A60F000453151 /* intro_tap.png in Resources */,
+				184D17A8175A60F300453151 /* intro_swipe.png in Resources */,
+				184D17AA175A651C00453151 /* CMInfoViewController_for_35inch.xib in Resources */,
+				184D17AD175A688F00453151 /* intro_album.png in Resources */,
+				184D17AE175A688F00453151 /* intro_select.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

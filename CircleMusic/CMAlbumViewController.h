@@ -81,7 +81,12 @@
     CGPoint _pop_abs_point;
     BOOL _onPlayer;
     BOOL _onPop;
+    
+    MPMediaQuery *current_query;
 
+    UIImageView *_intro;
+    BOOL _intro_type;
+    
 }
 //[type] 0: artist 1: song 2:album
 @property(atomic,assign) int type;

@@ -52,6 +52,7 @@ static const NSString *PlayerRateContext;
 {
     //[self updatePlayingMusicInfo:nil];
     
+
     _should_resume=NO;
     if(self.needReload){
         [self.player setQueueWithQuery:self.query];
@@ -68,7 +69,8 @@ static const NSString *PlayerRateContext;
         NSArray *collections=[self.query collections];
         NSMutableArray* _playerItems = [NSMutableArray array];
         self.currentIndex=0;
-        for (int i = 0 ; i < [collections count];  i++){
+        
+        for (int i = 0 ; i <[collections count];  i++){
             CMMusicItem *item=[[CMMusicItem alloc] init];
             MPMediaItem *representativeItem = [collections[i] representativeItem];
             NSURL *url = [representativeItem valueForProperty:MPMediaItemPropertyAssetURL];
@@ -86,12 +88,31 @@ static const NSString *PlayerRateContext;
                 [_playerItems addObject:playerItem];
             }
         }
-        _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
-        [_player2 play];
+        //_player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
+        
+        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"player_intro"]){
+            _intro=[[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,MAX(self.view.frame.size.width*1093/640,self.view.frame.size.height))];
+            _intro.image=[UIImage imageNamed:@"intro_tap"];
+            [self.view addSubview:_intro];
+            _intro_type=1;
+            
+            UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureForIntro:)];
+            _intro.userInteractionEnabled=YES;
+            [_intro addGestureRecognizer:tapRecognizer];
+            
+        }else{
+
+            if(self.index_for_play==-1){
+                [self playAtIndex:0];
+            }else{
+                [self playAtIndex:self.index_for_play];
+            }
+        }
+        /*
         [_player2 addObserver:self forKeyPath:@"status" options:0 context:&PlayerStatusContext];
         [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
         [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
-        
+        */
         
         
         self.isAvailable=YES;
@@ -181,7 +202,7 @@ static const NSString *PlayerRateContext;
     _twitter.image=[UIImage imageNamed:@"twitter.png"];
     _twitter_abs_point=absPoint(_twitter);
     [_pull makeCircle];
-    _pull.image=[UIImage imageNamed:@"pull.png"];
+    _pull.image=[UIImage imageNamed:@"back.png"];
     _pull_abs_point=absPoint(_pull);
     
     [_repeat makeCircle];
@@ -432,7 +453,7 @@ static const NSString *PlayerRateContext;
         NSMutableArray* _playerItems = [NSMutableArray array];
         int musicCount = [_items count];
         // palyerItems に　AVPlayerItemを追加
-        for (int i = index ; i < musicCount ; i++){
+        for (int i = index ; i < MAX(musicCount,100) ; i++){
             NSURL *url;
             @try {
                 if(!_isShuffling){
@@ -761,6 +782,14 @@ CGPoint absPoint(UIView* view)
 //http://labs.techfirm.co.jp/ipad/cho/466
 - (void)handlePanGesture:(UIGestureRecognizer *)sender {
     
+    
+    if(_intro_type!=0){
+        [self intro];
+        return;
+        
+    }
+    
+    
     UIPanGestureRecognizer *pan = (UIPanGestureRecognizer*)sender;
     CGPoint point = [pan translationInView:self.view];
     CGPoint velocity = [pan velocityInView:self.view];
@@ -816,7 +845,38 @@ CGPoint absPoint(UIView* view)
     }
 }
 
+-(void)intro{
+
+    
+    if(_intro_type==1){
+        _intro.image=[UIImage imageNamed:@"intro_swipe"];
+        _intro_type=2;
+    }else{
+        [_intro removeFromSuperview];
+        
+        if(self.index_for_play==-1){
+            [self playAtIndex:0];
+        }else{
+            [self playAtIndex:self.index_for_play];
+        }
+        
+        _intro_type=0;
+    }
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"player_intro"];
+
+}
+
+- (void)handleTapGestureForIntro:(UIGestureRecognizer *)sender {
+    
+    if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        [self intro];
+    }
+}
 - (void)handleTapGesture:(UIGestureRecognizer *)sender {
+    
+
+    
     if (sender.state == UIGestureRecognizerStateEnded)
     {
         UITapGestureRecognizer *tap = (UITapGestureRecognizer*)sender;

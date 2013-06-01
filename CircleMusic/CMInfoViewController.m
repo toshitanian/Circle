@@ -19,6 +19,10 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    if(ad.iOStype==2){
+        nibNameOrNil=@"CMInfoViewController_for_35inch";
+    }
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
