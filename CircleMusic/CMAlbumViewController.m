@@ -617,8 +617,12 @@ CGPoint absPoint_(UIView* view)
     
     
     if(_intro_type==1){
-        _intro.image=[UIImage imageNamed:@"intro_album"];
+        _intro.image=[UIImage imageNamed:@"intro_album_tap"];
         _intro_type=2;
+    }else if(_intro_type==2){
+        _intro.image=[UIImage imageNamed:@"intro_album_long_press"];
+        _intro_type=3;
+    
     }else{
         [_intro removeFromSuperview];
         _intro_type=0;
