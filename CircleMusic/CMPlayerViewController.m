@@ -455,7 +455,7 @@ static const NSString *PlayerRateContext;
         NSMutableArray* _playerItems = [NSMutableArray array];
         int musicCount = [_items count];
         // palyerItems に　AVPlayerItemを追加
-        for (int i = index ; i < MAX(musicCount,100) ; i++){
+        for (int i = index ; i < MIN(musicCount,100) ; i++){
             NSURL *url;
             @try {
                 if(!_isShuffling){
@@ -594,6 +594,12 @@ static const NSString *PlayerRateContext;
 #pragma mark - player
 -(void)updatePlayingMusicInfo:(id *)something
 {
+    AVPlayerItem *currentItem = [_player2 currentItem];
+    NSArray *metadataList = [currentItem.asset commonMetadata];
+    for (AVMetadataItem *metaItem in metadataList) {
+        NSLog(@"%@",[metaItem commonKey]);
+    }
+    
     _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",self.currentIndex+1,[_items count]];
     //!!TODO index
     _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
