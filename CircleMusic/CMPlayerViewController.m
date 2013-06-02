@@ -60,6 +60,14 @@ static const NSString *PlayerRateContext;
         // [self.player play];
         
         self.isPlaying=YES;
+        
+        
+        self.isAvailable=YES;
+        _repeat_type=0;
+        _repeat.image=[UIImage imageNamed:@"repeat.png"];
+        _repeat.alpha=ALPHA;
+        
+        _shuffle.alpha=ALPHA;
         //   _player.volume=0;
         _shadow.hidden=YES;
         _artwork.alpha=1.0f;
@@ -114,14 +122,7 @@ static const NSString *PlayerRateContext;
         [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
         [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
         */
-        
-        
-        self.isAvailable=YES;
-        _repeat_type=0;
-        _repeat.image=[UIImage imageNamed:@"repeat.png"];
-        _repeat.alpha=ALPHA;
-        
-        _shuffle.alpha=ALPHA;
+
         _isShuffling=NO;
         [self updatePlayingMusicInfo:nil];
         
