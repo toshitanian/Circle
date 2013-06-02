@@ -40,6 +40,8 @@
     BOOL _isEnabled;
     UIView *_progress_view;
     UIProgressView *_progress_bar;
+    
+    IBOutlet UILabel *title_text;
 }
 
 @property (nonatomic, assign) NSInteger cellCount;

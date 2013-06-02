@@ -55,6 +55,7 @@ static const NSString *PlayerRateContext;
 
     _should_resume=NO;
     if(self.needReload){
+        _song_progress.value=0;
         [self.player setQueueWithQuery:self.query];
         self.needReload=NO;
         // [self.player play];
@@ -1077,7 +1078,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 {
     SLComposeViewController *tweetViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
     
-    [tweetViewController setInitialText:[NSString stringWithFormat:@"#nowplaying %@ by %@ with CirclePlayer",title,artist]];
+    [tweetViewController setInitialText:[NSString stringWithFormat:@"#nowplaying %@ by %@ with Circle",title,artist]];
     [self presentViewController:tweetViewController animated:YES completion:nil];
     
     /*

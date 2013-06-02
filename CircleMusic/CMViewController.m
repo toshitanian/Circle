@@ -37,34 +37,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    /*
-     //level selector
-     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-     [flowLayout setItemSize:CGSizeMake(300, 80)];
-     [flowLayout setMinimumLineSpacing:10.0f];
-     [flowLayout setMinimumInteritemSpacing:10.0f];
-     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-     [flowLayout setSectionInset:UIEdgeInsetsMake(20, 10, 20, 10)];
-     float cv_height=
-     //self.view.frame.size.height
-     [[UIScreen mainScreen] bounds].size.height;
-     
-     
-     // _cv=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320 , cv_height) collectionViewLayout:flowLayout];
-     _cv=[[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320 , cv_height) collectionViewLayout:[[CMCircleLayout alloc] init]];
-     
-     _cv.backgroundColor=[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
-     _cv.showsHorizontalScrollIndicator = NO;
-     _cv.showsVerticalScrollIndicator = NO;
-     _cv.bounces=NO;
-     // UINib *nib = [UINib nibWithNibName:@"CMContentCell" bundle:nil];
-     //[_cv registerNib:nib forCellWithReuseIdentifier:@"CMContentCell"];
-     //  [_cv registerClass:[Cell class] forCellWithReuseIdentifier:@"CMContentCell"];
-     [_cv registerClass:[CMContentCell class] forCellWithReuseIdentifier:@"CMContentCell"];
-     _cv.delegate=self;
-     _cv.dataSource=self;
-     [self.view addSubview:_cv];
-     */
+
     
     [NSThread detachNewThreadSelector:@selector(artistvcThread)
                              toTarget:self
@@ -289,7 +262,33 @@
         if(_point_tap_began.x==-99){
             for(int i=0;i<[_views count];i++){
                 CMPlayerButtonView *view=_views[i];
+                
+           
+                
+                
                 if(CGRectContainsPoint(view.frame, point)){
+                    
+                    switch (i) {
+                        case 0:
+                            title_text.text=@"Artist";
+                            break;
+                        case 1:
+                            title_text.text=@"Song";
+                            break;
+                        case 2:
+                            title_text.text=@"Album";
+                            break;
+                        case 3:
+                            title_text.text=@"Playlist";
+                            break;
+                        case 4:
+                            title_text.text=@"Information";
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    
                     void (^animations)(void) = ^{
                         
                         float scale_value=1.25;
@@ -319,6 +318,7 @@
 - (void)handlePanGesture:(UIGestureRecognizer *)sender
 {
     if(!_isEnabled) return;
+        title_text.text=@"Circle";
     [self resetControlButtons];
     return;
     
@@ -423,19 +423,19 @@
                         hasLoaded=_artistViewController.hasLoaded;
                         break;
                     case 1:
-                          hasLoaded=_songViewController.hasLoaded;
+                        hasLoaded=_songViewController.hasLoaded;
                         break;
                     case 2:
-                          hasLoaded=_albumViewController.hasLoaded;
+                        hasLoaded=_albumViewController.hasLoaded;
                         break;
                     case 3:
-                          hasLoaded=_playlistViewController.hasLoaded;
+                        hasLoaded=_playlistViewController.hasLoaded;
                         break;
                     case 4:
-                          hasLoaded=_infoViewController.hasLoaded;
+                        hasLoaded=_infoViewController.hasLoaded;
                         break;
                         
-
+                        
                 }
                 
                 if(!hasLoaded){
@@ -497,6 +497,7 @@
 
 -(void)resetControlButtons
 {
+
     for(int i=0;i<[_views count];i++){
         _on[i]=NO;
         CMPlayerButtonView *view=_views[i];
@@ -604,6 +605,7 @@
 
 -(void)CMAlbumViewControllerDidFinishShowing:(CMAlbumViewController *)vc
 {
+        title_text.text=@"Circle";
     [self updateCircle:0 WithRatio:1.0];
     _isEnabled=YES;
     [_progress_view removeFromSuperview];
@@ -612,79 +614,14 @@
 
 -(void)CMInfoViewControllerDidFinishShowing:(CMAlbumViewController *)vc
 {
+    title_text.text=@"Circle";
     [self updateCircle:0 WithRatio:1.0];
     _isEnabled=YES;
     [_progress_view removeFromSuperview];
     
 }
 
-# pragma mark - collection view
-/*
- - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section;
- {
- 
- return self.cellCount;
- }
- 
- - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath;
- {
- 
- CMContentCell *cell;
- cell = [cv dequeueReusableCellWithReuseIdentifier:@"CMContentCell" forIndexPath:indexPath];
- cell.iv.image=nil;
- if(indexPath.section==0){
- if(indexPath.row == 0){
- cell.iv.image=[UIImage imageNamed:@"cell-artist.png"];
- }else if(indexPath.row ==1 ){
- cell.iv.image=[UIImage imageNamed:@"cell-song.png"];
- }else if(indexPath.row ==2 ){
- cell.iv.image=[UIImage imageNamed:@"cell-album.png"];
- }else if(indexPath.row ==3 ){
- cell.iv.image=[UIImage imageNamed:@"cell-playlist.png"];
- }else if(indexPath.row == 4){
- cell.iv.image=[UIImage imageNamed:@"cell-info.png"];
- }
- }
- 
- 
- return cell;
- }
- 
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
- {
- self.cellCount=self.cellCount-1;
- NSLog(@"%d",indexPath.row);
- [_cv performBatchUpdates:^{
- [_cv deleteItemsAtIndexPaths:[NSArray arrayWithObject:indexPath]];
- 
- } completion:^(BOOL finished){
- if(indexPath.row==0){
- 
- [self.navigationController pushViewController:_artistViewController animated:NO];
- 
- 
- }else if(indexPath.row==1){
- [self.navigationController pushViewController:_songViewController animated:NO];
- 
- }else if(indexPath.row==2){
- 
- [self.navigationController pushViewController:_albumViewController animated:NO];
- 
- }else if(indexPath.row==3){
- 
- [self.navigationController pushViewController:_playlistViewController animated:NO];
- 
- }else if(indexPath.row==4){
- 
- [self.navigationController pushViewController:_infoViewController animated:NO];
- }
- 
- }];
- 
- return YES;
- }
- 
- */
+
 
 - (void)didReceiveMemoryWarning
 {
