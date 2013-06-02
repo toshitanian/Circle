@@ -66,11 +66,12 @@ static const NSString *PlayerRateContext;
         _items = [NSMutableArray array];
         _urls=[NSMutableArray array];
         _shuffle_hash=[NSMutableArray array];
-        NSArray *collections=[self.query collections];
+        collections=[self.query collections];
         NSMutableArray* _playerItems = [NSMutableArray array];
         self.currentIndex=0;
         
         for (int i = 0 ; i <[collections count];  i++){
+            
             CMMusicItem *item=[[CMMusicItem alloc] init];
             MPMediaItem *representativeItem = [collections[i] representativeItem];
             NSURL *url = [representativeItem valueForProperty:MPMediaItemPropertyAssetURL];

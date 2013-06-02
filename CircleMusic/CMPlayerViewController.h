@@ -60,6 +60,8 @@
     IBOutlet UILabel *_full_time;
     IBOutlet UILabel *_queue_label;
     
+    NSArray *collections;
+    
     NSTimer *_tm;
     
     
@@ -117,5 +119,5 @@
 @property (nonatomic,retain) AVQueuePlayer *player2;
 @property (atomic,assign) BOOL isAvailable;
 
-@property (atomic,assign)     int index_for_play;
+@property (atomic,assign)  int index_for_play;
 @end
