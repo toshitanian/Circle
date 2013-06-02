@@ -71,31 +71,26 @@ static const NSString *PlayerRateContext;
         //   _player.volume=0;
         _shadow.hidden=YES;
         _artwork.alpha=1.0f;
-        _items = [NSMutableArray array];
         _urls=[NSMutableArray array];
         _shuffle_hash=[NSMutableArray array];
+        
+        _isShuffling=NO;
+   
         collections=[self.query collections];
         NSMutableArray* _playerItems = [NSMutableArray array];
         self.currentIndex=0;
-        
+        _item_count=[collections count];
         for (int i = 0 ; i <[collections count];  i++){
             
-            CMMusicItem *item=[[CMMusicItem alloc] init];
+           
             MPMediaItem *representativeItem = [collections[i] representativeItem];
             NSURL *url = [representativeItem valueForProperty:MPMediaItemPropertyAssetURL];
-            item.artist=  [representativeItem valueForProperty:MPMediaItemPropertyArtist];
-            item.title=  [representativeItem valueForProperty:MPMediaItemPropertyTitle];
-            item.album=  [representativeItem valueForProperty:MPMediaItemPropertyAlbumTitle];
-            item.fulltime=[(NSNumber *)[representativeItem valueForProperty:MPMediaItemPropertyPlaybackDuration] floatValue];
-            
-            MPMediaItemArtwork *artwork= [representativeItem valueForProperty: MPMediaItemPropertyArtwork];
-            item.artwork=[artwork imageWithSize: _artwork.bounds.size];
-            [_items addObject:item];
-            if(url!=nil && [AVPlayerItem playerItemWithURL:url].status!=AVPlayerItemStatusFailed){
+            if(url!=nil){
                 [_urls addObject:url];  
-                AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
-                [_playerItems addObject:playerItem];
+                //AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
+               // [_playerItems addObject:playerItem];
             }
+            //NSLog(@"ss");
         }
         //_player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
         
@@ -117,14 +112,12 @@ static const NSString *PlayerRateContext;
                 [self playAtIndex:self.index_for_play];
             }
         }
-        /*
+        
         [_player2 addObserver:self forKeyPath:@"status" options:0 context:&PlayerStatusContext];
         [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
         [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
-        */
+        
 
-        _isShuffling=NO;
-        [self updatePlayingMusicInfo:nil];
         
     }
     
@@ -137,7 +130,7 @@ static const NSString *PlayerRateContext;
     
     self.player = [MPMusicPlayerController applicationMusicPlayer];
     
-    
+    _no_artwork=[UIImage imageNamed:@"no_artwork.png"];
     _artwork.layer.cornerRadius = _artwork.frame.size.width/2;
     _artwork.layer.borderWidth = 5.0f;
     _artwork.layer.borderColor = [UIColor grayColor].CGColor;
@@ -235,11 +228,13 @@ static const NSString *PlayerRateContext;
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    
+   
     
     if (context == &PlayerStatusContext) {
+       
         AVPlayer *thePlayer = (AVPlayer *)object;
         if ([thePlayer status] == AVPlayerStatusFailed) {
+              NSLog(@"1122");
             NSError *error = [thePlayer error];
             NSLog(@"Error:%@",error);
             // Respond to error: for example, display an alert sheet.
@@ -248,16 +243,17 @@ static const NSString *PlayerRateContext;
             
         }else if ([thePlayer status] == AVPlayerStatusReadyToPlay){
             // if status OK start play
-            
+              NSLog(@"1122");
             [_player2 play];
-            
+            [self updatePlayingMusicInfo:nil];
             
         }else{
+              NSLog(@"1133");
             //NSLog(@"AVPlayerStatusNone:%@",object);
         }
         
     }else if (context == &CurrentItemChangedContext){
-        
+             NSLog(@"2222");
         AVPlayerItem *currentItem = [_player2 currentItem];
         AVURLAsset *asset = (AVURLAsset *)currentItem.asset;
         //  NSLog(@"currentItem%@.asset:%@",currentItem,currentItem.asset);
@@ -276,7 +272,7 @@ static const NSString *PlayerRateContext;
         }
         
     }else if (context == &PlayerRateContext){
-        
+        [self updatePlayingMusicInfo:nil];
     }
     
     return;
@@ -351,7 +347,7 @@ static const NSString *PlayerRateContext;
 
 -(int)get_next_index
 {
-    if (self.currentIndex+1>[_items count]-1) {
+    if (self.currentIndex+1>_item_count-1) {
         return -1;
     }
     return self.currentIndex+1;
@@ -362,14 +358,14 @@ static const NSString *PlayerRateContext;
     if(_repeat_type==2){
         self.currentIndex=0;
         [self playAtIndex:0];
-        [self updatePlayingMusicInfo:nil];
+     //s   [self updatePlayingMusicInfo:nil];
     }else if(_repeat_type==1){
         self.currentIndex=0;
         [self playAtIndex:0];
         _repeat_type=0;
         _repeat.image=[UIImage imageNamed:@"repeat.png"];
         _repeat.alpha=ALPHA;
-        [self updatePlayingMusicInfo:nil];
+       // [self updatePlayingMusicInfo:nil];
     }else{
         [self stop];
         self.isAvailable=NO;
@@ -402,7 +398,7 @@ static const NSString *PlayerRateContext;
             }else{
                 _needShuffleReload=NO;
                 [self playAtIndex:self.currentIndex];
-                [self updatePlayingMusicInfo:nil];
+              //  [self updatePlayingMusicInfo:nil];
             }
             NSLog(@"nextPlayWithPlaying:%d",self.currentIndex);
         }else{
@@ -413,7 +409,7 @@ static const NSString *PlayerRateContext;
             }else{
                 _needShuffleReload=NO;
                 [self playAtIndex:self.currentIndex];
-                [self updatePlayingMusicInfo:nil];
+             //   [self updatePlayingMusicInfo:nil];
             }
             NSLog(@"nextPlayNotPlaying:%d",self.currentIndex);
         }
@@ -453,9 +449,8 @@ static const NSString *PlayerRateContext;
         
         
         NSMutableArray* _playerItems = [NSMutableArray array];
-        int musicCount = [_items count];
         // palyerItems に　AVPlayerItemを追加
-        for (int i = index ; i < MIN(musicCount,100) ; i++){
+        for (int i = index ; i < MIN(_item_count,self.currentIndex+30) ; i++){
             NSURL *url;
             @try {
                 if(!_isShuffling){
@@ -475,11 +470,11 @@ static const NSString *PlayerRateContext;
             @finally {
                 
             }
-          
-            
+  
         }
         
         // AVQueuePlayerのインスタンスつくる
+        _player2=nil;
         _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
         
         [_player2 addObserver:self forKeyPath:@"status" options:0 context:&PlayerStatusContext];
@@ -492,6 +487,8 @@ static const NSString *PlayerRateContext;
             [_player2 pause];
         }
         
+      //  [self updatePlayingMusicInfo:nil];
+      
         
         
     });
@@ -521,7 +518,7 @@ static const NSString *PlayerRateContext;
         
         
     }
-    [self updatePlayingMusicInfo:nil];
+   // [self updatePlayingMusicInfo:nil];
     _isSkipping=NO;
     
 }
@@ -592,51 +589,70 @@ static const NSString *PlayerRateContext;
     }
 }
 #pragma mark - player
+//ID3取得
+//http://log.shipweb.jp/?mode=datview&board_name=mac&thread_key=1335398820&thread_id=494251
+//artwork取得
+//http://stackoverflow.com/questions/6607401/get-album-artwork-from-id3-tag-convert-function-from-java-to-objective-c
 -(void)updatePlayingMusicInfo:(id *)something
 {
-    AVPlayerItem *currentItem = [_player2 currentItem];
-    NSArray *metadataList = [currentItem.asset commonMetadata];
-    for (AVMetadataItem *metaItem in metadataList) {
-        NSLog(@"%@",[metaItem commonKey]);
+
+
+    float fulltime;
+    MPMediaItem *representativeItem;
+    if(!_isShuffling){
+        representativeItem = [collections[self.currentIndex] representativeItem];
+    }else{
+        NSNumber *num = _shuffle_hash[self.currentIndex];
+        representativeItem = [collections[[num intValue]] representativeItem];
+    }
+    current_artist=  [representativeItem valueForProperty:MPMediaItemPropertyArtist];
+    current_title=  [representativeItem valueForProperty:MPMediaItemPropertyTitle];
+    current_album=  [representativeItem valueForProperty:MPMediaItemPropertyAlbumTitle];
+    fulltime=[(NSNumber *)[representativeItem valueForProperty:MPMediaItemPropertyPlaybackDuration] floatValue];
+    MPMediaItemArtwork *artwork= [representativeItem valueForProperty: MPMediaItemPropertyArtwork];
+    
+    current_artwork_img=nil;
+       current_artwork_img=[artwork imageWithSize: _artwork.bounds.size];
+    if(current_artwork_img==nil){
+        current_artwork_img=_no_artwork;
     }
     
-    _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",self.currentIndex+1,[_items count]];
+    
+    _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",self.currentIndex+1,_item_count];
+    [_queue_label setNeedsDisplay];
     //!!TODO index
     _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
-    CMMusicItem *item;
-    if(!_isShuffling){
-        item=_items[self.currentIndex];
-    }else{
-        item=_items[[_shuffle_hash[self.currentIndex] intValue]];
-    }
-    _full_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)item.fulltime/60,(int)item.fulltime%60];
-    _song_progress.maximumValue=item.fulltime;
-    _info_artist.text=  item.artist;
-    _info_title.text=  item.title;
-    _info_album.text=  item.album;
+    [_current_time setNeedsDisplay];
     
-    if(item.artwork!=nil){
-        _artwork.image=item.artwork;
-    }else{
-        _artwork.image=[UIImage imageNamed:@"no_artwork.png"];
-    }
+    _full_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)fulltime/60,(int)fulltime%60];
+    _song_progress.maximumValue=fulltime;
+    _info_artist.text=  current_artist;
+    [_info_artist setNeedsDisplay];
+    _info_title.text=  current_title;
+    [_info_title setNeedsDisplay];
+    _info_album.text=  current_album;
+    [_info_album setNeedsDisplay];
+    _artwork.image=nil;
+        _artwork.image=current_artwork_img;
+         [_artwork setNeedsDisplay];
+
+   
     
     Class playingInfoCenter = NSClassFromString(@"MPNowPlayingInfoCenter");
     
     if (playingInfoCenter) {
-        CMMusicItem *item = _items[self.currentIndex];
-        
+
         NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
-        songInfo[MPMediaItemPropertyTitle] = item.title;
-        songInfo[MPMediaItemPropertyArtist] = item.artist;
-        songInfo[MPMediaItemPropertyAlbumTitle] = item.album;
+        songInfo[MPMediaItemPropertyTitle] = current_title;
+        songInfo[MPMediaItemPropertyArtist] = current_artist;
+        songInfo[MPMediaItemPropertyAlbumTitle] = current_album;
         
         // UIImage *img=[self roundCornersOfImage:[UIImage imageWithCGImage:item.artwork.CGImage]];
         
         
         
-        if (item.artwork){
-            MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:item.artwork];
+        if (current_artwork_img){
+            MPMediaItemArtwork *artwork = [[MPMediaItemArtwork alloc] initWithImage:current_artwork_img];
             
             songInfo[MPMediaItemPropertyArtwork] = artwork;
         }else{
@@ -924,8 +940,7 @@ CGPoint absPoint(UIView* view)
         point=[tap locationInView:_controller];
         if(CGRectContainsPoint(_twitter.frame, point)){
             NSLog(@"Twitter");
-            CMMusicItem *item=_items[self.currentIndex];
-            [self tweetWithTitle:item.title AndArtist:item.artist];
+            [self tweetWithTitle:_info_title.text AndArtist:_info_artist.text];
         }else if(CGRectContainsPoint(_pull.frame, point)){
             [self dismiss:nil];
         }else if(CGRectContainsPoint(_repeat.frame, point)){
@@ -1096,10 +1111,10 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 -(void)setShuffle
 {
     _isShuffling=YES;
-    _shuffle_hash= [self getShuffledHash:[_items count] Except:self.currentIndex];
+    _shuffle_hash= [self getShuffledHash:_item_count Except:self.currentIndex];
     _shuffled_urls=[NSMutableArray array];
     _needShuffleReload=YES;
-    for(int i=0;i<[_items count];i++){
+    for(int i=0;i<_item_count;i++){
         @try {
             _shuffled_urls[i]=_urls[[_shuffle_hash[i] intValue]];
         }
@@ -1170,6 +1185,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    [self stop];
     [CMCrashReporter reportCrash:@"didReceiveMemoryWarning@CMPlayerViewController"];
     
 }
@@ -1183,6 +1199,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [self resignFirstResponder];
+        [self stop];
     
 }
 @end

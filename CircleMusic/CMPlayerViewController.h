@@ -99,10 +99,15 @@
     BOOL _needShuffleReload;
     NSArray *_collections;
     
-    int _count;
+    int _item_count;
 
     UIImageView *_intro;
     int _intro_type;
+    NSString  *current_title;
+    NSString *current_album;
+    NSString *current_artist;
+    UIImage *current_artwork_img;
+    UIImage *_no_artwork;
 }
 
 -(IBAction)dismiss:(id)sender;
