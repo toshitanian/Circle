@@ -72,7 +72,7 @@
     
     AVAudioSession *_audioSession;
     
-    BOOL _isSkipping;
+ 
     IBOutlet CMPlayerButtonView *_twitter;
     IBOutlet CMPlayerButtonView *_pull;
     IBOutlet CMPlayerButtonView *_repeat;

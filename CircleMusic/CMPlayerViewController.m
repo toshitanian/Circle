@@ -287,7 +287,7 @@ static const NSString *PlayerRateContext;
     
     @try {
         
-        if(_isSkipping) return;
+  
         if(self.isPlaying){
             AVPlayerItem *item=[_player2 currentItem];
             int current_time=CMTimeGetSeconds(item.currentTime);
@@ -496,11 +496,11 @@ static const NSString *PlayerRateContext;
 
 
 -(void)previous_pushed:(UIButton *)btn{
-    if(_isSkipping) return;
+
     
     AVPlayerItem *item=[_player2 currentItem];
     int current_time=CMTimeGetSeconds(item.currentTime);
-    _isSkipping=YES;
+
     if(current_time>10){
         [self backToStart];
     }else{
@@ -519,7 +519,7 @@ static const NSString *PlayerRateContext;
         
     }
    // [self updatePlayingMusicInfo:nil];
-    _isSkipping=NO;
+
     
 }
 
