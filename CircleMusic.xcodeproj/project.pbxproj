@@ -35,6 +35,9 @@
 		1857F6A71736B3FF00F6146D /* CMPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */; };
 		18616667174782BD0043037D /* cell-artist.png in Resources */ = {isa = PBXBuildFile; fileRef = 18616666174782BD0043037D /* cell-artist.png */; };
 		1861666B174788E20043037D /* cell-album.png in Resources */ = {isa = PBXBuildFile; fileRef = 1861666A174788E20043037D /* cell-album.png */; };
+		18743C55175FA068005DBD4A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18743C54175FA068005DBD4A /* Default.png */; };
+		18743C57175FA06C005DBD4A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18743C56175FA06C005DBD4A /* Default@2x.png */; };
+		18743C59175FA075005DBD4A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18743C58175FA075005DBD4A /* Default-568h@2x.png */; };
 		187467E41737945A00C9F9D8 /* CMAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187467E21737945A00C9F9D8 /* CMAlbumViewController.m */; };
 		187467E51737945A00C9F9D8 /* CMAlbumViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187467E31737945A00C9F9D8 /* CMAlbumViewController.xib */; };
 		187467E81737EC4A00C9F9D8 /* CMSpiralCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 187467E71737EC4A00C9F9D8 /* CMSpiralCircleView.m */; };
@@ -54,17 +57,12 @@
 		18A7916617476CD30049AC9F /* cell-song.png in Resources */ = {isa = PBXBuildFile; fileRef = 18A7916517476CD30049AC9F /* cell-song.png */; };
 		18CD7822175F63C10082B0F1 /* icon2_.png in Resources */ = {isa = PBXBuildFile; fileRef = 18CD7821175F63C10082B0F1 /* icon2_.png */; };
 		18CD7824175F64350082B0F1 /* icon3.png in Resources */ = {isa = PBXBuildFile; fileRef = 18CD7823175F64350082B0F1 /* icon3.png */; };
-		18E30074175F96AC00C44910 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E30073175F96AC00C44910 /* Default.png */; };
-		18E30076175F96DD00C44910 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E30075175F96DD00C44910 /* Default@2x.png */; };
 		18E409231735692E006BB979 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E409221735692E006BB979 /* UIKit.framework */; };
 		18E409251735692E006BB979 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E409241735692E006BB979 /* Foundation.framework */; };
 		18E409271735692E006BB979 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E409261735692E006BB979 /* CoreGraphics.framework */; };
 		18E4092D1735692E006BB979 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18E4092B1735692E006BB979 /* InfoPlist.strings */; };
 		18E4092F1735692E006BB979 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4092E1735692E006BB979 /* main.m */; };
 		18E409331735692E006BB979 /* CMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E409321735692E006BB979 /* CMAppDelegate.m */; };
-		18E409351735692E006BB979 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E409341735692E006BB979 /* Default.png */; };
-		18E409371735692E006BB979 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E409361735692E006BB979 /* Default@2x.png */; };
-		18E409391735692E006BB979 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E409381735692E006BB979 /* Default-568h@2x.png */; };
 		18E4093C1735692E006BB979 /* CMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E4093B1735692E006BB979 /* CMViewController.m */; };
 		18E4093F1735692E006BB979 /* CMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E4093D1735692E006BB979 /* CMViewController.xib */; };
 		18E409471735692E006BB979 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E409461735692E006BB979 /* SenTestingKit.framework */; };
@@ -122,6 +120,9 @@
 		1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMPlayerViewController.xib; sourceTree = "<group>"; };
 		18616666174782BD0043037D /* cell-artist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-artist.png"; sourceTree = "<group>"; };
 		1861666A174788E20043037D /* cell-album.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-album.png"; sourceTree = "<group>"; };
+		18743C54175FA068005DBD4A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		18743C56175FA06C005DBD4A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		18743C58175FA075005DBD4A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		187467E11737945A00C9F9D8 /* CMAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMAlbumViewController.h; sourceTree = "<group>"; };
 		187467E21737945A00C9F9D8 /* CMAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMAlbumViewController.m; sourceTree = "<group>"; };
 		187467E31737945A00C9F9D8 /* CMAlbumViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMAlbumViewController.xib; sourceTree = "<group>"; };
@@ -146,8 +147,6 @@
 		18A7916517476CD30049AC9F /* cell-song.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell-song.png"; sourceTree = "<group>"; };
 		18CD7821175F63C10082B0F1 /* icon2_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon2_.png; sourceTree = "<group>"; };
 		18CD7823175F64350082B0F1 /* icon3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon3.png; sourceTree = "<group>"; };
-		18E30073175F96AC00C44910 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		18E30075175F96DD00C44910 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		18E4091F1735692E006BB979 /* CircleMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CircleMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18E409221735692E006BB979 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		18E409241735692E006BB979 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -158,9 +157,6 @@
 		18E409301735692E006BB979 /* CircleMusic-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CircleMusic-Prefix.pch"; sourceTree = "<group>"; };
 		18E409311735692E006BB979 /* CMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMAppDelegate.h; sourceTree = "<group>"; };
 		18E409321735692E006BB979 /* CMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CMAppDelegate.m; sourceTree = "<group>"; };
-		18E409341735692E006BB979 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		18E409361735692E006BB979 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		18E409381735692E006BB979 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		18E4093A1735692E006BB979 /* CMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMViewController.h; sourceTree = "<group>"; };
 		18E4093B1735692E006BB979 /* CMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CMViewController.m; sourceTree = "<group>"; };
 		18E4093E1735692E006BB979 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/CMViewController.xib; sourceTree = "<group>"; };
@@ -280,8 +276,9 @@
 		18E409161735692E006BB979 = {
 			isa = PBXGroup;
 			children = (
-				18E30075175F96DD00C44910 /* Default@2x.png */,
-				18E30073175F96AC00C44910 /* Default.png */,
+				18743C58175FA075005DBD4A /* Default-568h@2x.png */,
+				18743C56175FA06C005DBD4A /* Default@2x.png */,
+				18743C54175FA068005DBD4A /* Default.png */,
 				18CD7823175F64350082B0F1 /* icon3.png */,
 				18CD7821175F63C10082B0F1 /* icon2_.png */,
 				180B307117424CE700C2EA1B /* icon@2x.png */,
@@ -342,9 +339,6 @@
 				18E4092B1735692E006BB979 /* InfoPlist.strings */,
 				18E4092E1735692E006BB979 /* main.m */,
 				18E409301735692E006BB979 /* CircleMusic-Prefix.pch */,
-				18E409341735692E006BB979 /* Default.png */,
-				18E409361735692E006BB979 /* Default@2x.png */,
-				18E409381735692E006BB979 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -476,9 +470,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				18E4092D1735692E006BB979 /* InfoPlist.strings in Resources */,
-				18E409351735692E006BB979 /* Default.png in Resources */,
-				18E409371735692E006BB979 /* Default@2x.png in Resources */,
-				18E409391735692E006BB979 /* Default-568h@2x.png in Resources */,
 				18E4093F1735692E006BB979 /* CMViewController.xib in Resources */,
 				1857F6A71736B3FF00F6146D /* CMPlayerViewController.xib in Resources */,
 				187467E51737945A00C9F9D8 /* CMAlbumViewController.xib in Resources */,
@@ -516,8 +507,9 @@
 				1845A8F6175BC6C400667AA0 /* cell-info.png in Resources */,
 				18CD7822175F63C10082B0F1 /* icon2_.png in Resources */,
 				18CD7824175F64350082B0F1 /* icon3.png in Resources */,
-				18E30074175F96AC00C44910 /* Default.png in Resources */,
-				18E30076175F96DD00C44910 /* Default@2x.png in Resources */,
+				18743C55175FA068005DBD4A /* Default.png in Resources */,
+				18743C57175FA06C005DBD4A /* Default@2x.png in Resources */,
+				18743C59175FA075005DBD4A /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -680,7 +672,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CircleMusic/CircleMusic-Prefix.pch";
 				INFOPLIST_FILE = "CircleMusic/CircleMusic-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8E20C336-5384-4866-B69F-078E4F3525F7";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -695,7 +687,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CircleMusic/CircleMusic-Prefix.pch";
 				INFOPLIST_FILE = "CircleMusic/CircleMusic-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "E116C737-4A1C-44F5-9A67-D911039E1E4C";
 				TARGETED_DEVICE_FAMILY = 1;

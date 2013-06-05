@@ -7,6 +7,7 @@
 //
 
 #import "CMViewController.h"
+#import "CMAppDelegate.h"
 #define TIMER 0.05f
 
 #define SCROLL_SPEED 1.0
@@ -31,15 +32,43 @@
     
 }
 
+//http://blog.yabasoft.biz/archives/2982 をするので
+- (void)fadeSplashScreen {
+    UIImage *img;
+    CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
+    NSLog(@"Splash:%d",ad.iOStype);
+    UIImageView *imageview;
+    if(ad.iOStype==2){
+        img = [UIImage imageNamed:@"Default@2x.png"];
+        CGRect r=CGRectMake(0, -20, 320,480);
+        imageview =
+        [[UIImageView alloc] initWithFrame:r];
+        imageview.image = img;
+    }else{
+        img = [UIImage imageNamed:@"Default-568h@2x.png"];
+        imageview =
+        [[UIImageView alloc] initWithFrame:self.view.frame];
+        imageview.image = img;
+    }
+    
+
+    [self.view addSubview:imageview];
+    
+    self.view.alpha = 1.0;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:3.0];
+    imageview.alpha = 0.0;
+    
+    [UIView commitAnimations];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+  
 	// Do any additional setup after loading the view, typically from a nib.
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
 
-    
     [NSThread detachNewThreadSelector:@selector(artistvcThread)
                              toTarget:self
                            withObject:nil];
@@ -266,7 +295,7 @@
             for(int i=0;i<[_views count];i++){
                 CMPlayerButtonView *view=_views[i];
                 
-           
+                
                 
                 
                 if(CGRectContainsPoint(view.frame, point)){
@@ -321,7 +350,7 @@
 - (void)handlePanGesture:(UIGestureRecognizer *)sender
 {
     if(!_isEnabled) return;
-        title_text.text=@"Circle";
+    title_text.text=@"Circle";
     [self resetControlButtons];
     return;
     
@@ -500,7 +529,7 @@
 
 -(void)resetControlButtons
 {
-
+    
     for(int i=0;i<[_views count];i++){
         _on[i]=NO;
         CMPlayerButtonView *view=_views[i];
@@ -608,7 +637,7 @@
 
 -(void)CMAlbumViewControllerDidFinishShowing:(CMAlbumViewController *)vc
 {
-        title_text.text=@"Circle";
+    title_text.text=@"Circle";
     [self updateCircle:0 WithRatio:1.0];
     _isEnabled=YES;
     [_progress_view removeFromSuperview];
@@ -624,21 +653,7 @@
     
 }
 
-//http://blog.yabasoft.biz/archives/2982 をするので
-- (void)fadeSplashScreen {
-    UIImage *img = [UIImage imageNamed:@"Default.png"];
-    UIImageView *imageview =
-    [[UIImageView alloc] initWithFrame:CGRectMake( 0 , 0.0, 320 , 480 )] ;
-    imageview.image = img;
-    [self.view addSubview:imageview];
-    
-    self.view.alpha = 1.0;
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:2.0];
-    imageview.alpha = 0.0;
 
-    [UIView commitAnimations];
-}
 
 - (void)didReceiveMemoryWarning
 {
