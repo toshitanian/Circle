@@ -68,11 +68,11 @@
     
     NSMutableArray *_items;
     NSMutableArray *_urls;
-       NSMutableArray *_shuffled_urls;
+    NSMutableArray *_shuffled_urls;
     
     AVAudioSession *_audioSession;
     
- 
+    
     IBOutlet CMPlayerButtonView *_twitter;
     IBOutlet CMPlayerButtonView *_pull;
     IBOutlet CMPlayerButtonView *_repeat;
@@ -100,7 +100,7 @@
     NSArray *_collections;
     
     int _item_count;
-
+    
     UIImageView *_intro;
     int _intro_type;
     NSString  *current_title;
@@ -108,6 +108,13 @@
     NSString *current_artist;
     UIImage *current_artwork_img;
     UIImage *_no_artwork;
+    
+    UIImage *_repeat_normal;
+    UIImage *_repeat_once;
+    
+    BOOL _cant_playatindex;
+    
+    
 }
 
 -(IBAction)dismiss:(id)sender;
@@ -125,4 +132,7 @@
 @property (atomic,assign) BOOL isAvailable;
 
 @property (atomic,assign)  int index_for_play;
+
+@property (atomic,assign) BOOL isLoading;
+
 @end

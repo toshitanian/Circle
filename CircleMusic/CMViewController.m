@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 	// Do any additional setup after loading the view, typically from a nib.
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
@@ -152,6 +153,8 @@
     label.textColor=[UIColor whiteColor];
     label.textAlignment=NSTextAlignmentCenter;
     [_progress_view addSubview:label];
+    
+    [self fadeSplashScreen];
     
 }
 
@@ -438,7 +441,7 @@
                         
                 }
                 
-                if(!hasLoaded){
+                if(!hasLoaded && i!=4){
                     _progress_bar.progress=0.0f;
                     [self.view addSubview:_progress_view];
                 }
@@ -621,7 +624,21 @@
     
 }
 
+//http://blog.yabasoft.biz/archives/2982 をするので
+- (void)fadeSplashScreen {
+    UIImage *img = [UIImage imageNamed:@"Default.png"];
+    UIImageView *imageview =
+    [[UIImageView alloc] initWithFrame:CGRectMake( 0 , 0.0, 320 , 480 )] ;
+    imageview.image = img;
+    [self.view addSubview:imageview];
+    
+    self.view.alpha = 1.0;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:2.0];
+    imageview.alpha = 0.0;
 
+    [UIView commitAnimations];
+}
 
 - (void)didReceiveMemoryWarning
 {

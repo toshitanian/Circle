@@ -12,5 +12,5 @@ tmp/
 #Mac用
 .DS_Store
 #xcodeproj内の無視スべきもの
-MazeMonster.xcodeproj/project.xcworkspace
-MazeMonster.xcodeproj/xcuserdata
+CircleMusic.xcodeproj/project.xcworkspace
+CircleMusic.xcodeproj/xcuserdata

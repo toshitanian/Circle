@@ -282,8 +282,10 @@
     _shadow.layer.cornerRadius = _shadow.frame.size.width/2;
     _shadow.alpha=1.0f;
     _shadow.image=[UIImage imageNamed:@"blur.png"];
-    [_spiral addSubview:_shadow];
-    [_spiral sendSubviewToBack:_shadow];
+    if(_item_num>0){
+        [_spiral addSubview:_shadow];
+        [_spiral sendSubviewToBack:_shadow];
+    }
     
     
     _scroll_speed=0.0;
@@ -326,6 +328,24 @@
     
     _player_abs_point=absPoint_(_btn_player);
     _pop_abs_point=absPoint_(_btn_pop);
+    
+    switch (self.type) {
+        case 0:
+            img_type.image=[UIImage imageNamed:@"cell-artist.png"];
+            break;
+        case 1:
+            img_type.image=[UIImage imageNamed:@"cell-song.png"];
+            break;
+        case 2:
+            img_type.image=[UIImage imageNamed:@"cell-album.png"];
+            break;
+        case 3:
+            img_type.image=[UIImage imageNamed:@"cell-playlist.png"];
+            break;
+        default:
+            break;
+    }
+
     
     /*
     UIImageView *iv=[[UIImageView alloc] initWithFrame:self.view.frame];
@@ -924,8 +944,6 @@ CGPoint absPoint_(UIView* view)
             ad.playerViewController.query=current_query;
                   ad.playerViewController.index_for_play = [_circles indexOfObject:view];
             ad.playerViewController.needReload=YES;
-            
-            
             
             [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
         }else if(self.type==2){
