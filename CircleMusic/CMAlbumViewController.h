@@ -89,6 +89,8 @@
     
     IBOutlet UIImageView *img_type;
     
+
+    
 }
 //[type] 0: artist 1: song 2:album
 @property(atomic,assign) int type;

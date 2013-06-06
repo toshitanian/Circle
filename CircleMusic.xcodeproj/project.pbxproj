@@ -70,10 +70,7 @@
 		18E409491735692E006BB979 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E409241735692E006BB979 /* Foundation.framework */; };
 		18E409511735692E006BB979 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18E4094F1735692E006BB979 /* InfoPlist.strings */; };
 		18E409541735692E006BB979 /* CircleMusicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E409531735692E006BB979 /* CircleMusicTests.m */; };
-		18E40962173569DE006BB979 /* CMContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E40961173569DE006BB979 /* CMContentCell.m */; };
 		18E4096B17357118006BB979 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E4096A17357117006BB979 /* QuartzCore.framework */; };
-		18E40971173571AB006BB979 /* CMCircleLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E40970173571AB006BB979 /* CMCircleLayout.m */; };
-		18E40972173571E4006BB979 /* CMCircleLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E40970173571AB006BB979 /* CMCircleLayout.m */; };
 		18E4098D17358F50006BB979 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E4098C17358F50006BB979 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
@@ -166,11 +163,7 @@
 		18E409501735692E006BB979 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		18E409521735692E006BB979 /* CircleMusicTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CircleMusicTests.h; sourceTree = "<group>"; };
 		18E409531735692E006BB979 /* CircleMusicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CircleMusicTests.m; sourceTree = "<group>"; };
-		18E40960173569DE006BB979 /* CMContentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMContentCell.h; sourceTree = "<group>"; };
-		18E40961173569DE006BB979 /* CMContentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMContentCell.m; sourceTree = "<group>"; };
 		18E4096A17357117006BB979 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		18E4096F173571AB006BB979 /* CMCircleLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMCircleLayout.h; sourceTree = "<group>"; };
-		18E40970173571AB006BB979 /* CMCircleLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMCircleLayout.m; sourceTree = "<group>"; };
 		18E4098C17358F50006BB979 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -362,18 +355,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		18E4095F173569CC006BB979 /* CMContent */ = {
-			isa = PBXGroup;
-			children = (
-				18E40960173569DE006BB979 /* CMContentCell.h */,
-				18E40961173569DE006BB979 /* CMContentCell.m */,
-				18E4096F173571AB006BB979 /* CMCircleLayout.h */,
-				18E40970173571AB006BB979 /* CMCircleLayout.m */,
-				18E4098017358B54006BB979 /* cell images */,
-			);
-			name = CMContent;
-			sourceTree = "<group>";
-		};
 		18E4098017358B54006BB979 /* cell images */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,7 +373,7 @@
 				18E4093A1735692E006BB979 /* CMViewController.h */,
 				18E4093B1735692E006BB979 /* CMViewController.m */,
 				18E4093D1735692E006BB979 /* CMViewController.xib */,
-				18E4095F173569CC006BB979 /* CMContent */,
+				18E4098017358B54006BB979 /* cell images */,
 			);
 			name = CMHome;
 			sourceTree = "<group>";
@@ -544,11 +525,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18E40972173571E4006BB979 /* CMCircleLayout.m in Sources */,
 				18E4092F1735692E006BB979 /* main.m in Sources */,
 				18E409331735692E006BB979 /* CMAppDelegate.m in Sources */,
 				18E4093C1735692E006BB979 /* CMViewController.m in Sources */,
-				18E40962173569DE006BB979 /* CMContentCell.m in Sources */,
 				1857F6A61736B3FF00F6146D /* CMPlayerViewController.m in Sources */,
 				187467E41737945A00C9F9D8 /* CMAlbumViewController.m in Sources */,
 				187467E81737EC4A00C9F9D8 /* CMSpiralCircleView.m in Sources */,
@@ -565,7 +544,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				18E409541735692E006BB979 /* CircleMusicTests.m in Sources */,
-				18E40971173571AB006BB979 /* CMCircleLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

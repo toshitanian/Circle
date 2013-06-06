@@ -126,18 +126,20 @@
         
         //media
         MPMediaItem *representativeItem = [collections[i] representativeItem];
-        NSString *artistName =
-        [representativeItem valueForProperty: MPMediaItemPropertyAlbumArtist];
-        NSString *albumName =
-        [representativeItem valueForProperty: MPMediaItemPropertyAlbumTitle];
-        NSString *title= [representativeItem valueForProperty: MPMediaItemPropertyTitle];
+        NSString *artistName =[NSString stringWithFormat:@"%@",[representativeItem valueForProperty: MPMediaItemPropertyAlbumArtist]];
+        NSString *albumName =[NSString stringWithFormat:@"%@", [representativeItem valueForProperty: MPMediaItemPropertyAlbumTitle]];
+        NSString *title=[NSString stringWithFormat:@"%@",[representativeItem valueForProperty: MPMediaItemPropertyTitle]];
         MPMediaItemArtwork *artwork= [representativeItem valueForProperty:  MPMediaItemPropertyArtwork];
         
         view.artist_name=artistName;
         view.album_name=albumName;
         view.title=title;
         view.artwork=artwork;
+        /*
+        view.artwork_img=[[representativeItem valueForProperty:  MPMediaItemPropertyArtwork] imageWithSize: view.bounds.size];
+         */
         
+        representativeItem=nil;
         
         
         
@@ -914,7 +916,7 @@ CGPoint absPoint_(UIView* view)
     CMAppDelegate *ad=[[UIApplication sharedApplication] delegate];
     
     @try {
-        
+        __weak CMAlbumViewController* wself = self;
         if(self.type==0){
             
             [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
@@ -927,7 +929,7 @@ CGPoint absPoint_(UIView* view)
             [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
                 vc.view.alpha = 1.0;
             } completion:^(BOOL finished) {
-                [self.navigationController pushViewController:vc animated:NO];
+                [wself.navigationController pushViewController:vc animated:NO];
                 [vc.view removeFromSuperview];
             }];
             return;
@@ -935,17 +937,18 @@ CGPoint absPoint_(UIView* view)
         }else if(self.type==1){
             [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y)];
             _presenting_player=YES;
+            /*
             MPMediaQuery *songQuery = [MPMediaQuery songsQuery];
             [songQuery addFilterPredicate: [MPMediaPropertyPredicate
                                             predicateWithValue: view.title
                                             forProperty: MPMediaItemPropertyTitle]];
-            
+            */
         //ad.playerViewController.query=songQuery;
             ad.playerViewController.query=current_query;
                   ad.playerViewController.index_for_play = [_circles indexOfObject:view];
             ad.playerViewController.needReload=YES;
             
-            [self presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
+            [wself presentViewController:ad.playerViewController animated:YES completion:  ^{_presenting_player=NO;}];
         }else if(self.type==2){
             [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
             CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
@@ -957,7 +960,7 @@ CGPoint absPoint_(UIView* view)
             [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
                 vc.view.alpha = 1.0;
             } completion:^(BOOL finished) {
-                [self.navigationController pushViewController:vc animated:NO];
+                [wself.navigationController pushViewController:vc animated:NO];
                 [vc.view removeFromSuperview];
             }];
             return;
@@ -974,7 +977,7 @@ CGPoint absPoint_(UIView* view)
             [UIView transitionWithView:vc.view duration:0.33 options:UIViewAnimationOptionCurveEaseInOut animations:^(void) {
                 vc.view.alpha = 1.0;
             } completion:^(BOOL finished) {
-                [self.navigationController pushViewController:vc animated:NO];
+                [wself.navigationController pushViewController:vc animated:NO];
                 [vc.view removeFromSuperview];
             }];
             return;
@@ -1105,9 +1108,9 @@ CGPoint absPoint_(UIView* view)
 #pragma mark - index view
 -(IBAction)showIndex:(id)sender
 {
-    
+       __weak CMAlbumViewController* wself = self;
     void (^animations)(void) = ^{
-        _index_view.center=CGPointMake(self.view.frame.size.width*0.75,self.view.frame.size.height/2);
+        _index_view.center=CGPointMake(wself.view.frame.size.width*0.75,self.view.frame.size.height/2);
         
         // _index_view.center=CGPointMake(self.view.frame.size.width*0.5,self.view.frame.size.height/2);
         
@@ -1121,8 +1124,9 @@ CGPoint absPoint_(UIView* view)
 
 -(IBAction)hideIndex:(id)sender
 {
+    __weak CMAlbumViewController* wself = self;
     void (^animations)(void) = ^{
-        _index_view.frame=CGRectMake(self.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height);
+        _index_view.frame=CGRectMake(wself.view.frame.size.width, 0, _index_view.frame.size.width, _index_view.frame.size.height);
     };
     void (^completionAnimation)(BOOL) = ^(BOOL finished) {
         

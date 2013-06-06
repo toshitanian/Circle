@@ -26,14 +26,14 @@
     UIView *shadow;
     NSTimer *_tm;
     int _count;
-    CGPoint _start_point;
-    
+    CGPoint _start_point;    
 }
 @property(nonatomic,retain) NSString *title;
 @property(nonatomic,retain) NSString *artist_name;
 @property(nonatomic,retain) NSString *album_name;
 @property(nonatomic,retain) NSString *playlist_name;
 @property(nonatomic,retain) MPMediaItemArtwork *artwork;
+//@property(nonatomic,retain) UIImage *artwork_img;
 
 @property (nonatomic,retain) id<CMSpiralCircleViewDelegate> delegate;
 @property (atomic,assign) CGPoint original_center;

@@ -403,7 +403,7 @@ static const NSString *PlayerRateContext;
 {
     _cant_playatindex=YES;
     self.currentIndex = index;
-    
+    __weak CMPlayerViewController* wself = self;
     dispatch_queue_t q_global;
     q_global = dispatch_get_global_queue(0, 0);
     dispatch_async(q_global, ^{
@@ -413,7 +413,7 @@ static const NSString *PlayerRateContext;
         
         NSMutableArray* _playerItems = [NSMutableArray array];
         // palyerItems に　AVPlayerItemを追加
-        for (int i = index ; i < MIN(_item_count,self.currentIndex+30) ; i++){
+        for (int i = index ; i < MIN(_item_count,wself.currentIndex+30) ; i++){
             NSURL *url;
             @try {
                 if(!_isShuffling){
@@ -441,9 +441,9 @@ static const NSString *PlayerRateContext;
         _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
         
         
-        [_player2 addObserver:self forKeyPath:@"status" options:0 context:&PlayerStatusContext];
-        [_player2 addObserver:self forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
-        [_player2 addObserver:self forKeyPath:@"rate" options:0 context:&PlayerRateContext];
+        [_player2 addObserver:wself forKeyPath:@"status" options:0 context:&PlayerStatusContext];
+        [_player2 addObserver:wself forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
+        [_player2 addObserver:wself forKeyPath:@"rate" options:0 context:&PlayerRateContext];
         
         if(self.isPlaying){
             [_player2 play];

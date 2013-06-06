@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CMContentCell.h"
-#import "CMCircleLayout.h"
+
 #import "CMAlbumViewController.h"
 #import "CMInfoViewController.h"
 
