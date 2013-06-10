@@ -95,6 +95,7 @@
 @property(atomic,assign) BOOL hasLoaded;
 @property(atomic,assign) CGPoint pointPanBegan;
 @property(nonatomic,retain) NSString *query_keyword;
+@property(nonatomic,retain) NSString *query_artist;
 @property (nonatomic,retain) id<CMAlbumViewControllerDelegate> delegate;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil withType:(int)type;

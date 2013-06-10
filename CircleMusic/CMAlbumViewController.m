@@ -88,10 +88,16 @@
                 [query addFilterPredicate: [MPMediaPropertyPredicate
                                             predicateWithValue: self.query_keyword
                                             forProperty: MPMediaItemPropertyAlbumTitle]];
+                if(self.query_artist!=nil){
+                [query addFilterPredicate: [MPMediaPropertyPredicate
+                                            predicateWithValue: self.query_artist
+                                            forProperty: MPMediaItemPropertyAlbumArtist]];
+                }
             }else{
                 [query addFilterPredicate: [MPMediaPropertyPredicate
                                             predicateWithValue: self.query_keyword
                                             forProperty: MPMediaPlaylistPropertyName]];
+                
             }
         }
         current_query=query;
@@ -953,6 +959,7 @@ CGPoint absPoint_(UIView* view)
             [view gotPlayed:CGPointMake(_spiral.center.x,_spiral.center.y+_radius)];
             CMAlbumViewController *vc=[[CMAlbumViewController alloc] initWithNibName:@"CMAlbumViewController" bundle:nil withType:1];
             vc.query_keyword=view.album_name;
+            vc.query_artist=view.artist_name;
             [vc prepare];
             
             vc.view.alpha=0.0;

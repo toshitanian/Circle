@@ -639,14 +639,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: toshiya kawasaki (4X2JA6NF85)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: toshiya kawasaki (VH7R7V6D88)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: toshiya kawasaki (4X2JA6NF85)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CircleMusic/Circle-Prefix.pch";
 				INFOPLIST_FILE = "CircleMusic/Circle-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = Circle;
 				PROVISIONING_PROFILE = "8E20C336-5384-4866-B69F-078E4F3525F7";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8B6429B1-F09F-45CF-9788-1FB84CBC1BC0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8E20C336-5384-4866-B69F-078E4F3525F7";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -656,12 +656,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: toshiya kawasaki (VH7R7V6D88)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: toshiya kawasaki (4X2JA6NF85)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CircleMusic/Circle-Prefix.pch";
 				INFOPLIST_FILE = "CircleMusic/Circle-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = Circle;
 				PROVISIONING_PROFILE = "8B6429B1-F09F-45CF-9788-1FB84CBC1BC0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8E20C336-5384-4866-B69F-078E4F3525F7";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

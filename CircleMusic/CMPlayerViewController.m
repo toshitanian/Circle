@@ -428,7 +428,7 @@ static const NSString *PlayerRateContext;
     q_global = dispatch_get_global_queue(0, 0);
     dispatch_async(q_global, ^{
         
-        [self stop];
+        [wself stop];
         
         
         NSMutableArray* _playerItems = [NSMutableArray array];
