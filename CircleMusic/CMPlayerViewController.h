@@ -115,6 +115,9 @@
     BOOL _cant_playatindex;
     
     
+    NSTimer *_refuse;
+    int _refuse_count;
+    BOOL _is_refuse;
 }
 
 -(IBAction)dismiss:(id)sender;

@@ -14,7 +14,7 @@
 #import "CMPlayerButtonView.h"
 
 
-@interface CMViewController : UIViewController<UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,CMAlbumViewControllerDelegate,CMInfoViewControllerDelegate,UIGestureRecognizerDelegate>
+@interface CMViewController : UIViewController<CMAlbumViewControllerDelegate,CMInfoViewControllerDelegate,UIGestureRecognizerDelegate>
 {
     UICollectionView *_cv;
     CMAlbumViewController *_artistViewController;
@@ -41,6 +41,8 @@
     UIProgressView *_progress_bar;
     
     IBOutlet UILabel *title_text;
+ 
+    
 }
 
 @property (nonatomic, assign) NSInteger cellCount;

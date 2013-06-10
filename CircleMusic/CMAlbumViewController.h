@@ -48,10 +48,7 @@
     IBOutlet UILabel *_label_main;
     IBOutlet UILabel *_label_sub_upper;
     IBOutlet UILabel *_label_sub_lower;
-    NSMutableArray *_items;
-    
     bool _presenting_player;
-    
     
     UIImageView *_shadow;
     

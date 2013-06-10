@@ -180,9 +180,10 @@ static const NSString *PlayerRateContext;
     
     _tm =
     [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(clock:) userInfo:nil repeats:YES];
+    
     [_tm fire];
     [_song_progress addTarget:self action:@selector(seek:) forControlEvents:UIControlEventValueChanged];
-    
+
     
 #pragma mark gesture
     
@@ -219,6 +220,7 @@ static const NSString *PlayerRateContext;
     
     
 #pragma mark  audio session
+    
     _audioSession = [AVAudioSession sharedInstance];
     _audioSession.delegate=self;
     [_audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
@@ -312,6 +314,24 @@ static const NSString *PlayerRateContext;
         
     }
     
+}
+
+-(void)refuse_clock:(id)something
+{
+    if(_refuse_count>8){
+        [_refuse invalidate];
+        _is_refuse=NO;
+    }else{
+        _refuse_count++;
+    }
+}
+
+-(void)start_refuse{
+    _is_refuse=YES;
+    _refuse_count=0;
+    _refuse =
+    [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(refuse_clock:) userInfo:nil repeats:YES];
+    [_refuse fire];
 }
 
 -(UIButton *) getControllButton{
@@ -459,9 +479,10 @@ static const NSString *PlayerRateContext;
 }
 -(void)next_pushed:(UIButton *)btn{
     
+    if(_is_refuse) return;
+    [self start_refuse];
     
     if(_cant_playatindex) return;
-    
     _song_progress.value=0.0f;
     if ([self get_next_index]!=-1) {
         self.currentIndex=[self get_next_index];
@@ -505,6 +526,9 @@ static const NSString *PlayerRateContext;
 
 
 -(void)previous_pushed:(UIButton *)btn{
+    if(_is_refuse) return;
+    [self start_refuse];
+    
      if(_cant_playatindex) return;
     
     AVPlayerItem *item=[_player2 currentItem];
@@ -634,6 +658,7 @@ static const NSString *PlayerRateContext;
     [_current_time setNeedsDisplay];
     
     _full_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",(int)fulltime/60,(int)fulltime%60];
+    [_full_time setNeedsDisplay];
     _song_progress.maximumValue=fulltime;
     _info_artist.text=  current_artist;
     [_info_artist setNeedsDisplay];
