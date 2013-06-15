@@ -116,8 +116,9 @@ static const NSString *PlayerRateContext;
             
             if(self.index_for_play==-1){
                 [self playAtIndex:0];
+                
             }else{
-                [self playAtIndex:self.index_for_play];
+                //[self playAtIndex:self.index_for_play];
             }
         }
         
@@ -183,7 +184,7 @@ static const NSString *PlayerRateContext;
     
     [_tm fire];
     [_song_progress addTarget:self action:@selector(seek:) forControlEvents:UIControlEventValueChanged];
-
+    
     
 #pragma mark gesture
     
@@ -302,8 +303,10 @@ static const NSString *PlayerRateContext;
             AVPlayerItem *item=[_player2 currentItem];
             int current_time=CMTimeGetSeconds(item.currentTime);
             _song_progress.value=current_time;
-            _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];            
-        }
+            _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];
+        }/*else{
+          NSLog(@"clock not playing");
+          }*/
         
         
     }
@@ -365,6 +368,8 @@ static const NSString *PlayerRateContext;
 
 - (void)stop
 {
+    NSLog(@"%s",__func__);
+    
     if (self.isPlaying){
         [_player2 pause];
         self.isPlaying = NO;
@@ -382,6 +387,7 @@ static const NSString *PlayerRateContext;
 
 -(void)finishOrRepeat
 {
+    NSLog(@"%s",__func__);
     if(_repeat_type==2){
         self.currentIndex=0;
         [self playAtIndex:0];
@@ -394,6 +400,7 @@ static const NSString *PlayerRateContext;
         _repeat.alpha=ALPHA;
         // [self updatePlayingMusicInfo:nil];
     }else{
+        
         [self stop];
         self.isAvailable=NO;
         [self dismiss:nil];
@@ -404,6 +411,7 @@ static const NSString *PlayerRateContext;
 
 -(void)finish
 {
+    NSLog(@"%s",__func__);
     [self stop];
     _player2=nil;
     self.isAvailable=NO;
@@ -426,56 +434,57 @@ static const NSString *PlayerRateContext;
     __weak CMPlayerViewController* wself = self;
     dispatch_queue_t q_global;
     q_global = dispatch_get_global_queue(0, 0);
-    dispatch_async(q_global, ^{
-        
-        [wself stop];
-        
-        
-        NSMutableArray* _playerItems = [NSMutableArray array];
-        // palyerItems に　AVPlayerItemを追加
-        for (int i = index ; i < MIN(_item_count,wself.currentIndex+30) ; i++){
-            NSURL *url;
-            @try {
-                if(!_isShuffling){
-                    url= _urls[i];
-                }else{
-                    url=_shuffled_urls[i];
-                }
-                if (url != nil){
-                    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
-                    [_playerItems addObject:playerItem];
-                }
-                
+    //dispatch_async(q_global, ^{
+    
+   [_player2 pause];
+    
+    
+    NSMutableArray* _playerItems = [NSMutableArray array];
+    // palyerItems に　AVPlayerItemを追加
+    for (int i = index ; i < MIN(_item_count,wself.currentIndex+30) ; i++){
+        NSURL *url;
+        @try {
+            if(!_isShuffling){
+                url= _urls[i];
+            }else{
+                url=_shuffled_urls[i];
             }
-            @catch (NSException *exception) {
-                NSLog(@"%@",exception);
-            }
-            @finally {
-                
+            if (url != nil){
+                AVPlayerItem *playerItem = [AVPlayerItem playerItemWithURL:url];
+                [_playerItems addObject:playerItem];
             }
             
         }
-        
-        // AVQueuePlayerのインスタンスつくる
-        _player2=nil;
-        _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
-        
-        
-        [_player2 addObserver:wself forKeyPath:@"status" options:0 context:&PlayerStatusContext];
-        [_player2 addObserver:wself forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
-        [_player2 addObserver:wself forKeyPath:@"rate" options:0 context:&PlayerRateContext];
-        
-        if(self.isPlaying){
-            [_player2 play];
-        }else{
-            [_player2 pause];
+        @catch (NSException *exception) {
+            NSLog(@"%@",exception);
+        }
+        @finally {
+            
         }
         
-        //  [self updatePlayingMusicInfo:nil];
+    }
+    
+    // AVQueuePlayerのインスタンスつくる
+    _player2=nil;
+    _player2 = [AVQueuePlayer queuePlayerWithItems:_playerItems];
+    
+    
+    [_player2 addObserver:wself forKeyPath:@"status" options:0 context:&PlayerStatusContext];
+    [_player2 addObserver:wself forKeyPath:@"currentItem" options:0 context:&CurrentItemChangedContext];
+    [_player2 addObserver:wself forKeyPath:@"rate" options:0 context:&PlayerRateContext];
+    
+    if(self.isPlaying){
         
-        
-        
-    });
+        [_player2 play];
+    }else{
+        [_player2 pause];
+    }
+    
+    //  [self updatePlayingMusicInfo:nil];
+    
+    
+    
+    //});
 }
 -(void)next_pushed:(UIButton *)btn{
     
@@ -529,7 +538,7 @@ static const NSString *PlayerRateContext;
     if(_is_refuse) return;
     [self start_refuse];
     
-     if(_cant_playatindex) return;
+    if(_cant_playatindex) return;
     
     AVPlayerItem *item=[_player2 currentItem];
     int current_time=CMTimeGetSeconds(item.currentTime);
@@ -1217,6 +1226,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 
 - (void)didReceiveMemoryWarning
 {
+    NSLog(@"%s",__func__);
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
     [self stop];
@@ -1229,6 +1239,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
 }
 - (void)dealloc
 {
+    NSLog(@"%s",__func__);
     self.isAvailable=NO;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
