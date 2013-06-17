@@ -14,6 +14,7 @@
 #import "CMCrashReporter.h"
 
 #define ALPHA 0.5f
+#define QUEUE_LOAD_COUNT 5
 
 static const NSString *PlayerStatusContext;
 static const NSString *CurrentItemChangedContext;
@@ -118,7 +119,7 @@ static const NSString *PlayerRateContext;
                 [self playAtIndex:0];
                 
             }else{
-                //[self playAtIndex:self.index_for_play];
+                [self playAtIndex:self.index_for_play];
             }
         }
         
@@ -244,7 +245,8 @@ static const NSString *PlayerRateContext;
         
         AVPlayer *thePlayer = (AVPlayer *)object;
         if ([thePlayer status] == AVPlayerStatusFailed) {
-            NSLog(@"1122");
+            NSLog(@"1111");
+              _cant_playatindex=NO;
             NSError *error = [thePlayer error];
             NSLog(@"Error:%@",error);
             // Respond to error: for example, display an alert sheet.
@@ -260,6 +262,7 @@ static const NSString *PlayerRateContext;
             
         }else{
             NSLog(@"1133");
+              _cant_playatindex=NO;
             //NSLog(@"AVPlayerStatusNone:%@",object);
         }
         
@@ -270,20 +273,52 @@ static const NSString *PlayerRateContext;
         //  NSLog(@"currentItem%@.asset:%@",currentItem,currentItem.asset);
         
         if (currentItem != nil){
-            if(!_isShuffling){
-                self.currentIndex = [_urls indexOfObject:asset.URL];
+      
+            
+            if(!_needShuffleReload){
                 
+                if(!_isShuffling){
+                    self.currentIndex = [_urls indexOfObject:asset.URL];
+                    
+                }else{
+                    self.currentIndex = [_shuffled_urls indexOfObject:asset.URL];
+                }
+                
+                if(_queue_end- self.currentIndex<2){
+                    NSLog(@"QUEUE LOAD");
+                    [self playAtIndex:self.currentIndex];
+                }
             }else{
-                self.currentIndex = [_shuffled_urls indexOfObject:asset.URL];
+                
+                self.currentIndex=[self get_next_index];
+                _needShuffleReload=NO;
+                [self playAtIndex:self.currentIndex];
+            
             }
+            
+
+            
             [self updatePlayingMusicInfo:nil];
         }else{
+           
             
-            [self finishOrRepeat];
+            //Nextのみでクル．わけではなかった．
+            //!TODO:Next when queue is empty
+            if(self.currentIndex==_item_count-1){
+                [self finishOrRepeat];
+            }else{
+                self.currentIndex=[self get_next_index];
+                _needShuffleReload=NO;
+                [self playAtIndex:self.currentIndex];
+            }
+
         }
         
     }else if (context == &PlayerRateContext){
-        [self updatePlayingMusicInfo:nil];
+       /*Pause/Play*/
+        // NSLog(@"333");
+        
+       // [self updatePlayingMusicInfo:nil];
     }
     
     return;
@@ -304,9 +339,7 @@ static const NSString *PlayerRateContext;
             int current_time=CMTimeGetSeconds(item.currentTime);
             _song_progress.value=current_time;
             _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",current_time/60,current_time%60];
-        }/*else{
-          NSLog(@"clock not playing");
-          }*/
+        }
         
         
     }
@@ -391,7 +424,7 @@ static const NSString *PlayerRateContext;
     if(_repeat_type==2){
         self.currentIndex=0;
         [self playAtIndex:0];
-        //s   [self updatePlayingMusicInfo:nil];
+        //   [self updatePlayingMusicInfo:nil];
     }else if(_repeat_type==1){
         self.currentIndex=0;
         [self playAtIndex:0];
@@ -436,12 +469,13 @@ static const NSString *PlayerRateContext;
     q_global = dispatch_get_global_queue(0, 0);
     //dispatch_async(q_global, ^{
     
-   [_player2 pause];
+    [_player2 pause];
     
     
     NSMutableArray* _playerItems = [NSMutableArray array];
     // palyerItems に　AVPlayerItemを追加
-    for (int i = index ; i < MIN(_item_count,wself.currentIndex+30) ; i++){
+    _queue_end=MIN(_item_count,wself.currentIndex+QUEUE_LOAD_COUNT);
+    for (int i = index ; i < MIN(_item_count,wself.currentIndex+QUEUE_LOAD_COUNT) ; i++){
         NSURL *url;
         @try {
             if(!_isShuffling){
@@ -481,7 +515,7 @@ static const NSString *PlayerRateContext;
     }
     
     //  [self updatePlayingMusicInfo:nil];
-    
+    NSLog(@"playatindex");
     
     
     //});
@@ -662,7 +696,6 @@ static const NSString *PlayerRateContext;
     
     _queue_label.text=[[NSString alloc] initWithFormat:@"%d/%d",self.currentIndex+1,_item_count];
     [_queue_label setNeedsDisplay];
-    //!!TODO index
     _current_time.text=[[NSString alloc] initWithFormat:@"%2d:%02d",0,0];
     [_current_time setNeedsDisplay];
     

@@ -118,6 +118,8 @@
     NSTimer *_refuse;
     int _refuse_count;
     BOOL _is_refuse;
+    
+    int _queue_end;
 }
 
 -(IBAction)dismiss:(id)sender;
