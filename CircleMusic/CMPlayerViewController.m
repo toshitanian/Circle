@@ -635,7 +635,8 @@ static const NSString *PlayerRateContext;
         [_player2 pause];
         _artwork.alpha=0.5f;
         _shadow.hidden=NO;
-        _should_resume=YES;
+       // _should_resume=YES;
+        _should_resume=NO;
     }
 }
 
