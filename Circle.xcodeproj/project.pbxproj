@@ -192,26 +192,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		181BA42017443948005CF643 /* img */ = {
-			isa = PBXGroup;
-			children = (
-				184D17A5175A60F000453151 /* intro_tap.png */,
-				184D17A7175A60F300453151 /* intro_swipe.png */,
-				180B306B1741763900C2EA1B /* no_artwork.png */,
-				180B306D1741771F00C2EA1B /* no_artwork_with_circle.png */,
-				187C33F7173FE2DF0090B5BD /* circle_mask.png */,
-				180B3063174170BE00C2EA1B /* next.png */,
-				180B3067174173F600C2EA1B /* play.png */,
-				180B3061174170B800C2EA1B /* previous.png */,
-				188B33AA174998F80010AECC /* repeat_once.png */,
-				188B33AE1749A57C0010AECC /* shuffle.png */,
-				180B30691741755800C2EA1B /* note_black.png */,
-				188B33AB174998F80010AECC /* repeat.png */,
-				180B307E1743B23900C2EA1B /* twitter.png */,
-			);
-			name = img;
-			sourceTree = "<group>";
-		};
 		1857F6A21736B3F000F6146D /* CMPlayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -219,7 +199,6 @@
 				1857F6A41736B3FF00F6146D /* CMPlayerViewController.m */,
 				1857F6A51736B3FF00F6146D /* CMPlayerViewController.xib */,
 				181BA4231744516A005CF643 /* CMPlayerViewController_for_35inch.xib */,
-				181BA42017443948005CF643 /* img */,
 				180B30821743B34300C2EA1B /* CMPlayerButtonView.h */,
 				180B30831743B34400C2EA1B /* CMPlayerButtonView.m */,
 			);
@@ -239,14 +218,6 @@
 				189650C6173A964E0084F3DA /* CMIndexView.m */,
 				180B307B1743485E00C2EA1B /* CMIndexCircleView.h */,
 				180B307C1743485E00C2EA1B /* CMIndexCircleView.m */,
-				187467F31738B84100C9F9D8 /* pull.png */,
-				187467F71738DA1B00C9F9D8 /* blur.png */,
-				184D17AC175A688F00453151 /* intro_select.png */,
-				187467F41738B84100C9F9D8 /* push.png */,
-				181BA41C1743F461005CF643 /* headphone.png */,
-				184D17AF175B118800453151 /* intro_album_tap.png */,
-				184D17B0175B118800453151 /* intro_album_long_press.png */,
-				181BA41E174405DE005CF643 /* back.png */,
 			);
 			name = CMAlbum;
 			sourceTree = "<group>";
@@ -260,6 +231,80 @@
 				184D17A9175A651C00453151 /* CMInfoViewController_for_35inch.xib */,
 			);
 			name = CMInfo;
+			sourceTree = "<group>";
+		};
+		18BDB5A917EF52BA0095A02C /* img */ = {
+			isa = PBXGroup;
+			children = (
+				18BDB5AD17EF536D0095A02C /* circle */,
+				18BDB5AC17EF53460095A02C /* intro */,
+				18BDB5AB17EF53230095A02C /* button */,
+				18BDB5AA17EF53130095A02C /* cell */,
+			);
+			name = img;
+			sourceTree = "<group>";
+		};
+		18BDB5AA17EF53130095A02C /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				18616666174782BD0043037D /* cell-artist.png */,
+				18A494871761CA6C005D7265 /* cell-info.png */,
+				1861666A174788E20043037D /* cell-album.png */,
+				18A087EB17562EA800EA56C8 /* cell-playlist.png */,
+				18A7916517476CD30049AC9F /* cell-song.png */,
+			);
+			name = cell;
+			sourceTree = "<group>";
+		};
+		18BDB5AB17EF53230095A02C /* button */ = {
+			isa = PBXGroup;
+			children = (
+				187467F31738B84100C9F9D8 /* pull.png */,
+				187467F41738B84100C9F9D8 /* push.png */,
+				181BA41C1743F461005CF643 /* headphone.png */,
+				180B3063174170BE00C2EA1B /* next.png */,
+				180B3067174173F600C2EA1B /* play.png */,
+				180B3061174170B800C2EA1B /* previous.png */,
+				188B33AA174998F80010AECC /* repeat_once.png */,
+				188B33AE1749A57C0010AECC /* shuffle.png */,
+				188B33AB174998F80010AECC /* repeat.png */,
+				180B307E1743B23900C2EA1B /* twitter.png */,
+				181BA41E174405DE005CF643 /* back.png */,
+			);
+			name = button;
+			sourceTree = "<group>";
+		};
+		18BDB5AC17EF53460095A02C /* intro */ = {
+			isa = PBXGroup;
+			children = (
+				184D17AC175A688F00453151 /* intro_select.png */,
+				184D17AF175B118800453151 /* intro_album_tap.png */,
+				184D17B0175B118800453151 /* intro_album_long_press.png */,
+				184D17A5175A60F000453151 /* intro_tap.png */,
+				184D17A7175A60F300453151 /* intro_swipe.png */,
+			);
+			name = intro;
+			sourceTree = "<group>";
+		};
+		18BDB5AD17EF536D0095A02C /* circle */ = {
+			isa = PBXGroup;
+			children = (
+				180B306B1741763900C2EA1B /* no_artwork.png */,
+				187467F71738DA1B00C9F9D8 /* blur.png */,
+				180B306D1741771F00C2EA1B /* no_artwork_with_circle.png */,
+				187C33F7173FE2DF0090B5BD /* circle_mask.png */,
+				180B30691741755800C2EA1B /* note_black.png */,
+			);
+			name = circle;
+			sourceTree = "<group>";
+		};
+		18BDB5AE17EF53830095A02C /* CrashReporter */ = {
+			isa = PBXGroup;
+			children = (
+				188B33A01747A9FC0010AECC /* CMCrashReporter.h */,
+				188B33A11747A9FC0010AECC /* CMCrashReporter.m */,
+			);
+			name = CrashReporter;
 			sourceTree = "<group>";
 		};
 		18E409161735692E006BB979 = {
@@ -308,8 +353,8 @@
 			children = (
 				18E409311735692E006BB979 /* CMAppDelegate.h */,
 				18E409321735692E006BB979 /* CMAppDelegate.m */,
-				188B33A01747A9FC0010AECC /* CMCrashReporter.h */,
-				188B33A11747A9FC0010AECC /* CMCrashReporter.m */,
+				18BDB5A917EF52BA0095A02C /* img */,
+				18BDB5AE17EF53830095A02C /* CrashReporter */,
 				1857F6A21736B3F000F6146D /* CMPlayer */,
 				18E4099717364D9E006BB979 /* CMHome */,
 				187467E01737944300C9F9D8 /* CMAlbum */,
@@ -349,25 +394,12 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		18E4098017358B54006BB979 /* cell images */ = {
-			isa = PBXGroup;
-			children = (
-				18616666174782BD0043037D /* cell-artist.png */,
-				18A494871761CA6C005D7265 /* cell-info.png */,
-				1861666A174788E20043037D /* cell-album.png */,
-				18A087EB17562EA800EA56C8 /* cell-playlist.png */,
-				18A7916517476CD30049AC9F /* cell-song.png */,
-			);
-			name = "cell images";
-			sourceTree = "<group>";
-		};
 		18E4099717364D9E006BB979 /* CMHome */ = {
 			isa = PBXGroup;
 			children = (
 				18E4093A1735692E006BB979 /* CMViewController.h */,
 				18E4093B1735692E006BB979 /* CMViewController.m */,
 				18E4093D1735692E006BB979 /* CMViewController.xib */,
-				18E4098017358B54006BB979 /* cell images */,
 			);
 			name = CMHome;
 			sourceTree = "<group>";
